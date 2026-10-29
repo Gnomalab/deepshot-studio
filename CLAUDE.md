@@ -52,6 +52,14 @@ Lo que muestran las capturas, y lo que implica para la app:
 
 Decisión para la app (cerrada): áreas como **elipsoides 3D completos**, igual que el add-on. Ver "Decisiones tomadas" en ROADMAP.md.
 
+## Git y GitHub
+- El código vive en un repositorio **privado** de GitHub (cuenta Gnomalab, `Gnomalab/deepshot-studio`) para seguirlo y probarlo en el PC y en el Mac M1. Se trabaja en la carpeta local; GitHub es copia y punto de encuentro. Versión actual: 0.1.0, fase alfa; la etiqueta `v0.1.0-alpha` se pone cuando Juanjo lo pida (hito: probado en Mac).
+- **Avisar a Juanjo** cuando haya cambios importantes (función terminada con las pruebas en verde, o final de una tanda larga) de que toca commit y push, proponiendo el mensaje. **Nunca hacer commit ni push sin que él lo diga.**
+- Normalmente trabaja en el PC. En el Mac se hace `git pull` solo cuando él lo pida («actualiza todo en el Mac»). Al cambiar de máquina: push en la que deja y pull en la que empieza; se edita en una sola a la vez.
+- **No van a Git:** `models/` (se bajan desde el gestor en cada máquina; en el Mac empezar por Marigold V1.0 y Depth Anything V2 Small), `Fotos test/`, `Capure references/`, `.venv/` y cachés.
+- En el disco externo `E:` Git da «dubious ownership»: usar `git -c safe.directory=E:/deepshot-studio ...` (o las variables `GIT_CONFIG_COUNT`, `GIT_CONFIG_KEY_0=safe.directory`, `GIT_CONFIG_VALUE_0=E:/deepshot-studio`) sin tocar la configuración global.
+- Los commits terminan con la línea de atribución que indique el entorno. Los saltos de línea los normaliza `.gitattributes`.
+
 ## Equipos objetivo
 - **PC (principal):** ASUS TUF, Windows, 16 GB de RAM. GPU NVIDIA GeForce RTX 4060 (portátil). VRAM: 8 GB según la configuración habitual de esta GPU, PENDIENTE de confirmar en Windows (Administrador de tareas > Rendimiento > GPU). Es la máquina de referencia para CUDA.
 - **Mac:** M1 (Apple Silicon), 16 GB de memoria unificada (CPU y GPU comparten la misma memoria). Inferencia con PyTorch MPS.
