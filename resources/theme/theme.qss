@@ -1,0 +1,190 @@
+/* Deepshot Studio: plantilla de la hoja de estilos (`deepshot/themes.py` la rellena).
+   Los colores y las medidas son marcas con nombre entre llaves: la paleta de cada tema y el aspecto (redondeo, densidad) los dan valores.
+   Colores: window (fondo) · text · text_dim · line (bordes y fondo del lienzo) · panel (secciones) · header ·
+   popup (menús) · base (campos) · button · accent · outline (borde de botones y campos)... */
+
+QMainWindow, QWidget {
+    background: ${window};
+    color: ${text};
+}
+
+/* --- Menús ------------------------------------------------------------- */
+QMenuBar { background: ${line}; padding: 2px; }
+QMenuBar::item { padding: ${pad_v}px 9px; background: transparent; border-radius: ${radius}px; }
+QMenuBar::item:selected { background: ${panel}; }
+QMenu { background: ${popup}; border: 1px solid ${header}; padding: 3px; }
+QMenu::item { padding: ${menu_pad}px 22px ${menu_pad}px 18px; border-radius: ${radius}px; }
+QMenu::item:selected { background: ${accent}; color: ${on_accent}; }
+QMenu::item:disabled { color: ${text_disabled}; }
+QMenu::separator { height: 1px; background: ${base_hover}; margin: 3px 6px; }
+
+/* --- Paneles acoplables (como las regiones de Blender) ------------------ */
+QDockWidget { font-weight: 600; }
+QDockWidget::title { background: ${header}; padding: 5px 8px; text-align: left; }
+QDockWidget > QWidget { background: ${window}; }
+QMainWindow::separator { background: ${line}; width: 2px; height: 2px; }
+QMainWindow::separator:hover { background: ${accent}; }
+
+/* --- Barra de pasos (pestañas tipo "workspace" de Blender) --------------- */
+#StepBar { background: ${line}; }
+#StepBar QPushButton {
+    background: transparent;
+    border: none;
+    border-radius: ${radius}px;
+    color: ${text_dim};
+    padding: ${step_v}px 12px;
+    margin: 3px 1px;
+}
+#StepBar QPushButton:hover { background: ${header}; color: ${text}; }
+#StepBar QPushButton:checked { background: ${panel}; color: ${text_strong}; }
+
+/* --- Los cuatro pasos, en el centro de la cabecera ------------------------ */
+#StepButtons QPushButton {
+    background: transparent;
+    border: none;
+    border-radius: ${radius_big}px;
+    color: ${text_dim};
+    padding: ${step_v}px 16px;
+    margin: 0 1px;
+    font-size: 10.5pt;
+}
+#StepButtons QPushButton:hover { background: ${header}; color: ${text}; }
+#StepButtons QPushButton:checked { background: ${panel}; color: ${text_strong}; }
+
+/* --- Lienzo ------------------------------------------------------------- */
+#Canvas { background: ${line}; border: none; }
+#EmptyState, #EmptyTitle, #EmptyHint { background: transparent; }
+#EmptyTitle { font-size: 14pt; font-weight: 600; color: ${text}; }
+#EmptyHint { color: ${text_dim}; }
+
+/* --- Secciones plegables del panel de ajustes (panel de Blender) --------- */
+#Section { background: ${panel}; border-radius: ${radius_big}px; }
+#SectionHeader {
+    color: ${text_strong};
+    background: ${panel};
+    border: none;
+    border-radius: ${radius_big}px;
+    padding: 5px 8px;
+    text-align: left;
+    font-weight: 600;
+}
+#SectionHeader:hover { background: ${section_hover}; }
+#SectionBody { background: ${panel}; color: ${text_dim}; padding: 2px 8px 8px 8px; }
+#SectionBody QLabel { background: transparent; }
+
+/* --- Botones normales ---------------------------------------------------- */
+QPushButton, QToolButton {
+    background: ${button};
+    border: 1px solid ${outline};
+    border-radius: ${radius}px;
+    padding: ${pad_v}px ${pad_h}px;
+    min-height: ${min_h}px;
+}
+QPushButton:hover, QToolButton:hover { background: ${button_hover}; }
+QPushButton:pressed, QToolButton:pressed { background: ${accent}; }
+QPushButton:checked, QToolButton:checked { background: ${accent}; color: ${on_accent}; }
+QPushButton:disabled, QToolButton:disabled { color: ${text_disabled}; background: ${button_disabled}; }
+QPushButton#Primary { background: ${accent}; border-color: ${accent}; color: ${on_accent}; }
+QPushButton#Primary:hover { background: ${accent_hover}; }
+QPushButton#Primary:disabled { background: ${accent_disabled}; border-color: ${accent_disabled}; color: ${accent_disabled_text}; }
+
+/* --- Tablas (gestor de modelos) ------------------------------------------ */
+QTreeWidget { background: ${base}; border: 1px solid ${line}; border-radius: ${radius}px; }
+QTreeWidget::item { padding: ${row_pad}px 2px; }
+QTreeWidget::item:selected { background: ${accent}; color: ${on_accent}; }
+QHeaderView::section {
+    background: ${header};
+    color: ${text_dim};
+    border: none;
+    border-right: 1px solid ${line};
+    padding: 4px 6px;
+}
+
+/* --- Grupos segmentados ("sobre Rampa | Negro | Blanco") ----------------
+   Botones checkables pegados. La propiedad "segment" vale first/middle/last. */
+QPushButton[segment] { border-radius: 0; margin: 0; }
+QPushButton[segment="first"] { border-top-left-radius: ${radius}px; border-bottom-left-radius: ${radius}px; }
+QPushButton[segment="last"] { border-top-right-radius: ${radius}px; border-bottom-right-radius: ${radius}px; }
+
+/* --- Campos de texto y numéricos ---------------------------------------- */
+QLineEdit, QSpinBox, QDoubleSpinBox, QComboBox {
+    background: ${base};
+    border: 1px solid ${outline};
+    border-radius: ${radius}px;
+    padding: ${field_v}px ${field_h}px;
+    selection-background-color: ${accent};
+}
+QLineEdit:hover, QSpinBox:hover, QDoubleSpinBox:hover, QComboBox:hover { background: ${base_hover}; }
+QLineEdit:focus, QSpinBox:focus, QDoubleSpinBox:focus { border-color: ${accent}; }
+QComboBox { background: ${button}; }
+QComboBox:hover { background: ${button_hover}; }
+QComboBox::drop-down { border: none; width: 16px; }
+QComboBox QAbstractItemView { background: ${popup}; border: 1px solid ${header}; selection-background-color: ${accent}; }
+
+/* Deslizador plano: el relleno azul indica el valor, como los sliders de Blender.
+   (El campo numérico arrastrable propio se implementará como widget en la fase 3.) */
+QSlider::groove:horizontal { height: 18px; background: ${button}; border-radius: ${radius}px; }
+QSlider::sub-page:horizontal { background: ${accent}; border-radius: ${radius}px; }
+QSlider::handle:horizontal { width: 0; margin: 0; }
+
+QProgressBar { background: ${base}; border: none; border-radius: ${radius}px; }
+QProgressBar::chunk { background: ${accent}; border-radius: ${radius}px; }
+
+QCheckBox { background: transparent; spacing: 6px; }
+QCheckBox::indicator { width: 13px; height: 13px; background: ${button}; border-radius: ${radius}px; }
+QCheckBox::indicator:checked { background: ${accent}; }
+
+/* --- Listas, registro y barras de desplazamiento ------------------------- */
+QListWidget, QPlainTextEdit {
+    background: ${base};
+    border: 1px solid ${line};
+    border-radius: ${radius}px;
+}
+QListWidget::item { padding: ${row_pad}px; border-radius: ${radius}px; }
+QListWidget::item:selected { background: ${accent}; color: ${on_accent}; }
+QListWidget::item:hover:!selected { background: ${item_hover}; }
+QPlainTextEdit { font-family: "Consolas", "Menlo", monospace; font-size: 9pt; }
+
+QScrollArea { border: none; background: transparent; }
+QScrollBar:vertical { background: transparent; width: 8px; margin: 0; }
+QScrollBar::handle:vertical { background: ${scroll}; border-radius: ${radius_big}px; min-height: 24px; }
+QScrollBar::handle:vertical:hover { background: ${scroll_hover}; }
+QScrollBar:horizontal { background: transparent; height: 8px; margin: 0; }
+QScrollBar::handle:horizontal { background: ${scroll}; border-radius: ${radius_big}px; min-width: 24px; }
+QScrollBar::add-line, QScrollBar::sub-line { width: 0; height: 0; }
+QScrollBar::add-page, QScrollBar::sub-page { background: transparent; }
+
+QToolTip { background: ${popup}; color: ${text}; border: 1px solid ${header}; padding: 4px; }
+
+QStatusBar { background: ${line}; color: ${text_dim}; }
+QStatusBar::item { border: none; }
+
+/* --- Cabecera (nombre de la app, versión y crédito) ---------------------- */
+QToolBar#HeaderBar { background: ${popup}; border: none; border-bottom: 1px solid ${header}; padding: 0; spacing: 0; }
+#HeaderBar QWidget { background: transparent; }
+#AppTitle { font-size: 15pt; font-weight: 700; color: ${text_strong}; letter-spacing: 0.5px; }
+#AppVersion { color: ${text_faint}; font-size: 8.5pt; padding-bottom: 3px; }
+#AppTagline { color: ${link}; font-size: 9pt; font-style: italic; padding-bottom: 2px; }
+#AppCredit { color: ${text_dim}; font-size: 9pt; }
+
+/* --- Pie --------------------------------------------------------------------- */
+#FooterParams { color: ${text_dim}; padding-right: 4px; }
+QTextBrowser { background: ${base}; border: 1px solid ${line}; border-radius: ${radius}px; padding: 8px; }
+
+/* --- Textos con tono (se marcan con setProperty en vez de colores escritos en cada widget) ---- */
+QLabel[dim="true"] { color: ${text_dim}; font-size: 8.5pt; }
+QLabel[tone="ok"] { color: ${ok}; }
+QLabel[tone="warn"] { color: ${warn}; }
+QLabel[tone="bad"] { color: ${bad}; }
+/* Indicador de memoria del pie: botón plano cuyo color es el semáforo (propiedad "tone": ok / warn / bad). */
+#MemoryIndicator { border: none; background: transparent; padding: 0 6px; color: ${text_dim}; }
+#MemoryIndicator:hover { background: ${item_hover}; }
+#MemoryIndicator[tone="ok"] { color: ${ok}; }
+#MemoryIndicator[tone="warn"] { color: ${warn}; }
+#MemoryIndicator[tone="bad"] { color: ${bad}; }
+QLabel[tone="dim"] { color: ${text_dim}; }
+
+/* --- Tarjetas del gestor de modelos: el borde azul marca el modelo en uso; el claro, el seleccionado ------ */
+#ModelCard { background: ${panel}; border: 1px solid ${line}; border-radius: ${radius_big}px; }
+#ModelCard[current="true"] { border: 1px solid ${text_dim}; }
+#ModelCard[active="true"] { border: 1px solid ${accent}; }

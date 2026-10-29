@@ -1,0 +1,14 @@
+# Saltos de línea: Git normaliza el texto al guardar y cada sistema lo ve con los suyos (PC y Mac sin cambios falsos).
+* text=auto
+*.bat text eol=crlf
+*.sh text eol=lf
+*.command text eol=lf
+
+# Binarios: tal cual
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.tif binary
+*.qm binary
+*.ico binary
+*.lnk binary

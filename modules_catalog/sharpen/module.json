@@ -1,0 +1,16 @@
+{
+  "id": "sharpen",
+  "name": "Nitidez",
+  "version": "1.0",
+  "license": "MIT",
+  "author": "Gnomalab Estudio",
+  "kind": "look",
+  "description": "Máscara de enfoque (unsharp mask): realza el detalle fino. El radio se mide respecto al lado largo de la imagen, así que se ve igual en la vista previa y al exportar.",
+  "requires_models": [],
+  "params": [
+    {"name": "amount", "label": "Cantidad", "default": 0.0, "min": 0.0, "max": 3.0, "decimals": 2, "step": 0.05,
+     "tooltip": "Fuerza del realce: 0 = nada, 1 = notable, 3 = muy fuerte"},
+    {"name": "radius", "label": "Radio", "default": 0.15, "min": 0.02, "max": 1.0, "decimals": 2, "step": 0.01,
+     "tooltip": "Tamaño del detalle que se realza, en % del lado largo de la imagen (0,15 % son unos 3 px en 2000 px)"}
+  ]
+}

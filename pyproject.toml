@@ -1,0 +1,47 @@
+[project]
+name = "deepshot"
+version = "0.1.0"
+description = "Deepshot Studio: aplicación de escritorio local para crear imágenes a partir del mapa de profundidad de una foto."
+authors = [{ name = "Juanjo Fernández (Gnomalab Estudio)" }]
+requires-python = ">=3.11,<3.14"
+readme = "ROADMAP.md"
+dependencies = [
+    "PySide6-Essentials>=6.7",  # LGPL-3.0, enlazado dinámicamente (sin Addons ni WebEngine)
+    "numpy>=1.26",         # BSD-3-Clause
+    "Pillow>=10.0",        # HPND (MIT-CMU)
+    "torch>=2.4",          # BSD-3-Clause (CUDA en Windows, MPS en Mac)
+    "torchvision",         # BSD-3-Clause; lo pide el procesador de imágenes de Depth Pro (modelo de prueba)
+    "diffusers>=0.32",     # Apache-2.0 (MarigoldDepthPipeline oficial)
+    "transformers>=4.40",  # Apache-2.0 (codificador CLIP que carga el pipeline)
+    "scipy>=1.11",         # BSD-3-Clause (ensemble de Marigold)
+    "openexr>=3.2",        # BSD-3-Clause (exportar EXR de 32 bits)
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]      # MIT
+
+[project.gui-scripts]
+deepshot = "deepshot.app:main"
+deepshot-quick = "deepshot.quick_app:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["deepshot*"]
+
+# --- PyTorch: rueda CUDA en Windows, rueda normal (con MPS) en macOS ---------
+# uv lee esta sección. En Windows instala torch desde el índice CUDA 12.8
+# (válido para la RTX 4060); en Mac usa PyPI, que ya trae soporte MPS.
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true
+
+[tool.uv.sources]
+torch = [{ index = "pytorch-cu128", marker = "sys_platform == 'win32'" }]
+torchvision = [{ index = "pytorch-cu128", marker = "sys_platform == 'win32'" }]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

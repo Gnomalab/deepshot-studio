@@ -1,0 +1,31 @@
+# Entorno y cachés de Python
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Empaquetado (PyInstaller)
+build/
+dist/
+*.spec
+
+# Caché local de mapas de profundidad y pesos del modelo
+cache/
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Pesados o privados: no van a Git (los modelos se bajan desde el gestor en cada máquina)
+models/
+Fotos test/
+Capure references/
+
+# Windows
+*.lnk
+desktop.ini
+
+# Salidas de pruebas y editores
+.vscode/
+.idea/

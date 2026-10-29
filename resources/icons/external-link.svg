@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" stroke="#7fa6e0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Icono propio: abrir enlace externo -->
+  <path d="M9 2.5h4.5V7"/>
+  <path d="M13.5 2.5L7 9"/>
+  <path d="M11.5 9.5v3a1 1 0 0 1-1 1h-7a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1h3"/>
+</svg>
