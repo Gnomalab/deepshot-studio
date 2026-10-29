@@ -93,7 +93,7 @@ STEP_ICONS = ["import", "layers", "sliders", "look", "export"]
 LOGO_SIZE = 44                      # lado del logo de la cabecera, en píxeles
 STEP_TIPS = [QT_TRANSLATE_NOOP("MainWindow", "Importar y elegir la fotografía"), QT_TRANSLATE_NOOP("MainWindow", "Calcular o cargar el mapa de profundidad"),
              QT_TRANSLATE_NOOP("MainWindow", "Dar forma al efecto: rampa, bandas, áreas y mezcla"),
-             QT_TRANSLATE_NOOP("MainWindow", "Acabado opcional: niveles, contraste, saturación… en el orden que quieras"),
+             QT_TRANSLATE_NOOP("MainWindow", "Acabado opcional: niveles, contraste, saturación, grano, nitidez… en el orden que quieras"),
              QT_TRANSLATE_NOOP("MainWindow", "Guardar el resultado o el mapa de profundidad")]
 THUMB_SIZE = 96
 RECENT_MAX = 10                       # proyectos recientes que se recuerdan en Archivo
@@ -757,7 +757,7 @@ class MainWindow(QMainWindow):
                 section(self.tr("Mezcla y máscaras"), self.editor.mix_panel, key="mix"),
                 section(self.tr("Desenfoque de lente"), self.editor.lens_panel, key="lens"),
             ],
-            3: [section(self.tr("Capas de ajuste"), self.editor.look_panel, key="look", open_=True)],
+            3: [section(self.tr("Efectos"), self.editor.look_panel, key="look", open_=True)],
             4: [section(self.tr("Exportar"), self.export_panel, key="export", open_=True)],
         }
         for sections in self.sections_by_step.values():       # Ctrl+clic = solo esta; clic derecho = menú

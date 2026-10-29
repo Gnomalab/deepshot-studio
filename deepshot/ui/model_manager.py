@@ -431,6 +431,8 @@ class ModelManagerDialog(QDialog):
             self.tree.addTopLevelItem(item)
             if entry.repo_id:       # los de Hugging Face y los del catálogo llevan el enlace a su ficha; los de carpeta no
                 self.tree.setItemWidget(item, self.COL_LINK, self._link_button(entry.repo_id))
+            elif entry.url:         # los módulos, el enlace a su página (si la declaran en su module.json)
+                self.tree.setItemWidget(item, self.COL_LINK, self._link_button(None, entry.url))
             if entry.id == select_id:
                 item.setSelected(True)
         if not self._header_restored:      # solo la primera vez: después mandan los anchos que haya puesto el usuario
@@ -476,7 +478,7 @@ class ModelManagerDialog(QDialog):
                 status_tone="ok" if installed else "dim", installed=installed, update=False, active=False, enabled=True,
                 preload=False, removable_files=installed, can_install=True, warn_license=not is_permissive(entry.license),
                 kind_text=self.kind_text(entry), dest=str(self.dest_path(entry)), is_module=True,
-                description=entry.description)
+                description=entry.description, url=entry.url)
         misfit = self.misfit_reason(entry)
         if not can_compute(entry):
             status, tone = self.tr("Sin cálculo todavía · {0:.1f} GB").format(
@@ -787,16 +789,19 @@ class ModelManagerDialog(QDialog):
     def _url(repo_id: str) -> str:
         return f"https://huggingface.co/{repo_id}"
 
-    def _link_button(self, repo_id: str) -> QToolButton:
-        """Botón con icono que abre la ficha del modelo (licencia, autor, archivos) en el navegador del sistema."""
+    def _link_button(self, repo_id: str | None, page: str | None = None) -> QToolButton:
+        """Botón con icono que abre la ficha del modelo (licencia, autor, archivos) o la página del módulo en el
+        navegador del sistema."""
+        url = page or self._url(repo_id)
         button = QToolButton()
         button.setIcon(self._link_icon)
         button.setAutoRaise(True)  # sin fondo hasta pasar el ratón
         button.setCursor(Qt.PointingHandCursor)
-        button.setToolTip(self.tr("Ver la ficha en Hugging Face\n{0}").format(self._url(repo_id)))
+        button.setToolTip(self.tr("Abrir la página del módulo\n{0}").format(url) if page
+                          else self.tr("Ver la ficha en Hugging Face\n{0}").format(url))
         button.setStyleSheet("QToolButton { background: transparent; border: none; padding: 1px; }"
                              f"QToolButton:hover {{ background: {theme.color('panel').name()}; border-radius: 3px; }}")
-        button.clicked.connect(lambda: QDesktopServices.openUrl(QUrl(self._url(repo_id))))
+        button.clicked.connect(lambda: QDesktopServices.openUrl(QUrl(url)))
         return button
 
     # --- Carpeta de modelos -------------------------------------------------------------------------
@@ -837,6 +842,7 @@ class ModelManagerDialog(QDialog):
 
         self.manager.set_models_dir(Path(folder))
         save_models_dir(Path(folder))
+        modules.register_installed()                      # los módulos viven en «looks», dentro de la carpeta de modelos
         self._update_folder_label()
         self.refresh()
         self.models_changed.emit()

@@ -114,7 +114,9 @@ def test_settings_json_roundtrip(tmp_path):
 
 
 # --- Look: pila de capas de ajuste -------------------------------------------
-def test_look_panel_anade_capas_cambia_el_orden_y_se_deshace(tmp_path):
+def test_look_panel_estilo_photoshop_orden_arrastrar_renombrar_apagar_y_solo(tmp_path):
+    from PySide6.QtCore import QModelIndex, Qt
+
     from deepshot.look import LookLayer
 
     app, session, stack, *_ = _setup(tmp_path)
@@ -122,18 +124,41 @@ def test_look_panel_anade_capas_cambia_el_orden_y_se_deshace(tmp_path):
     assert p.look == [] and panel.isEnabled()
     panel.add_item(LookLayer.new("levels"))
     panel.add_item(LookLayer.new("saturation"))
-    assert [l.kind for l in p.look] == ["levels", "saturation"]
+    assert [l.kind for l in p.look] == ["saturation", "levels"] and panel.list.currentRow() == 0   # lo nuevo entra arriba
     panel.list.setCurrentRow(1)
-    panel._move(-1)                                              # sube la saturación: se aplica antes que los niveles
-    assert [l.kind for l in p.look] == ["saturation", "levels"] and panel.list.currentRow() == 0
+    panel._move(-1)                                              # sube los niveles: se aplican después de la saturación
+    assert [l.kind for l in p.look] == ["levels", "saturation"] and panel.list.currentRow() == 0
     assert not panel.up_button.isEnabled() and panel.down_button.isEnabled()
-    panel.param_sliders["amount"].setValue(-1.0, emit=True)       # el deslizador escribe en los ajustes de la capa
+    panel.list.model().moveRow(QModelIndex(), 0, QModelIndex(), 2)    # arrastrar la fila de arriba al final
+    app.processEvents()
+    assert [l.kind for l in p.look] == ["saturation", "levels"] and panel.list.currentRow() == 1
+    assert [panel.list.item(i).text() for i in range(2)] == ["Saturación", "Niveles"]      # la lista sigue al proyecto
+
+    entry = panel.list.item(0)                                   # renombrar (doble clic o F2 en la lista)
+    entry.setText("Color de la piel")
+    assert p.look[0].name == "Color de la piel" and panel.list.item(0).text() == "Color de la piel"
+    panel.list.item(0).setText("")                               # un nombre vacío vuelve al del efecto
+    assert p.look[0].name == "" and panel.list.item(0).text() == "Saturación"
+    panel.list.item(0).setCheckState(Qt.Unchecked)               # apagado
+    assert p.look[0].enabled is False
+    panel.list.item(0).setCheckState(Qt.Checked)
+
+    panel.toggle_row_solo(1)                                     # solo (ojo): la vista previa deja solo los niveles
+    preview = session._preview_project()
+    assert [l.enabled for l in preview.look] == [False, True] and [l.enabled for l in p.look] == [True, True]
+    panel.toggle_row_solo(1)
+    assert session._preview_project() is p                       # sin solo, el proyecto tal cual
+
+    panel.list.setCurrentRow(0)
+    panel.param_sliders["amount"].setValue(-1.0, emit=True)      # el deslizador escribe en los ajustes del efecto
     assert p.look[0].params["amount"] == -1.0
     panel.limit.set_current_index(1)
     panel._on_limit(1)
     assert p.look[0].limit == "depth" and panel.range_box.isVisibleTo(panel)
+    panel._duplicate()                                           # la copia queda justo encima, con su nombre
+    assert [l.kind for l in p.look] == ["saturation", "saturation", "levels"] and p.look[0].params == p.look[1].params
     panel._remove()
-    assert [l.kind for l in p.look] == ["levels"]
+    assert [l.kind for l in p.look] == ["saturation", "levels"]
 
 
 def test_look_cambia_la_imagen_final(tmp_path):

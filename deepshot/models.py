@@ -124,6 +124,7 @@ class ModelEntry:
     description: str = ""           # módulos: qué hacen (viene de su module.json)
     version: str = ""
     requires: list[str] = field(default_factory=list)   # módulos: ids de modelos que necesitan, del propio gestor
+    url: str = ""                   # módulos: su página web (enlace de la ficha en el gestor)
 
     @property
     def is_module(self) -> bool:
@@ -466,6 +467,9 @@ class ModelManager:
         """Usa otra carpeta de modelos (no mueve lo que haya en la anterior)."""
         self.models_dir = Path(path)
         self.models_dir.mkdir(parents=True, exist_ok=True)
+        from deepshot import modules
+
+        modules.set_models_base(self.models_dir)       # los módulos viven en «looks», dentro de la carpeta de modelos
         self._user_file = self.models_dir / "installed.json"
         if not _XET_SET_BY_USER:
             os.environ["HF_XET_CACHE"] = str(self.models_dir / "xet")
@@ -500,7 +504,7 @@ class ModelManager:
         infos.update({i.id: i for i in modules.installed()})       # lo instalado manda sobre el catálogo
         return [ModelEntry(id=MODULE_ID_PREFIX + i.id, label=i.name, family=MODULE_FAMILY, source="module",
                            license=i.license, kind=i.kind, description=i.description, version=i.version,
-                           requires=list(i.requires_models), path=i.id)
+                           requires=list(i.requires_models), url=i.homepage, path=i.id)
                 for i in sorted(infos.values(), key=lambda i: i.name.lower())]
 
     def missing_requirements(self, entry: ModelEntry) -> list[ModelEntry]:
@@ -572,7 +576,7 @@ class ModelManager:
         except OSError:
             return found
         for folder in folders:
-            if folder.name.startswith(("models--", ".")) or folder.name in ("local", "xet"):
+            if folder.name.startswith(("models--", ".")) or folder.name in ("local", "xet", "looks"):    # «looks»: módulos
                 continue
             family = _folder_family(folder)
             if family:

@@ -275,8 +275,8 @@ class EditSession(QObject):
         """El proyecto tal cual, o —con algo en «solo»— una copia donde lo que no está en solo queda desactivado. Solo
         vale para la vista previa: lo que se guarda y se exporta es siempre el proyecto entero."""
         project = self.project
-        areas_solo, bands_solo = self.areas_panel.solo, self.bands_panel.solo
-        if not (areas_solo or bands_solo):
+        areas_solo, bands_solo, look_solo = self.areas_panel.solo, self.bands_panel.solo, self.look_panel.solo
+        if not (areas_solo or bands_solo or look_solo):
             return project
         clone = Project.from_dict(project.to_dict())
         for i, area in enumerate(clone.areas):
@@ -285,6 +285,9 @@ class EditSession(QObject):
         for i, band in enumerate(clone.bands):
             if bands_solo and i not in bands_solo:
                 band.enabled = False
+        for i, layer in enumerate(clone.look):
+            if look_solo and i not in look_solo:
+                layer.enabled = False
         return clone
 
     def visible_areas(self) -> list[Area]:

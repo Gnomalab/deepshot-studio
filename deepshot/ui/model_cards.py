@@ -35,6 +35,7 @@ class CardData:
     dest: str = ""            # carpeta donde se instala
     is_module: bool = False   # los módulos no se «usan» ni se ocultan del selector: solo se instalan y se quitan
     description: str = ""     # módulos: qué hacen
+    url: str = ""             # módulos: su página web
 
 
 class ModelCard(QFrame):
@@ -72,13 +73,14 @@ class ModelCard(QFrame):
         head.setContentsMargins(0, 0, 0, 0)
         head.addWidget(title, 1)
         self.link_button: QToolButton | None = None
-        if data.repo:                                              # enlace a la ficha del modelo en Hugging Face
+        if data.repo or data.url:                                  # enlace a la ficha del modelo (HF) o a la página del módulo
             self.link_button = QToolButton()
             self.link_button.setIcon(link_icon)
             self.link_button.setAutoRaise(True)
             self.link_button.setCursor(Qt.PointingHandCursor)
-            url = f"https://huggingface.co/{data.repo}"
-            self.link_button.setToolTip(self.tr("Ver la ficha en Hugging Face\n{0}").format(url))
+            url = data.url or f"https://huggingface.co/{data.repo}"
+            self.link_button.setToolTip(self.tr("Abrir la página del módulo\n{0}").format(url) if data.url
+                                        else self.tr("Ver la ficha en Hugging Face\n{0}").format(url))
             self.link_button.clicked.connect(lambda: QDesktopServices.openUrl(QUrl(url)))
             head.addWidget(self.link_button, 0, Qt.AlignTop)
 

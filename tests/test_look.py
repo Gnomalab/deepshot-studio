@@ -1,14 +1,15 @@
 """Look: pila de capas de ajuste (niveles, contraste, saturación), su orden y su paso por el proyecto."""
 
 import numpy as np
+import pytest
 
 from deepshot.look import KINDS, LookLayer, apply_look, brightness_contrast, layers_from_list, levels, saturation
 from deepshot.project import Project, render
 
 
-def _image():
+def _image(h=24, w=32):
     rng = np.random.default_rng(1)
-    return rng.random((24, 32, 3)).astype(np.float32)
+    return rng.random((h, w, 3)).astype(np.float32)
 
 
 def test_capas_en_su_valor_inicial_no_cambian_nada():
@@ -103,3 +104,73 @@ def test_render_aplica_el_look_al_final():
     p.look = [layer]
     out = render(p, depth)
     assert out.mean() < base.mean()
+
+
+def test_la_pila_se_aplica_de_abajo_arriba_como_photoshop():
+    img = _image()
+    sat = LookLayer.new("saturation")
+    sat.params["amount"] = -1.0
+    lev = LookLayer.new("levels")
+    lev.params["white"] = 0.5
+    # [sat, lev]: «lev» está abajo y recibe primero la imagen; «sat» está arriba y va la última.
+    expected = saturation(levels(img, 0.0, 0.5, 1.0), -1.0)
+    assert np.allclose(apply_look(img, [sat, lev]), expected, atol=1e-6)
+    assert not np.allclose(apply_look(img, [lev, sat]), expected, atol=1e-3)
+
+
+def test_grano_nitidez_y_vineta_son_efectos_de_serie():
+    img = _image(40, 60)
+    for kind, change in (("grain", {"amount": 0.8}), ("sharpen", {"amount": 1.5}), ("vignette", {"amount": 0.9})):
+        assert kind in KINDS and not KINDS[kind].module_id
+        layer = LookLayer.new(kind)
+        assert layer.is_identity() and np.allclose(apply_look(img, [layer]), img)
+        layer.params.update(change)
+        out = apply_look(img, [layer])
+        assert out.shape == img.shape and out.dtype == np.float32 and 0.0 <= out.min() and out.max() <= 1.0
+        assert not np.allclose(out, img, atol=1e-3)
+
+
+def test_el_grano_es_siempre_el_mismo_y_la_vineta_oscurece_los_bordes():
+    img = np.full((40, 60, 3), 0.5, dtype=np.float32)
+    grain = LookLayer.new("grain")
+    grain.params["amount"] = 1.0
+    assert np.array_equal(apply_look(img, [grain]), apply_look(img, [grain]))        # reproducible
+    vignette = LookLayer.new("vignette")
+    vignette.params["amount"] = 1.0
+    out = apply_look(img, [vignette])
+    assert out[20, 30, 0] == pytest.approx(0.5) and out[0, 0, 0] < 0.3
+    vignette.params["amount"] = -1.0                                                  # negativa: aclara los bordes
+    assert apply_look(img, [vignette])[0, 0, 0] > 0.7
+
+
+def test_la_nitidez_y_el_grano_se_ven_igual_a_otra_resolucion():
+    yy, xx = np.mgrid[0:200, 0:300]
+    plane = 0.5 + 0.35 * np.sin(xx / 25.0) * np.cos(yy / 30.0) + 0.1 * (xx > 150)       # suave y con un borde
+    big = np.repeat(plane[..., None], 3, axis=-1).astype(np.float32)
+    small = np.ascontiguousarray(big[::2, ::2])                                           # la misma imagen a mitad de tamaño
+    layer = LookLayer.new("sharpen")
+    layer.params.update({"amount": 2.0, "radius": 0.6})
+    assert float(np.abs(apply_look(big, [layer])[::2, ::2] - apply_look(small, [layer])).mean()) < 0.02
+    grain = LookLayer.new("grain")
+    grain.params["amount"] = 1.0
+    flat_big, flat_small = np.full((200, 300, 3), 0.5, np.float32), np.full((100, 150, 3), 0.5, np.float32)
+    assert float((apply_look(flat_big, [grain]) - flat_big).std()) == pytest.approx(
+        float((apply_look(flat_small, [grain]) - flat_small).std()), rel=0.15)           # la misma fuerza de grano
+
+
+def test_los_proyectos_con_los_antiguos_modulos_pasan_a_los_efectos_de_serie():
+    layers = layers_from_list([{"kind": "module.film_grain", "params": {"amount": 0.4, "size": 2.0}},
+                               {"kind": "module.sharpen"}, {"kind": "module.vignette", "enabled": False}])
+    assert [l.kind for l in layers] == ["grain", "sharpen", "vignette"] and not layers[0].missing
+    assert layers[0].params == {"amount": 0.4, "size": 2.0} and layers[2].enabled is False
+
+
+def test_el_nombre_propio_de_la_capa_se_guarda(tmp_path):
+    p = Project()
+    layer = LookLayer.new("levels")
+    layer.name = "Contraste de la piel"
+    p.look = [layer]
+    p.save(tmp_path / "p.json")
+    assert Project.load(tmp_path / "p.json").look[0].name == "Contraste de la piel"
+    assert Project.from_dict({"look": [{"kind": "levels"}]}).look[0].name == ""      # proyecto sin nombres
+

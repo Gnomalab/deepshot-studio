@@ -5,9 +5,14 @@ Un módulo es una carpeta con dos archivos:
     module.py     una función `process(image, depth, params) -> image` (float32 alto×ancho×3 en 0..1)
 La interfaz dibuja los controles a partir de `params` del JSON, así que un módulo no necesita saber de Qt.
 
+Los módulos son para cosas complejas que necesitan modelos o librerías (relighting, embellecer…). Los efectos básicos
+(niveles, contraste, saturación, grano, nitidez, viñeta) vienen de serie en deepshot/look.py.
+
 Dónde viven:
-    <datos>/modules/<id>/     módulos instalados (DEEPSHOT_MODULES_DIR cambia la carpeta)
-    modules_catalog/<id>/     catálogo local junto al programa: lo que se ofrece en el gestor (DEEPSHOT_MODULES_CATALOG)
+    <carpeta de modelos>/looks/<id>/   módulos instalados, junto a los modelos pero en su propia carpeta
+                                       (DEEPSHOT_MODULES_DIR cambia la carpeta)
+    modules_catalog/<id>/              catálogo local junto al programa: lo que se ofrece en el gestor
+                                       (DEEPSHOT_MODULES_CATALOG)
 «Instalar» copia la carpeta del catálogo a la de módulos; «Desinstalar» la borra. Nada se descarga de internet.
 
 Seguridad: `module.py` es código que se ejecuta con los permisos del usuario. Solo se carga un módulo que el usuario
@@ -30,11 +35,11 @@ from PySide6.QtCore import QCoreApplication, QSettings
 
 from deepshot import look
 from deepshot.look import LayerKind, ParamSpec
-from deepshot.models import program_dir
-from deepshot.paths import app_data_dir
+from deepshot.models import program_dir, resolve_models_dir
 
 log = logging.getLogger(__name__)
 
+LOOKS_DIRNAME = "looks"                            # subcarpeta de la carpeta de modelos donde viven los módulos de Look
 MODULE_FILE = "module.json"
 CODE_FILE = "module.py"
 MODULE_KINDS = ("look",)                           # familias de módulo que la app sabe usar
@@ -58,6 +63,7 @@ class ModuleInfo:
     description: str = ""
     author: str = ""
     requires_models: list[str] = field(default_factory=list)      # ids de modelos del gestor que necesita
+    homepage: str = ""                                            # página del módulo (http/https), para el enlace del gestor
     params: list[ParamSpec] = field(default_factory=list)
     path: Path = Path(".")
 
@@ -69,10 +75,22 @@ class ModuleInfo:
 # ---------------------------------------------------------------------------
 # Carpetas
 # ---------------------------------------------------------------------------
+_models_base: Path | None = None
+
+
+def set_models_base(path: Path) -> None:
+    """La carpeta de modelos en uso (la fija el gestor de modelos al arrancar y al cambiarla): los módulos viven en su
+    subcarpeta `looks`, separados de los modelos de profundidad."""
+    global _models_base
+    _models_base = Path(path)
+
+
 def modules_dir() -> Path:
-    """Carpeta de los módulos instalados."""
+    """Carpeta de los módulos instalados: `looks` dentro de la carpeta de modelos."""
     forced = os.environ.get("DEEPSHOT_MODULES_DIR", "").strip()
-    return Path(forced) if forced else app_data_dir() / "modules"
+    if forced:
+        return Path(forced)
+    return (_models_base if _models_base is not None else resolve_models_dir()) / LOOKS_DIRNAME
 
 
 def catalog_dir() -> Path:
@@ -130,10 +148,13 @@ def read_info(folder: Path) -> ModuleInfo:
     requires = data.get("requires_models", [])
     if not isinstance(requires, list) or not all(isinstance(r, str) for r in requires):
         raise ModuleError(QCoreApplication.translate("Modules", "«requires_models» tiene que ser una lista de ids de modelos."))
+    homepage = str(data.get("homepage", "")).strip()
+    if not homepage.startswith(("https://", "http://")):
+        homepage = ""                                                    # solo enlaces web: nada de file:// ni rutas
     return ModuleInfo(id=module_id, name=str(data.get("name", module_id)), version=str(data.get("version", "1.0")),
                       license=str(data.get("license", "desconocida")), kind=kind,
                       description=str(data.get("description", "")), author=str(data.get("author", "")),
-                      requires_models=list(requires), params=params, path=Path(folder))
+                      requires_models=list(requires), homepage=homepage, params=params, path=Path(folder))
 
 
 def _scan(root: Path) -> list[ModuleInfo]:
