@@ -319,7 +319,7 @@ class _ListPanel(_Panel):
         self.list.viewport().setCursor(Qt.OpenHandCursor)           # la mano: las filas se arrastran para recolocarlas
         self._reordering = False
         # «Solo», como en un programa de audio o de capas: la «S» de cada fila deja en la vista previa solo ese elemento
-        # (se pueden dejar varios). Es solo de vista: no se guarda ni se exporta.
+        # (uno a la vez por lista). Es solo de vista: no se guarda ni se exporta.
         self.solo: set[int] = set()
         self.props = QWidget()
         self.props_layout = QVBoxLayout(self.props)
@@ -369,10 +369,11 @@ class _ListPanel(_Panel):
         return bool(solo) and row not in solo
 
     def toggle_row_solo(self, row: int) -> None:
-        """La «S» de una fila: pone o quita el «solo» de esa fila."""
+        """La «S» de una fila: pone el «solo» en esa fila (y se lo quita a la que lo tuviera) o, si ya lo tenía, lo quita.
+        Solo hay una a la vez en cada lista."""
         if not 0 <= row < len(self.items()):
             return
-        self.solo.symmetric_difference_update({row})
+        self.solo = set() if self.solo == {row} else {row}
         self.list.viewport().update()
         self.changed.emit()                          # se vuelve a pintar la vista previa y los manejadores (sin deshacer)
 
@@ -489,8 +490,8 @@ class _ListPanel(_Panel):
         if self.project is None:
             return
         self.items().append(item)
-        if self.solo:                                # con un «solo» activo, lo nuevo también se ve
-            self.solo.add(len(self.items()) - 1)
+        if self.solo:                                # con un «solo» activo, el solo pasa a lo nuevo
+            self.solo = {len(self.items()) - 1}
         self.refresh_list(select=len(self.items()) - 1)
         if commit:
             self.emit_both()
@@ -517,7 +518,7 @@ class _ListPanel(_Panel):
                 clone.from_style = ""                  # una copia es del usuario, aunque el original viniera de un estilo
             self.items().append(clone)
             if self.solo:
-                self.solo.add(len(self.items()) - 1)
+                self.solo = {len(self.items()) - 1}
             self.refresh_list(select=len(self.items()) - 1)
             self.emit_both()
 

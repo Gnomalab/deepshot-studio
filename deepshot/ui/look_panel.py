@@ -153,9 +153,9 @@ class LookPanel(_ListPanel):
             self.emit_both()
 
     def _shift_solo(self, row: int) -> None:
-        """Se mete una fila nueva en `row`: los «solo» de las de debajo bajan un puesto y la nueva se ve también."""
+        """Se mete una fila nueva en `row`: con un «solo» activo, el solo pasa a la nueva."""
         if self.solo:
-            self.solo = {r + 1 if r >= row else r for r in self.solo} | {row}
+            self.solo = {row}
 
     def add_item(self, item, commit: bool = True) -> None:
         """Un efecto nuevo entra arriba de la pila (como una capa nueva en Photoshop)."""

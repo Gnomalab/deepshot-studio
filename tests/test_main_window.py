@@ -1941,23 +1941,47 @@ def test_the_row_solo_shows_only_that_element_in_the_preview_without_touching_th
     assert [a.enabled for a in editor._preview_project().areas] == [False, True, False]
     assert all(a.enabled for a in editor.project.areas)                     # el proyecto real no cambia (ni se exporta distinto)
     assert [o["index"] for o in editor.overlays()] == [1]                   # en 2D solo sus contornos
-    panel.toggle_row_solo(2)                                                # se pueden dejar varias
-    assert [a.enabled for a in editor._preview_project().areas] == [False, True, True]
-    panel.toggle_row_solo(1)
-    panel.toggle_row_solo(2)
+    panel.toggle_row_solo(2)                                                # solo uno a la vez: el solo pasa a la otra fila
+    assert panel.solo == {2} and [a.enabled for a in editor._preview_project().areas] == [False, False, True]
+    panel.toggle_row_solo(2)                                                # y otro clic en la misma lo quita
     assert editor._preview_project() is editor.project
     panel.toggle_row_enabled(0)                                             # un elemento en bypass con «solo» sí se ve
     panel.toggle_row_solo(0)
     assert [a.enabled for a in editor._preview_project().areas] == [True, False, False]
     assert editor.project.areas[0].enabled is False
     panel.add_item(Area(name="D"))                                          # lo nuevo también se ve con un «solo» activo
-    assert panel.solo == {0, 3}
+    assert panel.solo == {3}
     panel._remove()                                                         # al borrar, las filas se corren y el «solo» se quita
     assert panel.solo == set() and editor._preview_project() is editor.project
     editor.project.bands.extend([Band(position=0.3), Band(position=0.6)])
     editor.bands_panel.bind(editor.project)
     editor.bands_panel.toggle_row_solo(1)
     assert [b.enabled for b in editor._preview_project().bands] == [False, True]
+
+
+def test_a_ramp_preset_shows_and_applies_on_the_ramp_base_even_if_the_base_was_black_or_white(win):
+    from deepshot import presets
+
+    win.add_photos(win._photos[:1])
+    give_depth(win)
+    wait_for(win, lambda: win.editor.result is not None)
+    win.set_step(STEP_EDIT)
+    editor = win.editor
+    editor.project.base = "black"
+    editor.base_panel.bind(editor.project)
+    editor._on_committed()                                                  # la base Negro es el punto de partida del deshacer
+    key = presets.builtin_names("ramp")[1][0]
+    preset = presets.builtin("ramp", key)
+    sent = []
+    editor.render.request = lambda project, mask=None: sent.append(project)
+    editor.preview_preset("ramp", preset)                                  # al pasar el ratón: se ve sobre la rampa…
+    assert sent[-1].base == "ramp" and editor.project.base == "black"      # …sin tocar el proyecto
+    undo_before = win.undo_stack.index()
+    editor.ramp_editor.preset.chosen.emit(preset)                          # al elegirlo: la base pasa a Rampa
+    assert editor.project.base == "ramp" and editor.base_panel.base.current_index() == 0
+    assert win.undo_stack.index() == undo_before + 1                        # un solo paso de deshacer
+    win.undo_stack.undo()
+    assert editor.project.base == "black"
 
 
 def test_rows_double_click_on_the_eye_or_color_does_not_open_the_name_editor_and_rows_reorder(win):

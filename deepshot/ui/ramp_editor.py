@@ -174,6 +174,7 @@ class RampEditor(QWidget):
     changed = Signal()
     committed = Signal()
     fitRequested = Signal()
+    presetApplying = Signal()           # un preset de rampa va a aplicarse (antes de tocar las paradas)
 
     INTERPOLATIONS = [("linear", "Lineal"), ("ease", "Suave"), ("constant", "Constante")]
 
@@ -305,6 +306,7 @@ class RampEditor(QWidget):
 
     def _apply_preset(self, preset: dict) -> None:
         """Aplica un preset de rampa (de fábrica o propio): paradas e interpolación."""
+        self.presetApplying.emit()
         data = preset["ramp"]
         # Se conserva el rango ajustado al relieve; cambian paradas e interpolación.
         self.ramp.stops = [RampStop(float(s["position"]), tuple(float(c) for c in s["color"]))

@@ -147,6 +147,7 @@ class EditSession(QObject):
             bar.previewed.connect(lambda preset, k=kind: self.preview_preset(k, preset))
             bar.previewEnded.connect(self.end_preview)
         self._previewing = False
+        self.ramp_editor.presetApplying.connect(self._base_to_ramp)
         self.ramp_editor.fitRequested.connect(self.fit_ramp)
         self.depth_panel.centersRequested.connect(self.centers_from_map)
         self.areas_panel.selectionChanged.connect(self._on_area_selected)
@@ -247,11 +248,21 @@ class EditSession(QObject):
         if self.project is None or self.depth is None:
             return
         try:
-            project = Project.from_dict(presets.apply_to_project_dict(kind, self.project.to_dict(), preset))
+            data = presets.apply_to_project_dict(kind, self.project.to_dict(), preset)
+            if kind == "ramp":
+                data["base"] = "ramp"            # sobre Negro o Blanco la rampa no se pinta: se enseña sobre la base Rampa
+            project = Project.from_dict(data)
         except (ValueError, KeyError, TypeError):
             return
         self._previewing = True
         self.render.request(project, self._mask_array())
+
+    def _base_to_ramp(self) -> None:
+        """Se elige un preset de rampa: con base Negro o Blanco la rampa no se vería, así que la base pasa a Rampa (en el
+        mismo paso de deshacer que el preset)."""
+        if self.project is not None and self.project.base != "ramp":
+            self.project.base = "ramp"
+            self.base_panel.bind(self.project)
 
     def end_preview(self) -> None:
         """Se acabó la vista previa de un preset: vuelve a pintarse el proyecto real."""
