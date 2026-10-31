@@ -317,6 +317,13 @@ Nombres tal como aparecen en el panel de Blender. Nuestra app puede usar otros n
 | Export | PNG 8-bit / PNG 16-bit / EXR 32-bit | botones | Formatos de salida |
 | Export | Set / Open output folder | botones | Carpeta de salida |
 
+## Revisión legal y de nombres (2026-10-31)
+- **Patentes:** búsqueda en la web (Google, Google Patents) sin resultados a nombre de Karim Joseph Nassar ni de «Vathography»; ni su web ni el texto de Zenodo (CC BY 4.0) mencionan patentes ni restricciones para implementar el método, y dicen que el enfoque está «abierto a todos». **No es una comprobación formal:** falta mirar Espacenet y WIPO PATENTSCOPE (inventor «Nassar Karim», «depth», «photograph») y las marcas (Swissreg, EUIPO, USPTO) antes de vender o distribuir.
+- **Código del autor:** el add-on de Blender parece ser GPL (según un port de terceros) y el nodo de ComfyUI es AGPL-3.0. No hemos copiado código de ninguno: copiarlo obligaría a liberar el nuestro. Los © del autor cubren su add-on (presets de rampa y algoritmos), sus fotos y el texto de la práctica (CC BY 4.0, con atribución, ya en «Acerca de»).
+- **Presets:** los nuestros (rampas, estilos, bokeh y looks) son propios y con nombres genéricos; ningún nombre coincide con los de paletas que el autor o terceros han publicado (metálicos, Magma, Inferno, Plasma, Viridis, Cividis, Twilight, Turbo, LUTs térmicas, MIST…). Los 19 presets del add-on no son públicos y no los hemos visto, así que no se pueden comparar valor a valor.
+- **Textos de la interfaz:** se cambiaron tres que eran idénticos a los del add-on: «Artistic ramp» → «Colour ramp» (Rampa de color), «Fit ramp to relief» → «Match ramp to depth range» (Adaptar rampa al rango de profundidad) y «Left = near · right = far» → «From near (left) to far (right)». «Bands and areas apply on:» pasó a «…are painted on:». Se dejan por ser términos genéricos: Ramp / Black / White, Ellipsoid / Box, Strength, Edge softness, Falloff y Relief.
+- **Decisión de Juanjo (2026-10-31):** de momento NO se escribe al autor. Sigue pendiente antes de distribuir o vender (contacto público: contact@vathography.com), junto con la comprobación formal de patentes y marcas.
+
 ## Ideas para más adelante (no prioritarias)
 - Upscaling de la foto con IA (tipo Real-ESRGAN, BSD-3) antes de calcular la profundidad. Comprobar licencia de los pesos.
 - Exportar la profundidad como nube de puntos o malla.

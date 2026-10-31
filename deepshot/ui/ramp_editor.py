@@ -215,10 +215,10 @@ class RampEditor(QWidget):
         self.color_button.setToolTip(self.tr("Color de la parada seleccionada (también: doble clic en su triángulo)"))
         self.color_button.clicked.connect(lambda: self._pick_color(self.bar.selected))
 
-        fit = QPushButton(self.tr("Ajustar rampa al relieve"))
+        fit = QPushButton(self.tr("Adaptar rampa al rango de profundidad"))
         fit.setToolTip(self.tr("Ajusta la rampa al rango real de profundidad de la foto"))
         fit.clicked.connect(self.fitRequested)
-        note = QLabel(self.tr("Izquierda = cerca · derecha = lejos"))
+        note = QLabel(self.tr("De cerca (izquierda) a lejos (derecha)"))
         note.setProperty("dim", True)
 
         row1 = QHBoxLayout()

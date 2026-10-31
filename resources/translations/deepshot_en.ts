@@ -297,8 +297,8 @@
     </message>
     <message>
         <location filename="../../deepshot/ui/editor_panels.py" line="564"/>
-        <source>La banda toma el color de la rampa artística en su posición, así siempre casa con el resto. Si está marcado, el color del cuadro de la lista no se usa.</source>
-        <translation>The band takes the colour of the art ramp at its position, so it always matches the rest. When checked, the colour square in the list is not used.</translation>
+        <source>La banda toma el color de la rampa de color en su posición, así siempre casa con el resto. Si está marcado, el color del cuadro de la lista no se usa.</source>
+        <translation>The band takes the colour of the colour ramp at its position, so it always matches the rest. When checked, the colour square in the list is not used.</translation>
     </message>
     <message>
         <location filename="../../deepshot/ui/editor_panels.py" line="583"/>
@@ -336,8 +336,8 @@
     </message>
     <message>
         <location filename="../../deepshot/ui/editor_panels.py" line="101"/>
-        <source>Bandas y áreas se aplican sobre:</source>
-        <translation>Bands and areas apply on:</translation>
+        <source>Bandas y áreas se pintan sobre:</source>
+        <translation>Bands and areas are painted on:</translation>
     </message>
 </context>
 <context>
@@ -436,22 +436,22 @@
         <translation>The family “{0}” is not supported in this version.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/depth.py" line="396"/>
+        <location filename="../../deepshot/depth.py" line="390"/>
         <source>Refinando bordes con la foto…</source>
         <translation>Refining edges with the photo…</translation>
     </message>
     <message>
-        <location filename="../../deepshot/depth.py" line="418"/>
+        <location filename="../../deepshot/depth.py" line="412"/>
         <source>Calculando profundidad ({0} pasadas)…</source>
         <translation>Computing depth ({0} passes)…</translation>
     </message>
     <message>
-        <location filename="../../deepshot/depth.py" line="420"/>
+        <location filename="../../deepshot/depth.py" line="414"/>
         <source>Calculando profundidad…</source>
         <translation>Computing depth…</translation>
     </message>
     <message>
-        <location filename="../../deepshot/depth.py" line="430"/>
+        <location filename="../../deepshot/depth.py" line="424"/>
         <source>Poca memoria de vídeo: reintentando a menor resolución…</source>
         <translation>Low video memory: retrying at a lower resolution…</translation>
     </message>
@@ -1377,7 +1377,7 @@ Con el icono del disquete guardas el tuyo.&lt;/li&gt;
 Cada zona tiene un centro y un destino: sube el destino para alejarla y bájalo para acercarla.
 &lt;i&gt;Centros desde el mapa&lt;/i&gt; coloca los centros donde hay profundidad en tu foto. Lo notan la rampa, las bandas,
 el desenfoque y las áreas, y se ve en las vistas Efecto y 3D. Con &lt;i&gt;Añadir zona&lt;/i&gt; puedes tener hasta tres más. Para ver qué parte del mapa es de cada zona, en la vista Profundidad elige &lt;i&gt;Mapa: zonas de profundidad&lt;/i&gt;; ahí mismo el mapa también se puede ver en color (se puede exportar así, en Exportar › Mapa de profundidad).&lt;/li&gt;
-&lt;li&gt;&lt;b&gt;Rampa artística&lt;/b&gt;: colores de cerca (izquierda) a lejos (derecha). Arrastra las paradas;
+&lt;li&gt;&lt;b&gt;Rampa de color&lt;/b&gt;: colores de cerca (izquierda) a lejos (derecha). Arrastra las paradas;
 &lt;b&gt;doble clic en una parada&lt;/b&gt; elige su color viendo el resultado en vivo; doble clic en la barra añade una;
 Supr borra. Puedes guardar tus rampas como presets. Si la base es Negro o Blanco, la rampa no se pinta: al elegir un preset de rampa
 (o al pasar el ratón por la lista) la base pasa a Rampa para que se vea.&lt;/li&gt;
@@ -1507,7 +1507,7 @@ With the floppy-disk icon you save your own.&lt;/li&gt;
 Each zone has a center and a target: raise the target to push it away and lower it to bring it closer.
 &lt;i&gt;Centers from the map&lt;/i&gt; places the centers where there is depth in your photo. The ramp, bands,
 blur and areas notice it, and it is seen in the Effect and 3D views. With &lt;i&gt;Add zone&lt;/i&gt; you can have up to three more. To see which part of the map belongs to each zone, in the Depth view choose &lt;i&gt;Map: depth zones&lt;/i&gt;; there the map can also be viewed in color (it can be exported that way, in Export › Depth map).&lt;/li&gt;
-&lt;li&gt;&lt;b&gt;Artistic ramp&lt;/b&gt;: colors from near (left) to far (right). Drag the stops;
+&lt;li&gt;&lt;b&gt;Colour ramp&lt;/b&gt;: colors from near (left) to far (right). Drag the stops;
 &lt;b&gt;double-click on a stop&lt;/b&gt; to choose its color while watching the live result; double-click on the bar to add one;
 Del deletes. You can save your ramps as presets. If the base is Black or White the ramp is not painted: when you choose a ramp preset
 (or hover over the list) the base switches to Ramp so you can see it.&lt;/li&gt;
@@ -2954,11 +2954,6 @@ Approve and load them?</translation>
         <translation>Depth control</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="764"/>
-        <source>Rampa artística</source>
-        <translation>Artistic ramp</translation>
-    </message>
-    <message>
         <location filename="../../deepshot/ui/main_window.py" line="766"/>
         <source>Bandas</source>
         <translation>Bands</translation>
@@ -3726,6 +3721,11 @@ Approve and load them?</translation>
         <location filename="../../deepshot/ui/main_window.py" line="632"/>
         <source>Gestor de modelos y módulos: descargar, instalar y borrar</source>
         <translation>Model and module manager: download, install and delete</translation>
+    </message>
+    <message>
+        <location filename="../../deepshot/ui/main_window.py" line="764"/>
+        <source>Rampa de color</source>
+        <translation>Colour ramp</translation>
     </message>
     <message>
         <location filename="../../deepshot/ui/main_window.py" line="771"/>
@@ -6151,18 +6151,18 @@ Continue?</translation>
     </message>
     <message>
         <location filename="../../deepshot/ui/ramp_editor.py" line="218"/>
-        <source>Ajustar rampa al relieve</source>
-        <translation>Fit ramp to relief</translation>
+        <source>Adaptar rampa al rango de profundidad</source>
+        <translation>Match ramp to depth range</translation>
+    </message>
+    <message>
+        <location filename="../../deepshot/ui/ramp_editor.py" line="221"/>
+        <source>De cerca (izquierda) a lejos (derecha)</source>
+        <translation>From near (left) to far (right)</translation>
     </message>
     <message>
         <location filename="../../deepshot/ui/ramp_editor.py" line="219"/>
         <source>Ajusta la rampa al rango real de profundidad de la foto</source>
         <translation>Fits the ramp to the real depth range of the photo</translation>
-    </message>
-    <message>
-        <location filename="../../deepshot/ui/ramp_editor.py" line="221"/>
-        <source>Izquierda = cerca · derecha = lejos</source>
-        <translation>Left = near · right = far</translation>
     </message>
     <message>
         <location filename="../../deepshot/ui/ramp_editor.py" line="288"/>

@@ -1,8 +1,7 @@
-"""Rampa artística y bandas: convierten la profundidad en tonos o colores.
+"""Rampa de color y bandas: convierten la profundidad en tonos o colores.
 
 Convención (igual que depth.py): profundidad 0 = cerca, 1 = lejos.
-La rampa va de izquierda (posición 0 = cerca) a derecha (posición 1 = lejos), como
-en el panel del add-on de referencia ("Left = near · right = far").
+La rampa va de izquierda (posición 0 = cerca) a derecha (posición 1 = lejos).
 
 Todas las imágenes son float32 en 0..1; las de color tienen forma (alto, ancho, 3).
 """
@@ -42,7 +41,7 @@ class RampStop:
 class ColorRamp:
     stops: list[RampStop] = field(default_factory=lambda: [RampStop(0.0, WHITE), RampStop(1.0, BLACK)])
     interpolation: str = "linear"   # "linear" | "constant" | "ease"
-    # Rango de profundidad que ocupa la rampa ("Fit ramp to relief" lo ajusta al real).
+    # Rango de profundidad que ocupa la rampa («Adaptar rampa al rango de profundidad» lo ajusta al real).
     range_min: float = 0.0
     range_max: float = 1.0
 

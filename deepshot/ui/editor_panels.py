@@ -98,7 +98,7 @@ class BasePanel(_Panel):
         self.base = SegmentedControl([self.tr("Rampa"), self.tr("Negro"), self.tr("Blanco")])
         self.base.setToolTip(self.tr("Sobre qué se pintan las bandas y las áreas"))
         self.base.changed.connect(self._on_base)
-        self.layout_.addWidget(_hint(self.tr("Bandas y áreas se aplican sobre:")))
+        self.layout_.addWidget(_hint(self.tr("Bandas y áreas se pintan sobre:")))
         self.layout_.addWidget(self.base)
 
     BASES = ["ramp", "black", "white"]
@@ -561,7 +561,7 @@ class BandsPanel(_ListPanel):
                                      "o se acerca (−). El centro de la imagen no cambia."))
         self.list.setToolTip(self.tr("Bandas. Cuadro: color · doble clic: renombrar · ojo: aplicar o saltar la banda"))
         self.color_ramp = QCheckBox(self.tr("Color de la rampa"))
-        self.color_ramp.setToolTip(self.tr("La banda toma el color de la rampa artística en su posición, así siempre "
+        self.color_ramp.setToolTip(self.tr("La banda toma el color de la rampa de color en su posición, así siempre "
                                            "casa con el resto. Si está marcado, el color del cuadro de la lista no se usa."))
         self.color_ramp.toggled.connect(self._on_color_ramp)
         # Controles de dos en dos: ocupan la mitad de líneas (como los campos X Y Z de Blender).

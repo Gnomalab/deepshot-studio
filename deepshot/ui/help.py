@@ -68,7 +68,7 @@ Con el icono del disquete guardas el tuyo.</li>
 Cada zona tiene un centro y un destino: sube el destino para alejarla y bájalo para acercarla.
 <i>Centros desde el mapa</i> coloca los centros donde hay profundidad en tu foto. Lo notan la rampa, las bandas,
 el desenfoque y las áreas, y se ve en las vistas Efecto y 3D. Con <i>Añadir zona</i> puedes tener hasta tres más. Para ver qué parte del mapa es de cada zona, en la vista Profundidad elige <i>Mapa: zonas de profundidad</i>; ahí mismo el mapa también se puede ver en color (se puede exportar así, en Exportar › Mapa de profundidad).</li>
-<li><b>Rampa artística</b>: colores de cerca (izquierda) a lejos (derecha). Arrastra las paradas;
+<li><b>Rampa de color</b>: colores de cerca (izquierda) a lejos (derecha). Arrastra las paradas;
 <b>doble clic en una parada</b> elige su color viendo el resultado en vivo; doble clic en la barra añade una;
 Supr borra. Puedes guardar tus rampas como presets. Si la base es Negro o Blanco, la rampa no se pinta: al elegir un preset de rampa
 (o al pasar el ratón por la lista) la base pasa a Rampa para que se vea.</li>

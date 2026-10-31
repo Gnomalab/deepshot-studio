@@ -19,7 +19,7 @@ Hugging Face the first time you use a model, and they stay in a local folder nex
    LCM variant or Depth Anything V2 Small, or load a map made elsewhere. Quality presets, edge refinement guided by the
    photo, and a list of previous computations (with real timings) to compare.
 3. **Shape the effect**:
-   - Artistic colour ramp, with presets.
+   - Colour ramp, with presets.
    - Depth bands with pan and tilt (up to ±89°), editable in 2D and with handles in 3D.
    - Ellipsoid or box areas that lighten or darken, edited on the image and in 3D.
    - Depth control (move near, middle and far zones), lens blur with real bokeh, blend with the photo and masks

@@ -761,7 +761,7 @@ class MainWindow(QMainWindow):
                         self.editor.style_bar, key="style"),
                 section(self.tr("Relieve"), self.editor.relief_panel, key="relief"),
                 section(self.tr("Control de profundidad"), self.editor.depth_panel, key="depth_control"),
-                section(self.tr("Rampa artística"), self.edit_hint, self.editor.ramp_editor, self.editor.base_panel,
+                section(self.tr("Rampa de color"), self.edit_hint, self.editor.ramp_editor, self.editor.base_panel,
                         key="ramp", open_=True),
                 section(self.tr("Bandas"), self.editor.bands_panel, key="bands"),
                 section(self.tr("Áreas"), self.editor.areas_panel, key="areas"),

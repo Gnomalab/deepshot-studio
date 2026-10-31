@@ -16,6 +16,7 @@ El autor es Juanjo Fernández (Gnomalab Estudio). Es artista audiovisual, no des
 ## Nombre y atribución
 - La app se llama **Deepshot Studio** (decisión de Juanjo, 2026-10-18; ver ROADMAP, decisión 10). Paquete Python y comando: `deepshot`.
 - La técnica de referencia es la de Karim Joseph Nassar. Su nombre («Vathography») NO se usa como marca, nombre de producto ni texto de la interfaz. La ÚNICA mención visible está en «Acerca de» (`deepshot/ui/about.py`: pestañas General y Créditos; un test lo vigila). Créditos lleva la cita de Zenodo (DOI 10.5281/zenodo.23103263, CC BY 4.0), los autores y artículos de Marigold y las bibliotecas. Texto de General: «Inspirado en la técnica Vathography de Karim Joseph Nassar (vathography.com). Proyecto independiente, sin afiliación con el autor.»
+- **Textos de la interfaz propios:** no copiar frases ni nombres de controles del add-on (revisado 2026-10-31; ver «Revisión legal y de nombres» en ROADMAP). Los términos genéricos (Ramp / Black / White, Strength, Falloff…) valen.
 - En el código solo queda `LEGACY_APP_NAME` (`deepshot/__init__.py`), para migrar datos y ajustes del nombre provisional anterior.
 
 ## Cómo responder y trabajar con Juanjo
