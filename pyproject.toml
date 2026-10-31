@@ -13,6 +13,7 @@ dependencies = [
     "torchvision",         # BSD-3-Clause; lo pide el procesador de imágenes de Depth Pro (modelo de prueba)
     "diffusers>=0.32",     # Apache-2.0 (MarigoldDepthPipeline oficial)
     "transformers>=4.40",  # Apache-2.0 (codificador CLIP que carga el pipeline)
+    "accelerate>=1.0",     # Apache-2.0 (carga del modelo directa al dispositivo, menos RAM)
     "scipy>=1.11",         # BSD-3-Clause (ensemble de Marigold)
     "openexr>=3.2",        # BSD-3-Clause (exportar EXR de 32 bits)
 ]

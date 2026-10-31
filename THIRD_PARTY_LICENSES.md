@@ -28,6 +28,8 @@ Versiones y licencias leídas de los metadatos del entorno `.venv` (2026-10-18).
 | typing_extensions | 4.16.0 | PSF-2.0 | Dependencia de torch. Licencia permisiva. Validada (2026-10-18). |
 | setuptools | 81.0.0 | MIT | Dependencia de torch. |
 | diffusers | 0.41.0 | Apache-2.0 | `MarigoldDepthPipeline` oficial (fase 1). |
+| accelerate | 1.15.0 | Apache-2.0 | Carga de pesos directa al dispositivo en diffusers/transformers (menos RAM al cargar). Comprobada en Mac (2026-10-31). |
+| psutil | 7.2.2 | BSD-3-Clause | Dependencia de accelerate. |
 | transformers | 5.20.1 | Apache-2.0 | Codificador CLIP que carga el pipeline de Marigold. |
 | huggingface_hub | 1.33.0 | Apache-2.0 | Descarga única de pesos. Telemetría desactivada (`HF_HUB_DISABLE_TELEMETRY=1`). |
 | hf-xet | 1.7.0 | Apache-2.0 | Transferencia de archivos grandes de Hugging Face. |
