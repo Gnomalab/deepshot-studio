@@ -1484,11 +1484,11 @@ computed whole. &lt;i&gt;Whole photo&lt;/i&gt; removes the framing.&lt;/p&gt;
 The first time the model is downloaded (about 2.6 GB); afterwards it works offline.&lt;/li&gt;
 &lt;li&gt;&lt;b&gt;Quality&lt;/b&gt;: &lt;i&gt;Fast&lt;/i&gt; for trying things out, &lt;i&gt;High&lt;/i&gt; for working,
 &lt;i&gt;Maximum&lt;/i&gt; for the final result. Each map is cached: going back to a photo is instant.&lt;/li&gt;
-&lt;li&gt;&lt;b&gt;Refine edges with the photo&lt;/b&gt; fits the map's contours to those of the photo.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;Refine edges with the photo&lt;/b&gt; fits the map&apos;s contours to those of the photo.&lt;/li&gt;
 &lt;li&gt;&lt;b&gt;Computations of this photo&lt;/b&gt;: every time you compute (or recover from the cache) a map, it stays in a list with how long
 that model and quality &lt;b&gt;really took&lt;/b&gt;. Select one to view it, select two to compare them with the
 divider, and &lt;i&gt;Use this map&lt;/i&gt; to continue with it; &lt;i&gt;Keep only this one&lt;/i&gt; removes the others. Maps are computed at
-a fixed size (the long side of the chosen quality) and scaled up to the photo's size.&lt;/li&gt;
+a fixed size (the long side of the chosen quality) and scaled up to the photo&apos;s size.&lt;/li&gt;
 &lt;li&gt;If you already have a map made in another program, use &lt;b&gt;Load depth map&lt;/b&gt;.&lt;/li&gt;
 &lt;li&gt;Convention: on screen, &lt;b&gt;near = bright&lt;/b&gt; and &lt;b&gt;far = dark&lt;/b&gt;.&lt;/li&gt;
 &lt;/ul&gt;
@@ -1533,7 +1533,7 @@ with the hand.&lt;/li&gt;
   &lt;/ul&gt;&lt;/li&gt;
 &lt;li&gt;&lt;b&gt;Lens blur&lt;/b&gt;: blurs what is far from the depth in focus, like a real camera. Choose the &lt;b&gt;focus&lt;/b&gt; (0 = closest, 1 = farthest; look at the map in the Depth view), the &lt;b&gt;aperture&lt;/b&gt; (f/1.4 blurs a lot, f/16 almost nothing) and the &lt;b&gt;diaphragm&lt;/b&gt;: round or 3 to 12 blades, which shapes the points of light. With the &lt;b&gt;eyedropper&lt;/b&gt; you choose the focus by clicking on the image on what you
 want sharp, and “Show in-focus zone” tints it green. You can blur the final image or only the photo before
-blending it. “Load bokeh…” brings presets (portrait, macro, cinema…) that only change the character of the blur, not the focus of your photo, and &lt;b&gt;Cat's eye&lt;/b&gt; clips the points of light at the edges of the image into an almond shape.&lt;/li&gt;
+blending it. “Load bokeh…” brings presets (portrait, macro, cinema…) that only change the character of the blur, not the focus of your photo, and &lt;b&gt;Cat&apos;s eye&lt;/b&gt; clips the points of light at the edges of the image into an almond shape.&lt;/li&gt;
 &lt;li&gt;&lt;b&gt;Blend and masks&lt;/b&gt;: adds the photo with a blend mode, limited if you want to the areas,
 to a depth range or to a &lt;b&gt;mask painted with a brush&lt;/b&gt; (B brush, E eraser,
 [ and ] size; the cursor shows the size and the hardness).&lt;/li&gt;
@@ -1551,7 +1551,7 @@ and “Reset layout”. Everything applies instantly, without restarting (except
 layout you have the same quick change.&lt;/li&gt;
 &lt;li&gt;&lt;b&gt;Style&lt;/b&gt; (File › Save style / Load style, Ctrl+L): the artistic look as a loose file,
 to apply it to other photos.&lt;/li&gt;
-&lt;li&gt;Hover over any control: its explanation appears below, in the window's footer.&lt;/li&gt;
+&lt;li&gt;Hover over any control: its explanation appears below, in the window&apos;s footer.&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h3&gt;4 · Look&lt;/h3&gt;
@@ -1571,7 +1571,7 @@ The effect can also save its settings in a .json.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Top right: &lt;b&gt;Photo&lt;/b&gt;, &lt;b&gt;Depth&lt;/b&gt;, &lt;b&gt;Effect&lt;/b&gt; or &lt;b&gt;Compare&lt;/b&gt;
 (V changes the view, C compares with the photo).&lt;/li&gt;
-&lt;li&gt;In the &lt;b&gt;Effect&lt;/b&gt; view, the &lt;b&gt;2D | 3D&lt;/b&gt; switch (3 key) shows the map's relief in 3D: drag to rotate, Shift+drag (or middle button) to pan,
+&lt;li&gt;In the &lt;b&gt;Effect&lt;/b&gt; view, the &lt;b&gt;2D | 3D&lt;/b&gt; switch (3 key) shows the map&apos;s relief in 3D: drag to rotate, Shift+drag (or middle button) to pan,
 wheel to zoom, double-click to reset; keys 1, 2 and 7: front, side and top. Choose which image
 covers the relief (photo, depth or effect).&lt;/li&gt;
 &lt;li&gt;The &lt;b&gt;areas&lt;/b&gt; are also seen and edited in 3D: click on an outline to select it; on the selected one, the
@@ -6115,57 +6115,72 @@ Continue?</translation>
 <context>
     <name>RampEditor</name>
     <message>
-        <location filename="../../deepshot/ui/ramp_editor.py" line="190"/>
+        <location filename="../../deepshot/ui/ramp_editor.py" line="191"/>
         <source>Cargar preset de rampa…</source>
         <translation>Load ramp preset…</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/ramp_editor.py" line="195"/>
+        <location filename="../../deepshot/ui/ramp_editor.py" line="196"/>
         <source>Añadir parada (también: doble clic en la barra)</source>
         <translation>Add stop (also: double-click on the bar)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/ramp_editor.py" line="198"/>
+        <location filename="../../deepshot/ui/ramp_editor.py" line="199"/>
         <source>Borrar la parada seleccionada (Supr)</source>
         <translation>Delete the selected stop (Del)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/ramp_editor.py" line="206"/>
+        <location filename="../../deepshot/ui/ramp_editor.py" line="207"/>
         <source>Cómo se pasa de una parada a la siguiente</source>
         <translation>How to go from one stop to the next</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/ramp_editor.py" line="209"/>
+        <location filename="../../deepshot/ui/ramp_editor.py" line="210"/>
         <source>Pos</source>
         <translation>Pos</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/ramp_editor.py" line="210"/>
+        <location filename="../../deepshot/ui/ramp_editor.py" line="211"/>
         <source>Posición de la parada seleccionada: 0 = cerca, 1 = lejos</source>
         <translation>Position of the selected stop: 0 = near, 1 = far</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/ramp_editor.py" line="215"/>
+        <location filename="../../deepshot/ui/ramp_editor.py" line="216"/>
         <source>Color de la parada seleccionada (también: doble clic en su triángulo)</source>
         <translation>Color of the selected stop (also: double-click on its triangle)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/ramp_editor.py" line="218"/>
+        <location filename="../../deepshot/ui/ramp_editor.py" line="219"/>
         <source>Adaptar rampa al rango de profundidad</source>
         <translation>Match ramp to depth range</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/ramp_editor.py" line="221"/>
+        <location filename="../../deepshot/ui/ramp_editor.py" line="222"/>
         <source>De cerca (izquierda) a lejos (derecha)</source>
         <translation>From near (left) to far (right)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/ramp_editor.py" line="219"/>
+        <location filename="../../deepshot/ui/ramp_editor.py" line="220"/>
         <source>Ajusta la rampa al rango real de profundidad de la foto</source>
         <translation>Fits the ramp to the real depth range of the photo</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/ramp_editor.py" line="288"/>
+        <location filename="../../deepshot/ui/ramp_editor.py" line="179"/>
+        <source>Lineal</source>
+        <translation>Linear</translation>
+    </message>
+    <message>
+        <location filename="../../deepshot/ui/ramp_editor.py" line="179"/>
+        <source>Suave</source>
+        <translation>Smooth</translation>
+    </message>
+    <message>
+        <location filename="../../deepshot/ui/ramp_editor.py" line="180"/>
+        <source>Constante</source>
+        <translation>Constant</translation>
+    </message>
+    <message>
+        <location filename="../../deepshot/ui/ramp_editor.py" line="289"/>
         <source>Color de la parada</source>
         <translation>Stop color</translation>
     </message>

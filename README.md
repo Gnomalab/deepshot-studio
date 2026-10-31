@@ -11,6 +11,10 @@ Hugging Face the first time you use a model, and they stay in a local folder nex
 
 > Status: 0.1.0, alpha. Personal use for now; the code is organised so it can be packaged later.
 
+![Deepshot Studio shaping a depth effect](docs/images/03-shape-ramp.png)
+
+New here? Read the [illustrated guide](docs/GUIDE.md): a short tour of every part of the interface, with screenshots.
+
 ## Features
 
 1. **Import**: drag photos in, see their EXIF information and, if you only need part of a big photo, **reframe** to work
@@ -76,6 +80,7 @@ Marigold V1.0 and Depth Anything V2 Small.
 - `deepshot/`: the application (`depth.py`, `models.py`, `tonemap.py`, `areas.py`, `look.py`, `dof.py`, `export.py`, `ui/`…).
 - `modules_catalog/`: downloadable Look modules (`module.json` + `module.py`); see its `README.md`.
 - `resources/`: icons, themes and translations. `tests/`: the test suite.
+- [`docs/GUIDE.md`](docs/GUIDE.md): the illustrated guide; `tools/make_screenshots.py` regenerates its screenshots.
 - [`ROADMAP.md`](ROADMAP.md): phases, decisions and what is left to do (in Spanish).
 - [`CLAUDE.md`](CLAUDE.md): working notes for the AI assistant used on this project (in Spanish).
 

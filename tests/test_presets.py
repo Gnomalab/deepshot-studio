@@ -247,3 +247,15 @@ def test_look_preset_roundtrips_through_the_user_files(tmp_path, monkeypatch):
     presets.save_user("look", "Mi look", presets.from_project("look", project))
     assert presets.list_user("look") == ["Mi look"]
     assert presets.load_user("look", "Mi look")["look"] == project.to_dict()["look"]
+
+
+def test_the_illustrated_guide_only_links_to_screenshots_that_exist():
+    """docs/GUIDE.md y el README enseñan capturas de docs/images: ninguna puede faltar (se regeneran con tools/make_screenshots.py)."""
+    import re
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[1]
+    for doc in (root / "docs" / "GUIDE.md", root / "README.md"):
+        for target in re.findall(r"!\[[^\]]*\]\(([^)]+)\)", doc.read_text(encoding="utf-8")):
+            assert (doc.parent / target).is_file(), f"{doc.name}: falta {target}"
+    assert (root / "tools" / "make_screenshots.py").is_file()

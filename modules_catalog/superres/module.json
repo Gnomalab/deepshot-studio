@@ -1,17 +1,35 @@
 {
   "id": "superres",
-  "name": "Superresolución (recuperar detalle)",
+  "name": "Super-resolution (recover detail)",
   "version": "1.0",
-  "license": "Apache-2.0 (Swin2SR; código del módulo propio de Deepshot Studio)",
+  "license": "Apache-2.0 (Swin2SR; module code by Deepshot Studio)",
   "author": "Gnomalab Estudio",
   "kind": "look",
   "homepage": "https://huggingface.co/caidas/swin2SR-classical-sr-x2-64",
-  "description": "Pasa la imagen por Swin2SR x2 (ampliar con IA) y la devuelve al tamaño original: recupera detalle fino y limpia la compresión y el ruido sin cambiar el tamaño (las capas de Look conservan siempre el tamaño de la imagen). Necesita el modelo «Swin2SR x2» (50 MB, Apache 2.0), que se descarga una vez y se usa en local. Con imágenes grandes tarda; en CPU, mucho.",
-  "requires_models": ["swin2sr-classical-sr-x2"],
+  "description": "Runs the image through Swin2SR x2 (AI upscaling) and brings it back to the original size: it recovers fine detail and cleans up compression and noise without changing the size (Look layers always keep the image size). It needs the «Swin2SR x2» model (50 MB, Apache 2.0), downloaded once and used locally. It is slow on big images, and very slow on CPU.",
+  "requires_models": [
+    "swin2sr-classical-sr-x2"
+  ],
   "params": [
-    {"name": "strength", "label": "Fuerza", "default": 1.0, "min": 0.0, "max": 1.0, "decimals": 2, "step": 0.01,
-     "tooltip": "Cuánto se aplica el detalle recuperado: 0 = la imagen tal cual, 1 = el resultado del modelo."},
-    {"name": "tile", "label": "Mosaico", "default": 256, "min": 64, "max": 768, "decimals": 0, "step": 32,
-     "tooltip": "Tamaño en píxeles de los trozos en que se procesa la imagen. Más pequeño = menos memoria (útil con 8 GB de VRAM o en Mac); más grande = algo más rápido."}
+    {
+      "name": "strength",
+      "label": "Strength",
+      "default": 1.0,
+      "min": 0.0,
+      "max": 1.0,
+      "decimals": 2,
+      "step": 0.01,
+      "tooltip": "How much of the recovered detail is applied: 0 = the image as it is, 1 = the model's result."
+    },
+    {
+      "name": "tile",
+      "label": "Tile",
+      "default": 256,
+      "min": 64,
+      "max": 768,
+      "decimals": 0,
+      "step": 32,
+      "tooltip": "Size in pixels of the pieces the image is processed in. Smaller = less memory (useful with 8 GB of VRAM or on a Mac); larger = a bit faster."
+    }
   ]
 }

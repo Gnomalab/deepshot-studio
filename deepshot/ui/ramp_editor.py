@@ -13,7 +13,7 @@ Señales: changed() en cada cambio (vista previa) y committed() al terminar (des
 from __future__ import annotations
 
 import numpy as np
-from PySide6.QtCore import QPointF, QRectF, Qt, Signal
+from PySide6.QtCore import QT_TRANSLATE_NOOP, QCoreApplication, QPointF, QRectF, Qt, Signal
 from PySide6.QtGui import QColor, QImage, QPainter, QPen, QPolygonF
 from PySide6.QtWidgets import (
     QComboBox,
@@ -176,7 +176,8 @@ class RampEditor(QWidget):
     fitRequested = Signal()
     presetApplying = Signal()           # un preset de rampa va a aplicarse (antes de tocar las paradas)
 
-    INTERPOLATIONS = [("linear", "Lineal"), ("ease", "Suave"), ("constant", "Constante")]
+    INTERPOLATIONS = [("linear", QT_TRANSLATE_NOOP("RampEditor", "Lineal")), ("ease", QT_TRANSLATE_NOOP("RampEditor", "Suave")),
+                      ("constant", QT_TRANSLATE_NOOP("RampEditor", "Constante"))]
 
     def __init__(self, parent: QWidget | None = None) -> None:
         super().__init__(parent)
@@ -202,7 +203,7 @@ class RampEditor(QWidget):
             b.setStyleSheet("padding: 0;")
         self.interp = QComboBox()
         for key, label in self.INTERPOLATIONS:
-            self.interp.addItem(self.tr(label), key)
+            self.interp.addItem(QCoreApplication.translate("RampEditor", label), key)
         self.interp.setToolTip(self.tr("Cómo se pasa de una parada a la siguiente"))
         self.interp.activated.connect(self._on_interp)
 
