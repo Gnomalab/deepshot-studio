@@ -876,13 +876,13 @@ class MainWindow(QMainWindow):
         self.recent_menu.aboutToShow.connect(self._fill_recent_menu)
         self.recent_menu.setToolTip(self.tr("Los últimos proyectos abiertos o guardados."))
         file_menu.addSeparator()
-        file_menu.addAction(self._action("Salir", QKeySequence("Ctrl+Q"), self.close))
+        file_menu.addAction(self._action(self.tr("Salir"), QKeySequence("Ctrl+Q"), self.close))
 
         # --- Edición: deshacer/rehacer desde la pila común ---
         edit_menu = menu.addMenu(self.tr("&Edición"))
-        undo = self.undo_stack.createUndoAction(self, "Deshacer")
+        undo = self.undo_stack.createUndoAction(self, self.tr("Deshacer"))
         undo.setShortcut(QKeySequence.Undo)
-        redo = self.undo_stack.createRedoAction(self, "Rehacer")
+        redo = self.undo_stack.createRedoAction(self, self.tr("Rehacer"))
         redo.setShortcuts([QKeySequence.Redo, QKeySequence("Ctrl+Shift+Z")])
         edit_menu.addActions([undo, redo])
 
@@ -890,8 +890,8 @@ class MainWindow(QMainWindow):
         view_menu = menu.addMenu(self.tr("&Ver"))
         view_menu.addAction(self._action(self.tr("Ajustar a la ventana"), QKeySequence("Ctrl+0"), self.canvas.fit_to_window))
         view_menu.addAction(self._action(self.tr("Tamaño real (100 %)"), QKeySequence("Ctrl+1"), self.canvas.zoom_actual_size))
-        view_menu.addAction(self._action("Acercar", QKeySequence.ZoomIn, lambda: self.canvas.zoom(1.25)))
-        view_menu.addAction(self._action("Alejar", QKeySequence.ZoomOut, lambda: self.canvas.zoom(0.8)))
+        view_menu.addAction(self._action(self.tr("Acercar"), QKeySequence.ZoomIn, lambda: self.canvas.zoom(1.25)))
+        view_menu.addAction(self._action(self.tr("Alejar"), QKeySequence.ZoomOut, lambda: self.canvas.zoom(0.8)))
         view_menu.addAction(self._action(self.tr("Cambiar vista (foto, profundidad, efecto)"),
                                          QKeySequence("V"), self.toggle_view))
         view_menu.addAction(self._action(self.tr("Comparar con la foto"), QKeySequence("C"), self.toggle_compare))

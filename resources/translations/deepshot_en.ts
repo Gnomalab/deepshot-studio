@@ -2142,7 +2142,7 @@ and &lt;i&gt;Open folder&lt;/i&gt; shows the log file, which is always saved.&lt
     <message>
         <location filename="../../deepshot/look.py" line="166"/>
         <source>Tamaño del detalle que se realza, en % del lado largo de la imagen</source>
-        <translation>Size of the detail that is boosted, as a % of the image's long side</translation>
+        <translation>Size of the detail that is boosted, as a % of the image&apos;s long side</translation>
     </message>
     <message>
         <location filename="../../deepshot/look.py" line="168"/>
@@ -2910,6 +2910,16 @@ Approve and load them?</translation>
         <translation>&amp;Edit</translation>
     </message>
     <message>
+        <location filename="../../deepshot/ui/main_window.py" line="883"/>
+        <source>Deshacer</source>
+        <translation>Undo</translation>
+    </message>
+    <message>
+        <location filename="../../deepshot/ui/main_window.py" line="885"/>
+        <source>Rehacer</source>
+        <translation>Redo</translation>
+    </message>
+    <message>
         <location filename="../../deepshot/ui/main_window.py" line="890"/>
         <source>&amp;Ver</source>
         <translation>&amp;View</translation>
@@ -2923,6 +2933,16 @@ Approve and load them?</translation>
         <location filename="../../deepshot/ui/main_window.py" line="892"/>
         <source>Tamaño real (100 %)</source>
         <translation>Actual size (100 %)</translation>
+    </message>
+    <message>
+        <location filename="../../deepshot/ui/main_window.py" line="893"/>
+        <source>Acercar</source>
+        <translation>Zoom in</translation>
+    </message>
+    <message>
+        <location filename="../../deepshot/ui/main_window.py" line="894"/>
+        <source>Alejar</source>
+        <translation>Zoom out</translation>
     </message>
     <message>
         <location filename="../../deepshot/ui/main_window.py" line="895"/>
@@ -3622,6 +3642,7 @@ Approve and load them?</translation>
         <translation>Load depth map</translation>
     </message>
     <message>
+        <location filename="../../deepshot/ui/main_window.py" line="879"/>
         <location filename="../../deepshot/ui/main_window.py" line="2589"/>
         <source>Salir</source>
         <translation>Quit</translation>
@@ -3864,7 +3885,7 @@ Approve and load them?</translation>
         <location filename="../../deepshot/ui/model_cards.py" line="82"/>
         <source>Abrir la página del módulo
 {0}</source>
-        <translation>Open the module's page
+        <translation>Open the module&apos;s page
 {0}</translation>
     </message>
     <message>
@@ -4560,7 +4581,7 @@ Layers in your projects that use it are kept, but do nothing until you install i
         <location filename="../../deepshot/ui/model_manager.py" line="800"/>
         <source>Abrir la página del módulo
 {0}</source>
-        <translation>Open the module's page
+        <translation>Open the module&apos;s page
 {0}</translation>
     </message>
     <message>
