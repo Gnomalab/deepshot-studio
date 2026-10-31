@@ -141,9 +141,10 @@ class EditSession(QObject):
         self.style_bar.setEnabled(False)
         self.style_bar.chosen.connect(self.apply_style)
         self.lens_panel.presetChosen.connect(self.apply_lens_preset)
+        self.look_panel.preset_bar.chosen.connect(self.apply_look_preset)
         # Al pasar el ratón por la lista de un preset se ve el resultado en la vista previa sin aplicarlo.
         for kind, bar in (("style", self.style_bar), ("ramp", self.ramp_editor.preset),
-                          ("lens", self.lens_panel.preset_bar)):
+                          ("lens", self.lens_panel.preset_bar), ("look", self.look_panel.preset_bar)):
             bar.previewed.connect(lambda preset, k=kind: self.preview_preset(k, preset))
             bar.previewEnded.connect(self.end_preview)
         self._previewing = False
@@ -241,7 +242,7 @@ class EditSession(QObject):
     # Cambios, vista previa y deshacer
     # =====================================================================
     def preset_bars(self) -> list:
-        return [self.style_bar, self.ramp_editor.preset, self.lens_panel.preset_bar]
+        return [self.style_bar, self.ramp_editor.preset, self.lens_panel.preset_bar, self.look_panel.preset_bar]
 
     def preview_preset(self, kind: str, preset: dict) -> None:
         """Enseña en la vista previa cómo quedaría un preset sin aplicarlo ni apilar deshacer."""
@@ -398,6 +399,16 @@ class EditSession(QObject):
         self.restore(self.path, after)
         self.undo_stack.push(_ProjectEdit(self, self.path, before, after, self.tr("Aplicar bokeh")))
         self.lens_panel.refresh()
+        self.userEdited.emit()
+
+    def apply_look_preset(self, preset: dict) -> None:
+        """Aplica un look (pila de efectos) en lugar de la que había; se puede deshacer."""
+        if self.project is None:
+            return
+        before = self.project.to_dict()
+        after = presets.apply_to_project_dict("look", before, preset)
+        self.restore(self.path, after)
+        self.undo_stack.push(_ProjectEdit(self, self.path, before, after, self.tr("Aplicar look")))
         self.userEdited.emit()
 
     def place_area_at(self, u: float, v: float) -> bool:

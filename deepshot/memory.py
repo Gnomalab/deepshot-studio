@@ -1,8 +1,10 @@
 """Uso de memoria del proceso y utilidades para devolverla al sistema (sin interfaz, sin dependencias nuevas).
 
-`process_memory_mb()` mide la RAM que usa la app ahora mismo: en Windows con la API del sistema (ctypes) y en
-Linux con /proc; en macOS no hay una lectura sencilla sin psutil y devuelve None. `gpu_memory_mb()` mide la
-memoria de vídeo que PyTorch tiene reservada (None si no hay CUDA o torch todavía no se cargó).
+`process_memory_mb()` mide la RAM que usa la app ahora mismo: en Windows con la API del sistema (ctypes), en
+Linux con /proc y en macOS con psutil (viene con accelerate; sin él devuelve None). `gpu_memory_mb()` mide la
+memoria de vídeo que PyTorch tiene reservada: CUDA en Windows y Linux, MPS en Mac (None si no hay GPU o torch todavía no se
+cargó). En Mac la memoria es unificada: lo que reserva MPS sale de la misma RAM, así que devolverla con
+`torch.mps.empty_cache()` importa tanto como en CUDA.
 """
 
 from __future__ import annotations
@@ -40,6 +42,11 @@ def process_memory_mb() -> float | None:
             import os
 
             return pages * os.sysconf("SC_PAGE_SIZE") / 1e6
+        if sys.platform == "darwin":
+            import psutil
+
+            info = psutil.Process().memory_full_info()
+            return float(getattr(info, "uss", info.rss)) / 1e6      # memoria propia del proceso (lo que se libera al soltarla)
     except (OSError, ValueError, AttributeError, ImportError):
         pass
     return None
@@ -51,20 +58,38 @@ def gpu_memory_mb() -> float | None:
     try:
         if torch is not None and torch.cuda.is_available():
             return torch.cuda.memory_reserved() / 1e6
+        if torch is not None and _mps_available(torch):
+            return torch.mps.driver_allocated_memory() / 1e6
     except Exception:                      # un driver raro no debe romper la interfaz
         pass
     return None
 
 
+def _mps_available(torch) -> bool:
+    try:
+        return bool(torch.backends.mps.is_available())
+    except Exception:
+        return False
+
+
+def empty_gpu_cache(torch=None) -> None:
+    """Devuelve a la GPU (CUDA o MPS) la memoria que PyTorch tiene en caché. Sin torch cargado no hace nada."""
+    torch = torch or sys.modules.get("torch")
+    if torch is None:
+        return
+    try:
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+        if _mps_available(torch):
+            torch.mps.empty_cache()
+    except Exception:                      # un driver raro no debe romper la interfaz
+        pass
+
+
 def release_python_memory() -> None:
     """Recoge la basura de Python y devuelve a la GPU la memoria que PyTorch tiene en caché."""
     gc.collect()
-    torch = sys.modules.get("torch")
-    try:
-        if torch is not None and torch.cuda.is_available():
-            torch.cuda.empty_cache()
-    except Exception:
-        pass
+    empty_gpu_cache()
 
 
 # ---------------------------------------------------------------------------
@@ -101,6 +126,11 @@ def ram_free_total_mb() -> tuple[float, float] | None:
             if ctypes.windll.kernel32.GlobalMemoryStatusEx(ctypes.byref(status)):
                 return status.ullAvailPhys / 1e6, status.ullTotalPhys / 1e6
             return None
+        if sys.platform == "darwin":
+            import psutil
+
+            vm = psutil.virtual_memory()
+            return vm.available / 1e6, vm.total / 1e6
         if sys.platform.startswith("linux"):
             info = {}
             with open("/proc/meminfo", encoding="ascii") as f:

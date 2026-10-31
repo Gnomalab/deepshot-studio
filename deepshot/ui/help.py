@@ -29,12 +29,15 @@ def guide_html() -> str:
     return QCoreApplication.translate("Help", """
 <h2>Guía rápida de {app}</h2>
 <p>{app} crea imágenes a partir de la <b>profundidad</b> de una fotografía:
-lo cercano y lo lejano se convierten en luz, sombra o color. El trabajo sigue cuatro pasos,
-visibles en la barra superior (<b>Alt+1…4</b>).</p>
+lo cercano y lo lejano se convierten en luz, sombra o color. El trabajo sigue cinco pasos,
+visibles en la barra superior (<b>Alt+1…5</b>).</p>
 
 <h3>1 · Importar</h3>
 <p>Arrastra fotos a la ventana o usa <b>Archivo › Importar fotografía</b> (Ctrl+O).
 Aparecen en la <b>Biblioteca</b> de la izquierda; haz clic en una para trabajar con ella.</p>
+<p>A la derecha ves la <b>información de la foto</b> (cámara, objetivo, exposición…; la ubicación GPS está oculta
+hasta que la muestres). <b>Reencuadrar…</b> te deja trabajar solo con una zona de la foto, sin tocar el archivo original:
+así no se calcula entera una foto grande. <i>Foto entera</i> quita el encuadre.</p>
 
 <h3>2 · Profundidad</h3>
 <ul>
@@ -67,8 +70,16 @@ Cada zona tiene un centro y un destino: sube el destino para alejarla y bájalo 
 el desenfoque y las áreas, y se ve en las vistas Efecto y 3D. Con <i>Añadir zona</i> puedes tener hasta tres más. Para ver qué parte del mapa es de cada zona, en la vista Profundidad elige <i>Mapa: zonas de profundidad</i>; ahí mismo el mapa también se puede ver en color (se puede exportar así, en Exportar › Mapa de profundidad).</li>
 <li><b>Rampa artística</b>: colores de cerca (izquierda) a lejos (derecha). Arrastra las paradas;
 <b>doble clic en una parada</b> elige su color viendo el resultado en vivo; doble clic en la barra añade una;
-Supr borra. Puedes guardar tus rampas como presets.</li>
-<li><b>Bandas</b>: franjas de profundidad que se iluminan (o se tiñen) sobre la rampa, negro o blanco.</li>
+Supr borra. Puedes guardar tus rampas como presets. Si la base es Negro o Blanco, la rampa no se pinta: al elegir un preset de rampa
+(o al pasar el ratón por la lista) la base pasa a Rampa para que se vea.</li>
+<li><b>Bandas</b>: franjas de profundidad que se iluminan (o se tiñen) sobre la rampa, negro o blanco. Cada banda tiene posición,
+anchura, suavidad, intensidad y los giros <b>Pan</b> y <b>Tilt</b> (hasta ±89°), que inclinan la franja como un plano.
+En la vista 3D, la banda elegida lleva <b>tiradores</b>: la flecha la mueve en profundidad, los círculos giran Pan y Tilt
+y el cuadrado cambia su grosor.</li>
+<li><b>Listas de capas</b> (bandas, áreas y efectos de Look): cada fila tiene el <b>ojo</b> (aplica o salta ese elemento),
+la <b>S</b> (<i>solo</i>: en la vista previa solo se ve ese elemento, uno a la vez; no cambia lo que se exporta), el nombre
+(doble clic o F2) y el <b>cuadro de color</b> (clic para cambiarlo). Se reordenan con las <b>flechas</b> o <b>arrastrando</b>
+la fila con la mano.</li>
 <li><b>Áreas</b>: elipsoides o cajas en 3D que aclaran (fuerza +) u oscurecen (fuerza −). Se editan
 <b>sobre la imagen</b>:
   <ul>
@@ -104,8 +115,17 @@ para aplicarlo a otras fotos.</li>
 <li>Pasa el ratón por cualquier control: su explicación aparece abajo, en el pie de la ventana.</li>
 </ul>
 
-<h3>4 · Exportar</h3>
-<p>Elige <b>Efecto</b> o <b>Mapa de profundidad</b>, el formato (PNG de 8 o 16 bits, EXR de 32 bits),
+<h3>4 · Look</h3>
+<p>Acabado opcional: una pila de <b>efectos</b> que se aplican de abajo arriba, como en Photoshop (niveles, contraste,
+saturación, grano, nitidez, viñeta, claridad, resplandor, aberración cromática, niebla por profundidad y temperatura).
+Cada efecto se puede limitar a un rango de profundidad, mezclar con una opacidad y un modo de fusión, renombrar y
+reordenar. <i>Cargar look…</i> trae looks de fábrica (hechos solo con efectos de serie) y puedes guardar los tuyos.
+Los <b>módulos</b> (Profundidad › Gestor de modelos y módulos, filtro <i>Look modules</i>) añaden efectos más complejos:
+relighting por profundidad, quitar fondo y superresolución.</p>
+
+<h3>5 · Exportar</h3>
+<p>Elige <b>Efecto</b>, <b>Mapa de profundidad</b> o <b>Imagen final</b> (el efecto con el Look aplicado, en JPG, TIFF, PNG o
+WebP, con tamaño, resolución y datos EXIF a elegir), el formato (PNG de 8 o 16 bits, EXR de 32 bits),
 la carpeta y el nombre. Se guarda a <b>resolución completa</b> y nunca se sobrescribe un archivo existente.
 El efecto puede guardar también sus ajustes en un .json.</p>
 

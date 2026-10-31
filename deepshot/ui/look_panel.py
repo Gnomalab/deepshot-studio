@@ -14,9 +14,11 @@ import copy
 from PySide6.QtCore import QCoreApplication, QSize, Qt, QTimer, Signal
 from PySide6.QtWidgets import QAbstractItemView, QComboBox, QHBoxLayout, QLabel, QMenu, QPushButton, QVBoxLayout, QWidget
 
+from deepshot import presets
 from deepshot.look import KINDS, LookLayer
 from deepshot.ui.editor_panels import DETAIL_ROLE, MixPanel, _ListPanel
 from deepshot.ui.icons import set_icon
+from deepshot.ui.preset_bar import PresetBar
 from deepshot.ui.widgets import SegmentedControl
 
 
@@ -45,6 +47,12 @@ class LookPanel(_ListPanel):
         self.list.setToolTip(self.tr("Efectos de arriba abajo; se aplican de abajo arriba, como en Photoshop. Arrastra "
                                      "para reordenar, doble clic o F2 para renombrar. El ojo aplica o salta el efecto."))
         self.layout_.insertWidget(0, _one_line(self.tr("Se aplican de abajo arriba, como en Photoshop.")))
+        # Looks guardados: la pila entera. Los de fábrica usan solo efectos de serie, así valen en cualquier instalación.
+        self.preset_bar = PresetBar("look", self.tr("Cargar look…"), lambda: presets.from_project("look", self.project))
+        self.preset_bar.combo.setToolTip(self.tr("Looks: una pila de efectos entera (sustituye a la actual; se puede "
+                                                 "deshacer). Los de fábrica usan solo efectos de serie. Si guardas uno con "
+                                                 "efectos de un módulo, hará falta ese módulo para verlo."))
+        self.layout_.insertWidget(1, self.preset_bar)
 
         cur = lambda: self.current()  # noqa: E731 (atajo legible para los setters)
 

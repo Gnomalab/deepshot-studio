@@ -15,6 +15,7 @@ from dataclasses import dataclass, replace
 import numpy as np
 
 from deepshot.areas import Area, rotation_matrix
+from deepshot.tonemap import MAX_BAND_ANGLE
 from deepshot.view3d import OrbitCamera
 
 MIN_SCALE = 0.005                  # semieje mínimo, igual que en la vista 2D
@@ -202,7 +203,7 @@ def rotate_about_axis(area0: Area, axis: str, ray0: Ray, ray1: Ray, snap: bool =
 # ---------------------------------------------------------------------------
 # Bandas: tiradores del plano de una banda y gestos de ratón a valores
 # ---------------------------------------------------------------------------
-BAND_MAX_ANGLE = 80.0              # pan y tilt, igual que en el panel
+BAND_MAX_ANGLE = MAX_BAND_ANGLE    # pan y tilt, igual que en el panel y en el efecto
 BAND_MIN_SPAN = 0.05               # el ratón tiene que estar al menos así de lejos del centro para fijar un ángulo
 
 

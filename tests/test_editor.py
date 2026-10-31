@@ -168,3 +168,24 @@ def test_look_cambia_la_imagen_final(tmp_path):
     session.look_panel.emit_both()
     after = _wait_result(app, session).pixelColor(60, 40).value()
     assert after < before
+
+
+def test_a_look_preset_replaces_the_stack_in_one_undo_step_and_previews_on_hover(tmp_path):
+    from deepshot import presets
+    from deepshot.look import LookLayer
+
+    app, session, stack, *_ = _setup(tmp_path)
+    p = session.project
+    session.look_panel.add_item(LookLayer.new("levels"))
+    steps = stack.index()
+    sent = []
+    session.render.request = lambda project, mask=None: sent.append(project)
+    preset = presets.builtin("look", "old_film")
+    session.preview_preset("look", preset)                                   # al pasar el ratón: se ve sin aplicar
+    assert [l.kind for l in sent[-1].look] == [l["kind"] for l in preset["look"]]
+    assert [l.kind for l in session.project.look] == ["levels"]
+    session.look_panel.preset_bar.chosen.emit(preset)                        # al elegirlo: sustituye la pila
+    assert [l.kind for l in session.project.look] == [l["kind"] for l in preset["look"]]
+    assert stack.index() == steps + 1
+    stack.undo()
+    assert [l.kind for l in session.project.look] == ["levels"]

@@ -645,57 +645,62 @@
         <translation>Load style…</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor.py" line="341"/>
+        <location filename="../../deepshot/ui/editor.py" line="342"/>
         <source>Editar ajustes</source>
         <translation>Edit settings</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor.py" line="388"/>
+        <location filename="../../deepshot/ui/editor.py" line="389"/>
         <source>Aplicar estilo</source>
         <translation>Apply style</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor.py" line="399"/>
+        <location filename="../../deepshot/ui/editor.py" line="400"/>
         <source>Aplicar bokeh</source>
         <translation>Apply bokeh</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor.py" line="513"/>
+        <location filename="../../deepshot/ui/editor.py" line="411"/>
+        <source>Aplicar look</source>
+        <translation>Apply look</translation>
+    </message>
+    <message>
+        <location filename="../../deepshot/ui/editor.py" line="524"/>
         <source>Borrar máscara</source>
         <translation>Delete mask</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor.py" line="513"/>
+        <location filename="../../deepshot/ui/editor.py" line="524"/>
         <source>Pintar máscara</source>
         <translation>Paint mask</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor.py" line="542"/>
+        <location filename="../../deepshot/ui/editor.py" line="553"/>
         <source>Rellenar máscara</source>
         <translation>Fill mask</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor.py" line="542"/>
+        <location filename="../../deepshot/ui/editor.py" line="553"/>
         <source>Vaciar máscara</source>
         <translation>Clear mask</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor.py" line="543"/>
+        <location filename="../../deepshot/ui/editor.py" line="554"/>
         <source>Invertir máscara</source>
         <translation>Invert mask</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor.py" line="543"/>
+        <location filename="../../deepshot/ui/editor.py" line="554"/>
         <source>Cargar máscara</source>
         <translation>Load mask</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor.py" line="763"/>
+        <location filename="../../deepshot/ui/editor.py" line="774"/>
         <source>Área {0}</source>
         <translation>Area {0}</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor.py" line="869"/>
+        <location filename="../../deepshot/ui/editor.py" line="880"/>
         <source>Cargar ajustes</source>
         <translation>Load settings</translation>
     </message>
@@ -1333,12 +1338,15 @@ If you have no connection, you can install a model from a folder. Meanwhile you 
         <source>
 &lt;h2&gt;Guía rápida de {app}&lt;/h2&gt;
 &lt;p&gt;{app} crea imágenes a partir de la &lt;b&gt;profundidad&lt;/b&gt; de una fotografía:
-lo cercano y lo lejano se convierten en luz, sombra o color. El trabajo sigue cuatro pasos,
-visibles en la barra superior (&lt;b&gt;Alt+1…4&lt;/b&gt;).&lt;/p&gt;
+lo cercano y lo lejano se convierten en luz, sombra o color. El trabajo sigue cinco pasos,
+visibles en la barra superior (&lt;b&gt;Alt+1…5&lt;/b&gt;).&lt;/p&gt;
 
 &lt;h3&gt;1 · Importar&lt;/h3&gt;
 &lt;p&gt;Arrastra fotos a la ventana o usa &lt;b&gt;Archivo › Importar fotografía&lt;/b&gt; (Ctrl+O).
 Aparecen en la &lt;b&gt;Biblioteca&lt;/b&gt; de la izquierda; haz clic en una para trabajar con ella.&lt;/p&gt;
+&lt;p&gt;A la derecha ves la &lt;b&gt;información de la foto&lt;/b&gt; (cámara, objetivo, exposición…; la ubicación GPS está oculta
+hasta que la muestres). &lt;b&gt;Reencuadrar…&lt;/b&gt; te deja trabajar solo con una zona de la foto, sin tocar el archivo original:
+así no se calcula entera una foto grande. &lt;i&gt;Foto entera&lt;/i&gt; quita el encuadre.&lt;/p&gt;
 
 &lt;h3&gt;2 · Profundidad&lt;/h3&gt;
 &lt;ul&gt;
@@ -1371,8 +1379,16 @@ Cada zona tiene un centro y un destino: sube el destino para alejarla y bájalo 
 el desenfoque y las áreas, y se ve en las vistas Efecto y 3D. Con &lt;i&gt;Añadir zona&lt;/i&gt; puedes tener hasta tres más. Para ver qué parte del mapa es de cada zona, en la vista Profundidad elige &lt;i&gt;Mapa: zonas de profundidad&lt;/i&gt;; ahí mismo el mapa también se puede ver en color (se puede exportar así, en Exportar › Mapa de profundidad).&lt;/li&gt;
 &lt;li&gt;&lt;b&gt;Rampa artística&lt;/b&gt;: colores de cerca (izquierda) a lejos (derecha). Arrastra las paradas;
 &lt;b&gt;doble clic en una parada&lt;/b&gt; elige su color viendo el resultado en vivo; doble clic en la barra añade una;
-Supr borra. Puedes guardar tus rampas como presets.&lt;/li&gt;
-&lt;li&gt;&lt;b&gt;Bandas&lt;/b&gt;: franjas de profundidad que se iluminan (o se tiñen) sobre la rampa, negro o blanco.&lt;/li&gt;
+Supr borra. Puedes guardar tus rampas como presets. Si la base es Negro o Blanco, la rampa no se pinta: al elegir un preset de rampa
+(o al pasar el ratón por la lista) la base pasa a Rampa para que se vea.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;Bandas&lt;/b&gt;: franjas de profundidad que se iluminan (o se tiñen) sobre la rampa, negro o blanco. Cada banda tiene posición,
+anchura, suavidad, intensidad y los giros &lt;b&gt;Pan&lt;/b&gt; y &lt;b&gt;Tilt&lt;/b&gt; (hasta ±89°), que inclinan la franja como un plano.
+En la vista 3D, la banda elegida lleva &lt;b&gt;tiradores&lt;/b&gt;: la flecha la mueve en profundidad, los círculos giran Pan y Tilt
+y el cuadrado cambia su grosor.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;Listas de capas&lt;/b&gt; (bandas, áreas y efectos de Look): cada fila tiene el &lt;b&gt;ojo&lt;/b&gt; (aplica o salta ese elemento),
+la &lt;b&gt;S&lt;/b&gt; (&lt;i&gt;solo&lt;/i&gt;: en la vista previa solo se ve ese elemento, uno a la vez; no cambia lo que se exporta), el nombre
+(doble clic o F2) y el &lt;b&gt;cuadro de color&lt;/b&gt; (clic para cambiarlo). Se reordenan con las &lt;b&gt;flechas&lt;/b&gt; o &lt;b&gt;arrastrando&lt;/b&gt;
+la fila con la mano.&lt;/li&gt;
 &lt;li&gt;&lt;b&gt;Áreas&lt;/b&gt;: elipsoides o cajas en 3D que aclaran (fuerza +) u oscurecen (fuerza −). Se editan
 &lt;b&gt;sobre la imagen&lt;/b&gt;:
   &lt;ul&gt;
@@ -1408,8 +1424,17 @@ para aplicarlo a otras fotos.&lt;/li&gt;
 &lt;li&gt;Pasa el ratón por cualquier control: su explicación aparece abajo, en el pie de la ventana.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3&gt;4 · Exportar&lt;/h3&gt;
-&lt;p&gt;Elige &lt;b&gt;Efecto&lt;/b&gt; o &lt;b&gt;Mapa de profundidad&lt;/b&gt;, el formato (PNG de 8 o 16 bits, EXR de 32 bits),
+&lt;h3&gt;4 · Look&lt;/h3&gt;
+&lt;p&gt;Acabado opcional: una pila de &lt;b&gt;efectos&lt;/b&gt; que se aplican de abajo arriba, como en Photoshop (niveles, contraste,
+saturación, grano, nitidez, viñeta, claridad, resplandor, aberración cromática, niebla por profundidad y temperatura).
+Cada efecto se puede limitar a un rango de profundidad, mezclar con una opacidad y un modo de fusión, renombrar y
+reordenar. &lt;i&gt;Cargar look…&lt;/i&gt; trae looks de fábrica (hechos solo con efectos de serie) y puedes guardar los tuyos.
+Los &lt;b&gt;módulos&lt;/b&gt; (Profundidad › Gestor de modelos y módulos, filtro &lt;i&gt;Look modules&lt;/i&gt;) añaden efectos más complejos:
+relighting por profundidad, quitar fondo y superresolución.&lt;/p&gt;
+
+&lt;h3&gt;5 · Exportar&lt;/h3&gt;
+&lt;p&gt;Elige &lt;b&gt;Efecto&lt;/b&gt;, &lt;b&gt;Mapa de profundidad&lt;/b&gt; o &lt;b&gt;Imagen final&lt;/b&gt; (el efecto con el Look aplicado, en JPG, TIFF, PNG o
+WebP, con tamaño, resolución y datos EXIF a elegir), el formato (PNG de 8 o 16 bits, EXR de 32 bits),
 la carpeta y el nombre. Se guarda a &lt;b&gt;resolución completa&lt;/b&gt; y nunca se sobrescribe un archivo existente.
 El efecto puede guardar también sus ajustes en un .json.&lt;/p&gt;
 
@@ -1443,12 +1468,15 @@ y &lt;i&gt;Abrir carpeta&lt;/i&gt; muestra el archivo de registro, que se guarda
         <translation>
 &lt;h2&gt;{app} quick guide&lt;/h2&gt;
 &lt;p&gt;{app} creates images from the &lt;b&gt;depth&lt;/b&gt; of a photograph:
-near and far things become light, shadow or color. The work follows four steps,
-shown in the top bar (&lt;b&gt;Alt+1…4&lt;/b&gt;).&lt;/p&gt;
+near and far things become light, shadow or color. The work follows five steps,
+shown in the top bar (&lt;b&gt;Alt+1…5&lt;/b&gt;).&lt;/p&gt;
 
 &lt;h3&gt;1 · Import&lt;/h3&gt;
 &lt;p&gt;Drag photos onto the window or use &lt;b&gt;File › Import photograph&lt;/b&gt; (Ctrl+O).
 They appear in the &lt;b&gt;Library&lt;/b&gt; on the left; click one to work with it.&lt;/p&gt;
+&lt;p&gt;On the right you see the &lt;b&gt;photo information&lt;/b&gt; (camera, lens, exposure…; the GPS location is hidden until you show it).
+&lt;b&gt;Reframe…&lt;/b&gt; lets you work with just one area of the photo without touching the original file, so a big photo is not
+computed whole. &lt;i&gt;Whole photo&lt;/i&gt; removes the framing.&lt;/p&gt;
 
 &lt;h3&gt;2 · Depth&lt;/h3&gt;
 &lt;ul&gt;
@@ -1456,11 +1484,11 @@ They appear in the &lt;b&gt;Library&lt;/b&gt; on the left; click one to work wit
 The first time the model is downloaded (about 2.6 GB); afterwards it works offline.&lt;/li&gt;
 &lt;li&gt;&lt;b&gt;Quality&lt;/b&gt;: &lt;i&gt;Fast&lt;/i&gt; for trying things out, &lt;i&gt;High&lt;/i&gt; for working,
 &lt;i&gt;Maximum&lt;/i&gt; for the final result. Each map is cached: going back to a photo is instant.&lt;/li&gt;
-&lt;li&gt;&lt;b&gt;Refine edges with the photo&lt;/b&gt; fits the map&apos;s contours to those of the photo.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;Refine edges with the photo&lt;/b&gt; fits the map's contours to those of the photo.&lt;/li&gt;
 &lt;li&gt;&lt;b&gt;Computations of this photo&lt;/b&gt;: every time you compute (or recover from the cache) a map, it stays in a list with how long
 that model and quality &lt;b&gt;really took&lt;/b&gt;. Select one to view it, select two to compare them with the
 divider, and &lt;i&gt;Use this map&lt;/i&gt; to continue with it; &lt;i&gt;Keep only this one&lt;/i&gt; removes the others. Maps are computed at
-a fixed size (the long side of the chosen quality) and scaled up to the photo&apos;s size.&lt;/li&gt;
+a fixed size (the long side of the chosen quality) and scaled up to the photo's size.&lt;/li&gt;
 &lt;li&gt;If you already have a map made in another program, use &lt;b&gt;Load depth map&lt;/b&gt;.&lt;/li&gt;
 &lt;li&gt;Convention: on screen, &lt;b&gt;near = bright&lt;/b&gt; and &lt;b&gt;far = dark&lt;/b&gt;.&lt;/li&gt;
 &lt;/ul&gt;
@@ -1481,8 +1509,16 @@ Each zone has a center and a target: raise the target to push it away and lower 
 blur and areas notice it, and it is seen in the Effect and 3D views. With &lt;i&gt;Add zone&lt;/i&gt; you can have up to three more. To see which part of the map belongs to each zone, in the Depth view choose &lt;i&gt;Map: depth zones&lt;/i&gt;; there the map can also be viewed in color (it can be exported that way, in Export › Depth map).&lt;/li&gt;
 &lt;li&gt;&lt;b&gt;Artistic ramp&lt;/b&gt;: colors from near (left) to far (right). Drag the stops;
 &lt;b&gt;double-click on a stop&lt;/b&gt; to choose its color while watching the live result; double-click on the bar to add one;
-Del deletes. You can save your ramps as presets.&lt;/li&gt;
-&lt;li&gt;&lt;b&gt;Bands&lt;/b&gt;: depth stripes that light up (or tint) over the ramp, black or white.&lt;/li&gt;
+Del deletes. You can save your ramps as presets. If the base is Black or White the ramp is not painted: when you choose a ramp preset
+(or hover over the list) the base switches to Ramp so you can see it.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;Bands&lt;/b&gt;: depth stripes that light up (or tint) over the ramp, black or white. Each band has position, width,
+softness, intensity and the &lt;b&gt;Pan&lt;/b&gt; and &lt;b&gt;Tilt&lt;/b&gt; rotations (up to ±89°), which tilt the stripe like a plane.
+In the 3D view the selected band has &lt;b&gt;handles&lt;/b&gt;: the arrow moves it in depth, the circles turn Pan and Tilt and the
+square changes its thickness.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;Layer lists&lt;/b&gt; (bands, areas and Look effects): each row has the &lt;b&gt;eye&lt;/b&gt; (applies or bypasses that item), the &lt;b&gt;S&lt;/b&gt;
+(&lt;i&gt;solo&lt;/i&gt;: the preview shows only that item, one at a time; it does not change what is exported), the name (double-click or
+F2) and the &lt;b&gt;colour square&lt;/b&gt; (click to change it). Rows are reordered with the &lt;b&gt;arrows&lt;/b&gt; or by &lt;b&gt;dragging&lt;/b&gt; the row
+with the hand.&lt;/li&gt;
 &lt;li&gt;&lt;b&gt;Areas&lt;/b&gt;: 3D ellipsoids or boxes that lighten (strength +) or darken (strength −). They are edited
 &lt;b&gt;on the image&lt;/b&gt;:
   &lt;ul&gt;
@@ -1497,7 +1533,7 @@ Del deletes. You can save your ramps as presets.&lt;/li&gt;
   &lt;/ul&gt;&lt;/li&gt;
 &lt;li&gt;&lt;b&gt;Lens blur&lt;/b&gt;: blurs what is far from the depth in focus, like a real camera. Choose the &lt;b&gt;focus&lt;/b&gt; (0 = closest, 1 = farthest; look at the map in the Depth view), the &lt;b&gt;aperture&lt;/b&gt; (f/1.4 blurs a lot, f/16 almost nothing) and the &lt;b&gt;diaphragm&lt;/b&gt;: round or 3 to 12 blades, which shapes the points of light. With the &lt;b&gt;eyedropper&lt;/b&gt; you choose the focus by clicking on the image on what you
 want sharp, and “Show in-focus zone” tints it green. You can blur the final image or only the photo before
-blending it. “Load bokeh…” brings presets (portrait, macro, cinema…) that only change the character of the blur, not the focus of your photo, and &lt;b&gt;Cat&apos;s eye&lt;/b&gt; clips the points of light at the edges of the image into an almond shape.&lt;/li&gt;
+blending it. “Load bokeh…” brings presets (portrait, macro, cinema…) that only change the character of the blur, not the focus of your photo, and &lt;b&gt;Cat's eye&lt;/b&gt; clips the points of light at the edges of the image into an almond shape.&lt;/li&gt;
 &lt;li&gt;&lt;b&gt;Blend and masks&lt;/b&gt;: adds the photo with a blend mode, limited if you want to the areas,
 to a depth range or to a &lt;b&gt;mask painted with a brush&lt;/b&gt; (B brush, E eraser,
 [ and ] size; the cursor shows the size and the hardness).&lt;/li&gt;
@@ -1515,11 +1551,19 @@ and “Reset layout”. Everything applies instantly, without restarting (except
 layout you have the same quick change.&lt;/li&gt;
 &lt;li&gt;&lt;b&gt;Style&lt;/b&gt; (File › Save style / Load style, Ctrl+L): the artistic look as a loose file,
 to apply it to other photos.&lt;/li&gt;
-&lt;li&gt;Hover over any control: its explanation appears below, in the window&apos;s footer.&lt;/li&gt;
+&lt;li&gt;Hover over any control: its explanation appears below, in the window's footer.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3&gt;4 · Export&lt;/h3&gt;
-&lt;p&gt;Choose &lt;b&gt;Effect&lt;/b&gt; or &lt;b&gt;Depth map&lt;/b&gt;, the format (8 or 16-bit PNG, 32-bit EXR),
+&lt;h3&gt;4 · Look&lt;/h3&gt;
+&lt;p&gt;Optional finishing: a stack of &lt;b&gt;effects&lt;/b&gt; applied from bottom to top, as in Photoshop (levels, contrast, saturation, grain,
+sharpen, vignette, clarity, glow, chromatic aberration, depth haze and temperature). Each effect can be limited to a depth
+range, blended with an opacity and a blend mode, renamed and reordered. &lt;i&gt;Load look…&lt;/i&gt; brings factory looks (made only
+with built-in effects) and you can save your own. &lt;b&gt;Modules&lt;/b&gt; (Depth › Model and module manager, &lt;i&gt;Look modules&lt;/i&gt; filter)
+add more complex effects: depth relighting, background removal and super-resolution.&lt;/p&gt;
+
+&lt;h3&gt;5 · Export&lt;/h3&gt;
+&lt;p&gt;Choose &lt;b&gt;Effect&lt;/b&gt;, &lt;b&gt;Depth map&lt;/b&gt; or &lt;b&gt;Final image&lt;/b&gt; (the effect with the Look applied, as JPG, TIFF, PNG or WebP, with a
+choice of size, resolution and EXIF data), the format (8 or 16-bit PNG, 32-bit EXR),
 the folder and the name. It is saved at &lt;b&gt;full resolution&lt;/b&gt; and an existing file is never overwritten.
 The effect can also save its settings in a .json.&lt;/p&gt;
 
@@ -1527,7 +1571,7 @@ The effect can also save its settings in a .json.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Top right: &lt;b&gt;Photo&lt;/b&gt;, &lt;b&gt;Depth&lt;/b&gt;, &lt;b&gt;Effect&lt;/b&gt; or &lt;b&gt;Compare&lt;/b&gt;
 (V changes the view, C compares with the photo).&lt;/li&gt;
-&lt;li&gt;In the &lt;b&gt;Effect&lt;/b&gt; view, the &lt;b&gt;2D | 3D&lt;/b&gt; switch (3 key) shows the map&apos;s relief in 3D: drag to rotate, Shift+drag (or middle button) to pan,
+&lt;li&gt;In the &lt;b&gt;Effect&lt;/b&gt; view, the &lt;b&gt;2D | 3D&lt;/b&gt; switch (3 key) shows the map's relief in 3D: drag to rotate, Shift+drag (or middle button) to pan,
 wheel to zoom, double-click to reset; keys 1, 2 and 7: front, side and top. Choose which image
 covers the relief (photo, depth or effect).&lt;/li&gt;
 &lt;li&gt;The &lt;b&gt;areas&lt;/b&gt; are also seen and edited in 3D: click on an outline to select it; on the selected one, the
@@ -1551,264 +1595,264 @@ from the list; the files are not deleted.&lt;/p&gt;
 and &lt;i&gt;Open folder&lt;/i&gt; shows the log file, which is always saved.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="144"/>
-        <location filename="../../deepshot/ui/help.py" line="145"/>
-        <location filename="../../deepshot/ui/help.py" line="146"/>
-        <location filename="../../deepshot/ui/help.py" line="147"/>
-        <location filename="../../deepshot/ui/help.py" line="153"/>
+        <location filename="../../deepshot/ui/help.py" line="164"/>
+        <location filename="../../deepshot/ui/help.py" line="165"/>
+        <location filename="../../deepshot/ui/help.py" line="166"/>
+        <location filename="../../deepshot/ui/help.py" line="167"/>
+        <location filename="../../deepshot/ui/help.py" line="173"/>
         <source>Lienzo</source>
         <translation>Canvas</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="144"/>
+        <location filename="../../deepshot/ui/help.py" line="164"/>
         <source>Rueda del ratón</source>
         <translation>Mouse wheel</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="144"/>
+        <location filename="../../deepshot/ui/help.py" line="164"/>
         <source>Acercar / alejar</source>
         <translation>Zoom in / out</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="145"/>
+        <location filename="../../deepshot/ui/help.py" line="165"/>
         <source>Arrastrar con el botón izquierdo</source>
         <translation>Drag with the left button</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="145"/>
-        <location filename="../../deepshot/ui/help.py" line="147"/>
+        <location filename="../../deepshot/ui/help.py" line="165"/>
+        <location filename="../../deepshot/ui/help.py" line="167"/>
         <source>Desplazar la imagen</source>
         <translation>Pan the image</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="146"/>
+        <location filename="../../deepshot/ui/help.py" line="166"/>
         <source>Arrastrar el tirador azul</source>
         <translation>Drag the blue handle</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="146"/>
+        <location filename="../../deepshot/ui/help.py" line="166"/>
         <source>Mover el divisor al comparar</source>
         <translation>Move the divider when comparing</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="147"/>
+        <location filename="../../deepshot/ui/help.py" line="167"/>
         <source>Botón central</source>
         <translation>Middle button</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="148"/>
-        <location filename="../../deepshot/ui/help.py" line="149"/>
-        <location filename="../../deepshot/ui/help.py" line="150"/>
-        <location filename="../../deepshot/ui/help.py" line="151"/>
-        <location filename="../../deepshot/ui/help.py" line="152"/>
+        <location filename="../../deepshot/ui/help.py" line="168"/>
+        <location filename="../../deepshot/ui/help.py" line="169"/>
+        <location filename="../../deepshot/ui/help.py" line="170"/>
+        <location filename="../../deepshot/ui/help.py" line="171"/>
+        <location filename="../../deepshot/ui/help.py" line="172"/>
         <source>Áreas</source>
         <translation>Areas</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="148"/>
+        <location filename="../../deepshot/ui/help.py" line="168"/>
         <source>Arrastrar un área</source>
         <translation>Drag an area</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="148"/>
+        <location filename="../../deepshot/ui/help.py" line="168"/>
         <source>Moverla (Mayús: pegada a la superficie)</source>
         <translation>Move it (Shift: stuck to the surface)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="149"/>
+        <location filename="../../deepshot/ui/help.py" line="169"/>
         <source>Arrastrar un cuadrado / el círculo</source>
         <translation>Drag a square / the circle</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="149"/>
+        <location filename="../../deepshot/ui/help.py" line="169"/>
         <source>Escalar un semieje / girar el área</source>
         <translation>Scale a semi-axis / rotate the area</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="150"/>
+        <location filename="../../deepshot/ui/help.py" line="170"/>
         <source>G · S · R con el ratón sobre la imagen</source>
         <translation>G · S · R with the mouse over the image</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="150"/>
+        <location filename="../../deepshot/ui/help.py" line="170"/>
         <source>Mover · escalar · girar (X / Y / Z: eje)</source>
         <translation>Move · scale · rotate (X / Y / Z: axis)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="151"/>
+        <location filename="../../deepshot/ui/help.py" line="171"/>
         <source>Rueda con Ctrl / Mayús / Alt</source>
         <translation>Wheel with Ctrl / Shift / Alt</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="151"/>
+        <location filename="../../deepshot/ui/help.py" line="171"/>
         <source>Tamaño / profundidad / suavidad del área seleccionada</source>
         <translation>Size / depth / softness of the selected area</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="152"/>
+        <location filename="../../deepshot/ui/help.py" line="172"/>
         <source>Dibujar (Mayús+A) y Colocar (P)</source>
         <translation>Draw (Shift+A) and Place (P)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="152"/>
+        <location filename="../../deepshot/ui/help.py" line="172"/>
         <source>Crear o mover un área arrastrando</source>
         <translation>Create or move an area by dragging</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="153"/>
+        <location filename="../../deepshot/ui/help.py" line="173"/>
         <source>Esc</source>
         <translation>Esc</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="153"/>
+        <location filename="../../deepshot/ui/help.py" line="173"/>
         <source>Salir de la herramienta activa o cancelar el gesto</source>
         <translation>Leave the active tool or cancel the gesture</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="154"/>
+        <location filename="../../deepshot/ui/help.py" line="174"/>
         <source>Máscara</source>
         <translation>Mask</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="154"/>
+        <location filename="../../deepshot/ui/help.py" line="174"/>
         <source>Pincel (B), borrador (E), [ y ]</source>
         <translation>Brush (B), eraser (E), [ and ]</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="154"/>
+        <location filename="../../deepshot/ui/help.py" line="174"/>
         <source>Pintar la máscara y cambiar el tamaño</source>
         <translation>Paint the mask and change the size</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="155"/>
-        <location filename="../../deepshot/ui/help.py" line="156"/>
+        <location filename="../../deepshot/ui/help.py" line="175"/>
+        <location filename="../../deepshot/ui/help.py" line="176"/>
         <source>Campos numéricos</source>
         <translation>Numeric fields</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="155"/>
+        <location filename="../../deepshot/ui/help.py" line="175"/>
         <source>Arrastrar / Mayús+arrastrar</source>
         <translation>Drag / Shift+drag</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="155"/>
+        <location filename="../../deepshot/ui/help.py" line="175"/>
         <source>Cambiar el valor / ajuste fino</source>
         <translation>Change the value / fine adjustment</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="156"/>
+        <location filename="../../deepshot/ui/help.py" line="176"/>
         <source>Clic</source>
         <translation>Click</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="156"/>
+        <location filename="../../deepshot/ui/help.py" line="176"/>
         <source>Escribir el valor</source>
         <translation>Type the value</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="157"/>
-        <location filename="../../deepshot/ui/help.py" line="158"/>
-        <location filename="../../deepshot/ui/help.py" line="159"/>
+        <location filename="../../deepshot/ui/help.py" line="177"/>
+        <location filename="../../deepshot/ui/help.py" line="178"/>
+        <location filename="../../deepshot/ui/help.py" line="179"/>
         <source>Rampa</source>
         <translation>Ramp</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="157"/>
+        <location filename="../../deepshot/ui/help.py" line="177"/>
         <source>Doble clic en una parada</source>
         <translation>Double-click on a stop</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="157"/>
+        <location filename="../../deepshot/ui/help.py" line="177"/>
         <source>Elegir su color con vista previa en vivo</source>
         <translation>Choose its color with a live preview</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="158"/>
+        <location filename="../../deepshot/ui/help.py" line="178"/>
         <source>Doble clic en la barra</source>
         <translation>Double-click on the bar</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="158"/>
+        <location filename="../../deepshot/ui/help.py" line="178"/>
         <source>Añadir parada</source>
         <translation>Add a stop</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="159"/>
-        <location filename="../../deepshot/ui/help.py" line="162"/>
+        <location filename="../../deepshot/ui/help.py" line="179"/>
+        <location filename="../../deepshot/ui/help.py" line="182"/>
         <source>Supr</source>
         <translation>Del</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="159"/>
+        <location filename="../../deepshot/ui/help.py" line="179"/>
         <source>Borrar la parada seleccionada</source>
         <translation>Delete the selected stop</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="160"/>
-        <location filename="../../deepshot/ui/help.py" line="161"/>
-        <location filename="../../deepshot/ui/help.py" line="162"/>
+        <location filename="../../deepshot/ui/help.py" line="180"/>
+        <location filename="../../deepshot/ui/help.py" line="181"/>
+        <location filename="../../deepshot/ui/help.py" line="182"/>
         <source>Biblioteca</source>
         <translation>Library</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="160"/>
+        <location filename="../../deepshot/ui/help.py" line="180"/>
         <source>Arrastrar archivos a la ventana</source>
         <translation>Drag files onto the window</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="160"/>
-        <location filename="../../deepshot/ui/help.py" line="161"/>
+        <location filename="../../deepshot/ui/help.py" line="180"/>
+        <location filename="../../deepshot/ui/help.py" line="181"/>
         <source>Importar fotografías</source>
         <translation>Import photographs</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="161"/>
+        <location filename="../../deepshot/ui/help.py" line="181"/>
         <source>Doble clic en el espacio vacío</source>
         <translation>Double-click on the empty space</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="162"/>
+        <location filename="../../deepshot/ui/help.py" line="182"/>
         <source>Quitar las fotos seleccionadas de la lista</source>
         <translation>Remove the selected photos from the list</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="163"/>
+        <location filename="../../deepshot/ui/help.py" line="183"/>
         <source>Gestor de modelos</source>
         <translation>Model manager</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="163"/>
+        <location filename="../../deepshot/ui/help.py" line="183"/>
         <source>Doble clic en un modelo</source>
         <translation>Double-click on a model</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="163"/>
+        <location filename="../../deepshot/ui/help.py" line="183"/>
         <source>Usarlo como activo</source>
         <translation>Use it as the active one</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="170"/>
+        <location filename="../../deepshot/ui/help.py" line="190"/>
         <source>Guía rápida</source>
         <translation>Quick guide</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="175"/>
-        <location filename="../../deepshot/ui/help.py" line="216"/>
+        <location filename="../../deepshot/ui/help.py" line="195"/>
+        <location filename="../../deepshot/ui/help.py" line="236"/>
         <source>Cerrar</source>
         <translation>Close</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="187"/>
+        <location filename="../../deepshot/ui/help.py" line="207"/>
         <source>Atajos de teclado</source>
         <translation>Keyboard shortcuts</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="190"/>
+        <location filename="../../deepshot/ui/help.py" line="210"/>
         <source>Acción</source>
         <translation>Action</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/help.py" line="190"/>
+        <location filename="../../deepshot/ui/help.py" line="210"/>
         <source>Atajo</source>
         <translation>Shortcut</translation>
     </message>
@@ -2327,117 +2371,127 @@ and &lt;i&gt;Open folder&lt;/i&gt; shows the log file, which is always saved.&lt
 <context>
     <name>LookPanel</name>
     <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="63"/>
+        <location filename="../../deepshot/ui/look_panel.py" line="71"/>
         <source>Opacidad</source>
         <translation>Opacity</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="71"/>
+        <location filename="../../deepshot/ui/look_panel.py" line="79"/>
         <source>Todo</source>
         <translation>All</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="71"/>
+        <location filename="../../deepshot/ui/look_panel.py" line="79"/>
         <source>Profundidad</source>
         <translation>Depth</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="75"/>
+        <location filename="../../deepshot/ui/look_panel.py" line="83"/>
         <source>Desde</source>
         <translation>From</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="78"/>
+        <location filename="../../deepshot/ui/look_panel.py" line="86"/>
         <source>Hasta</source>
         <translation>To</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="42"/>
+        <location filename="../../deepshot/ui/look_panel.py" line="44"/>
         <source>+ Añadir efecto</source>
         <translation>+ Add effect</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="42"/>
+        <location filename="../../deepshot/ui/look_panel.py" line="44"/>
         <source>Añade un efecto a la pila (niveles, contraste, saturación, grano…). Entra arriba.</source>
         <translation>Adds an effect to the stack (levels, contrast, saturation, grain…). It goes on top.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="45"/>
+        <location filename="../../deepshot/ui/look_panel.py" line="47"/>
         <source>Efectos de arriba abajo; se aplican de abajo arriba, como en Photoshop. Arrastra para reordenar, doble clic o F2 para renombrar. El ojo aplica o salta el efecto.</source>
         <translation>Effects from top to bottom; they are applied bottom to top, as in Photoshop. Drag to reorder, double-click or F2 to rename. The eye applies or bypasses the effect.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="47"/>
+        <location filename="../../deepshot/ui/look_panel.py" line="49"/>
         <source>Se aplican de abajo arriba, como en Photoshop.</source>
         <translation>Applied from bottom to top, as in Photoshop.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="54"/>
+        <location filename="../../deepshot/ui/look_panel.py" line="51"/>
+        <source>Cargar look…</source>
+        <translation>Load look…</translation>
+    </message>
+    <message>
+        <location filename="../../deepshot/ui/look_panel.py" line="52"/>
+        <source>Looks: una pila de efectos entera (sustituye a la actual; se puede deshacer). Los de fábrica usan solo efectos de serie. Si guardas uno con efectos de un módulo, hará falta ese módulo para verlo.</source>
+        <translation>Looks: a whole stack of effects (it replaces the current one; it can be undone). Factory looks use only built-in effects. If you save one with effects from a module, that module will be needed to see it.</translation>
+    </message>
+    <message>
+        <location filename="../../deepshot/ui/look_panel.py" line="62"/>
         <source>Módulo no instalado: no hace nada. Instálalo en el Gestor (Ctrl+M).</source>
         <translation>Module not installed: it does nothing. Install it in the Manager (Ctrl+M).</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="65"/>
+        <location filename="../../deepshot/ui/look_panel.py" line="73"/>
         <source>Cuánto se nota el efecto: 0 = nada, 1 = por completo</source>
         <translation>How visible the effect is: 0 = not at all, 1 = fully</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="69"/>
+        <location filename="../../deepshot/ui/look_panel.py" line="77"/>
         <source>Cómo se combina el ajuste con la imagen que llega al efecto</source>
         <translation>How the adjustment is combined with the image reaching the effect</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="72"/>
+        <location filename="../../deepshot/ui/look_panel.py" line="80"/>
         <source>Todo: el efecto afecta a toda la imagen. Profundidad: solo a un rango del mapa, p. ej. solo el fondo.</source>
         <translation>All: the effect affects the whole image. Depth: only a range of the map, e.g. just the background.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="77"/>
+        <location filename="../../deepshot/ui/look_panel.py" line="85"/>
         <source>Profundidad desde la que actúa el efecto (0 = lo más cercano)</source>
         <translation>Depth from which the effect acts (0 = nearest)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="80"/>
+        <location filename="../../deepshot/ui/look_panel.py" line="88"/>
         <source>Profundidad hasta la que actúa el efecto (1 = lo más lejano)</source>
         <translation>Depth up to which the effect acts (1 = farthest)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="81"/>
+        <location filename="../../deepshot/ui/look_panel.py" line="89"/>
         <source>Suavidad</source>
         <translation>Softness</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="83"/>
+        <location filename="../../deepshot/ui/look_panel.py" line="91"/>
         <source>Cuánto se difumina el paso entre lo que se ajusta y lo que no</source>
         <translation>How much the transition between adjusted and unadjusted areas is softened</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="110"/>
+        <location filename="../../deepshot/ui/look_panel.py" line="118"/>
         <source>módulo no instalado</source>
         <translation>module not installed</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="117"/>
+        <location filename="../../deepshot/ui/look_panel.py" line="125"/>
         <source>solo en un rango de profundidad</source>
         <translation>only in a depth range</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="117"/>
+        <location filename="../../deepshot/ui/look_panel.py" line="125"/>
         <source>toda la imagen</source>
         <translation>the whole image</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="176"/>
+        <location filename="../../deepshot/ui/look_panel.py" line="184"/>
         <source>copia</source>
         <translation>copy</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="197"/>
+        <location filename="../../deepshot/ui/look_panel.py" line="205"/>
         <source>Abre el Gestor de modelos y módulos para instalar más efectos</source>
         <translation>Opens the Model and module manager to install more effects</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="196"/>
+        <location filename="../../deepshot/ui/look_panel.py" line="204"/>
         <source>Más módulos…</source>
         <translation>More modules…</translation>
     </message>
@@ -5640,228 +5694,268 @@ Continue?</translation>
 <context>
     <name>Presets</name>
     <message>
-        <location filename="../../deepshot/presets.py" line="45"/>
+        <location filename="../../deepshot/presets.py" line="47"/>
         <source>Lineal</source>
         <translation>Linear</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="46"/>
+        <location filename="../../deepshot/presets.py" line="48"/>
         <source>Neblina (haze)</source>
         <translation>Haze</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="47"/>
+        <location filename="../../deepshot/presets.py" line="49"/>
         <source>Contraste fuerte</source>
         <translation>Strong contrast</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="48"/>
+        <location filename="../../deepshot/presets.py" line="50"/>
         <source>Color (rojo / azul)</source>
         <translation>Color (red / blue)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="49"/>
+        <location filename="../../deepshot/presets.py" line="51"/>
         <source>Inverso (cerca oscuro)</source>
         <translation>Inverse (near dark)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="50"/>
+        <location filename="../../deepshot/presets.py" line="52"/>
         <source>Silueta (cerca negro, lejos luz)</source>
         <translation>Silhouette (near black, far light)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="54"/>
+        <location filename="../../deepshot/presets.py" line="56"/>
         <source>Calle (cerca negro, fondo en niebla)</source>
         <translation>Street (near black, background in fog)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="57"/>
+        <location filename="../../deepshot/presets.py" line="59"/>
         <source>Mapa suave (cerca oscuro)</source>
         <translation>Soft map (near dark)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="59"/>
+        <location filename="../../deepshot/presets.py" line="61"/>
         <source>Niebla densa (lejos blanco)</source>
         <translation>Dense fog (far white)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="62"/>
+        <location filename="../../deepshot/presets.py" line="64"/>
         <source>Atardecer (cálido)</source>
         <translation>Sunset (warm)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="65"/>
+        <location filename="../../deepshot/presets.py" line="67"/>
         <source>Térmico</source>
         <translation>Thermal</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="68"/>
+        <location filename="../../deepshot/presets.py" line="70"/>
         <source>Océano</source>
         <translation>Ocean</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="70"/>
+        <location filename="../../deepshot/presets.py" line="72"/>
         <source>Cartel (3 tonos)</source>
         <translation>Poster (3 tones)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="76"/>
+        <location filename="../../deepshot/presets.py" line="78"/>
         <source>Neblina atmosférica</source>
         <translation>Atmospheric haze</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="77"/>
+        <location filename="../../deepshot/presets.py" line="79"/>
         <source>Contraste fuerte (B/N)</source>
         <translation>Strong contrast (B/W)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="78"/>
+        <location filename="../../deepshot/presets.py" line="80"/>
         <source>Color de profundidad</source>
         <translation>Depth color</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="79"/>
+        <location filename="../../deepshot/presets.py" line="81"/>
         <source>Silueta fotográfica</source>
         <translation>Photographic silhouette</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="82"/>
+        <location filename="../../deepshot/presets.py" line="84"/>
         <source>Fotografía B/N con profundidad</source>
         <translation>B/W photograph with depth</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="85"/>
+        <location filename="../../deepshot/presets.py" line="87"/>
         <source>Foto en color con niebla</source>
         <translation>Color photo with fog</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="88"/>
+        <location filename="../../deepshot/presets.py" line="90"/>
         <source>Foco de luz sobre negro</source>
         <translation>Spotlight on black</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="94"/>
+        <location filename="../../deepshot/presets.py" line="96"/>
         <source>Mapa de calle (cerca negro)</source>
         <translation>Street map (near black)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="95"/>
+        <location filename="../../deepshot/presets.py" line="97"/>
         <source>Mapa de calle con detalle de la foto</source>
         <translation>Street map with photo detail</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="98"/>
+        <location filename="../../deepshot/presets.py" line="100"/>
         <source>Mapa de profundidad suave</source>
         <translation>Soft depth map</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="99"/>
+        <location filename="../../deepshot/presets.py" line="101"/>
         <source>Mapa con niebla densa</source>
         <translation>Map with dense fog</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="100"/>
+        <location filename="../../deepshot/presets.py" line="102"/>
         <source>Bandas de profundidad</source>
         <translation>Depth bands</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="106"/>
+        <location filename="../../deepshot/presets.py" line="108"/>
         <source>Bandas con el color de la rampa</source>
         <translation>Bands with the ramp color</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="111"/>
+        <location filename="../../deepshot/presets.py" line="113"/>
         <source>Sombra central (área negativa)</source>
         <translation>Central shadow (negative area)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="115"/>
+        <location filename="../../deepshot/presets.py" line="117"/>
         <source>Losa de luz (área en caja)</source>
         <translation>Light slab (box area)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="120"/>
+        <location filename="../../deepshot/presets.py" line="122"/>
         <source>Velo blanco con bandas oscuras</source>
         <translation>White veil with dark bands</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="124"/>
+        <location filename="../../deepshot/presets.py" line="126"/>
         <source>Cartel de profundidad (3 tonos)</source>
         <translation>Depth poster (3 tones)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="125"/>
+        <location filename="../../deepshot/presets.py" line="127"/>
         <source>Atardecer sobre la foto</source>
         <translation>Sunset over the photo</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="128"/>
+        <location filename="../../deepshot/presets.py" line="130"/>
         <source>Retrato: sujeto nítido, fondo desenfocado</source>
         <translation>Portrait: sharp subject, blurred background</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="140"/>
+        <location filename="../../deepshot/presets.py" line="142"/>
         <source>Retrato f/1.8 (fondo suave)</source>
         <translation>Portrait f/1.8 (soft background)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="143"/>
+        <location filename="../../deepshot/presets.py" line="145"/>
         <source>Retrato clásico (ojo de gato)</source>
         <translation>Classic portrait (cat&apos;s eye)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="146"/>
+        <location filename="../../deepshot/presets.py" line="148"/>
         <source>Macro (muy poca profundidad)</source>
         <translation>Macro (very shallow depth)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="149"/>
+        <location filename="../../deepshot/presets.py" line="151"/>
         <source>Cine (diafragma de 7 palas)</source>
         <translation>Cinema (7-blade diaphragm)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="152"/>
+        <location filename="../../deepshot/presets.py" line="154"/>
         <source>Discos nítidos (bokeh duro)</source>
         <translation>Sharp discs (hard bokeh)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="155"/>
+        <location filename="../../deepshot/presets.py" line="157"/>
         <source>Paisaje f/8 (desenfoque ligero)</source>
         <translation>Landscape f/8 (light blur)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="200"/>
-        <location filename="../../deepshot/presets.py" line="242"/>
+        <location filename="../../deepshot/presets.py" line="164"/>
+        <source>Cine cálido</source>
+        <translation>Warm cinema</translation>
+    </message>
+    <message>
+        <location filename="../../deepshot/presets.py" line="169"/>
+        <source>Noche fría</source>
+        <translation>Cold night</translation>
+    </message>
+    <message>
+        <location filename="../../deepshot/presets.py" line="175"/>
+        <source>Blanco y negro duro</source>
+        <translation>Hard black and white</translation>
+    </message>
+    <message>
+        <location filename="../../deepshot/presets.py" line="181"/>
+        <source>Onírico suave</source>
+        <translation>Soft dreamy</translation>
+    </message>
+    <message>
+        <location filename="../../deepshot/presets.py" line="186"/>
+        <source>Niebla en la distancia</source>
+        <translation>Fog in the distance</translation>
+    </message>
+    <message>
+        <location filename="../../deepshot/presets.py" line="190"/>
+        <source>Película antigua</source>
+        <translation>Old film</translation>
+    </message>
+    <message>
+        <location filename="../../deepshot/presets.py" line="197"/>
+        <source>Nitidez de revista</source>
+        <translation>Magazine sharpness</translation>
+    </message>
+    <message>
+        <location filename="../../deepshot/presets.py" line="202"/>
+        <source>Lavado mate</source>
+        <translation>Matte wash</translation>
+    </message>
+    <message>
+        <location filename="../../deepshot/presets.py" line="253"/>
+        <location filename="../../deepshot/presets.py" line="295"/>
         <source>Tipo de preset desconocido: {0}</source>
         <translation>Unknown preset type: {0}</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="229"/>
+        <location filename="../../deepshot/presets.py" line="282"/>
         <source>El nombre del preset está vacío.</source>
         <translation>The preset name is empty.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="253"/>
+        <location filename="../../deepshot/presets.py" line="306"/>
         <source>No se pudo leer el archivo: {0}</source>
         <translation>The file could not be read: {0}</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="255"/>
+        <location filename="../../deepshot/presets.py" line="308"/>
         <source>El archivo no es un preset de tipo «{0}».</source>
         <translation>The file is not a “{0}” preset.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="265"/>
+        <location filename="../../deepshot/presets.py" line="318"/>
         <source>No se pudo leer el preset «{0}»: {1}</source>
         <translation>The preset “{0}” could not be read: {1}</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="267"/>
+        <location filename="../../deepshot/presets.py" line="320"/>
         <source>«{0}» no es un preset de tipo {1}.</source>
         <translation>“{0}” is not a {1} preset.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/presets.py" line="282"/>
+        <location filename="../../deepshot/presets.py" line="335"/>
         <source>El archivo no contiene un preset válido: {0}</source>
         <translation>The file does not contain a valid preset: {0}</translation>
     </message>

@@ -339,13 +339,7 @@ class DepthEstimator:
         self._pipe = None
         self._processor = None
         self._loaded_model = None
-        try:
-            import torch
-
-            if torch.cuda.is_available():
-                torch.cuda.empty_cache()
-        except ImportError:
-            pass
+        self._free_gpu_memory()
 
     # --- Inferencia ------------------------------------------------------------
     def estimate(
@@ -517,7 +511,8 @@ class DepthEstimator:
         try:
             import torch
 
-            if torch.cuda.is_available():
-                torch.cuda.empty_cache()
+            from deepshot import memory
+
+            memory.empty_gpu_cache(torch)         # CUDA en Windows, MPS en Mac
         except ImportError:
             pass

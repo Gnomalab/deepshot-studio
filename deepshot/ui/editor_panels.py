@@ -39,7 +39,7 @@ from deepshot.ui.color_pick import pick_color
 from deepshot.ui.icons import icon, set_icon
 from deepshot.ui.preset_bar import PresetBar
 from deepshot.project import Project
-from deepshot.tonemap import Band, band_color
+from deepshot.tonemap import MAX_BAND_ANGLE, Band, band_color
 from deepshot.ui.value_slider import ValueSlider
 from deepshot.ui.widgets import CollapsibleSection, SegmentedControl
 
@@ -551,12 +551,12 @@ class BandsPanel(_ListPanel):
         self.strength = self.slider(self.tr("Intensidad"), lambda v: setattr(cur(), "strength", v), value=1.0)
         self.strength.setToolTip(self.tr("Opacidad de la banda: 0 = invisible, 1 = totalmente visible"))
         # Pan y tilt: la franja deja de ser un plano paralelo a la cámara y se inclina (como un giro del plano).
-        self.pan = self.slider(self.tr("Pan"), lambda v: setattr(cur(), "pan", v), value=0.0, minimum=-80, maximum=80,
+        self.pan = self.slider(self.tr("Pan"), lambda v: setattr(cur(), "pan", v), value=0.0, minimum=-MAX_BAND_ANGLE, maximum=MAX_BAND_ANGLE,
                                decimals=0, step=1, suffix="°")
         self.pan.setToolTip(self.tr("Gira la banda sobre el eje vertical: la franja se aleja hacia la derecha (+) "
                                     "o hacia la izquierda (−). El centro de la imagen no cambia."))
-        self.tilt = self.slider(self.tr("Tilt"), lambda v: setattr(cur(), "tilt", v), value=0.0, minimum=-80,
-                                maximum=80, decimals=0, step=1, suffix="°")
+        self.tilt = self.slider(self.tr("Tilt"), lambda v: setattr(cur(), "tilt", v), value=0.0, minimum=-MAX_BAND_ANGLE,
+                                maximum=MAX_BAND_ANGLE, decimals=0, step=1, suffix="°")
         self.tilt.setToolTip(self.tr("Gira la banda sobre el eje horizontal: la franja se aleja hacia arriba (+) "
                                      "o se acerca (−). El centro de la imagen no cambia."))
         self.list.setToolTip(self.tr("Bandas. Cuadro: color · doble clic: renombrar · ojo: aplicar o saltar la banda"))

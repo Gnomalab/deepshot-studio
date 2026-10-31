@@ -191,3 +191,59 @@ def test_preset_bar_imports_a_shared_style_and_it_appears_in_the_list(tmp_path, 
     assert presets.list_user("style") == ["Estilo de un amigo"]
     assert bar.export_file("Estilo de un amigo", str(tmp_path / "salida.deepshotstyle"))
     assert (tmp_path / "salida.deepshotstyle").is_file()
+
+
+# --- Revisión de los presets de fábrica -----------------------------------------------------------------------------
+def test_every_factory_preset_applies_validates_and_renders_without_downloadable_modules():
+    """Todos los presets de fábrica (rampa, estilo, bokeh y look) se aplican, dan un proyecto válido y se pintan."""
+    import numpy as np
+
+    from deepshot import look
+    from deepshot.project import Project, render
+
+    depth = np.tile(np.linspace(0, 1, 48, dtype=np.float32), (6, 1))
+    photo = np.full((6, 48, 3), 0.5, dtype=np.float32)
+    for kind in presets.KINDS:
+        names = presets.builtin_names(kind)
+        assert names, kind
+        for key, _name in names:
+            data = presets.apply_to_project_dict(kind, Project().to_dict(), presets.builtin(kind, key))
+            project = Project.from_dict(data)
+            project.validate()
+            out = render(project, depth, photo)
+            assert out.shape == (6, 48, 3) and np.isfinite(out).all(), (kind, key)
+            for layer in project.look:                                  # solo efectos de serie (numpy), nunca módulos
+                assert layer.kind in look.KINDS and not look.KINDS[layer.kind].module_id, (kind, key, layer.kind)
+
+
+def test_factory_looks_change_the_image_and_replace_only_the_effects_stack():
+    import json
+
+    import numpy as np
+
+    from deepshot.project import Project, render
+
+    depth = np.tile(np.linspace(0, 1, 48, dtype=np.float32), (6, 1))
+    photo = np.tile(np.linspace(0.1, 0.9, 48, dtype=np.float32)[None, :, None], (6, 1, 3))
+    base = Project()
+    base.composite.opacity = 1.0
+    plain = render(base, depth, photo)
+    before = json.loads(json.dumps(base.to_dict()))                           # como se guarda en el archivo
+    before["look"] = [{"kind": "grain", "params": {"amount": 0.5}}]            # una pila anterior que se sustituye
+    assert {"cinema_warm", "cold_night", "hard_bw", "far_fog", "old_film"} <= {k for k, _ in presets.builtin_names("look")}
+    for key, _name in presets.builtin_names("look"):
+        after = presets.apply_to_project_dict("look", before, presets.builtin("look", key))
+        assert after["look"] == presets.builtin("look", key)["look"] and len(after["look"]) >= 3
+        assert {k: v for k, v in after.items() if k != "look"} == {k: v for k, v in before.items() if k != "look"}
+        out = render(Project.from_dict(after), depth, photo)
+        assert np.abs(out - plain).mean() > 0.003, key                          # cada look se nota
+
+
+def test_look_preset_roundtrips_through_the_user_files(tmp_path, monkeypatch):
+    monkeypatch.setenv("DEEPSHOT_DATA_DIR", str(tmp_path))
+    from deepshot.project import Project
+
+    project = Project.from_dict(presets.apply_to_project_dict("look", Project().to_dict(), presets.builtin("look", "matte")))
+    presets.save_user("look", "Mi look", presets.from_project("look", project))
+    assert presets.list_user("look") == ["Mi look"]
+    assert presets.load_user("look", "Mi look")["look"] == project.to_dict()["look"]

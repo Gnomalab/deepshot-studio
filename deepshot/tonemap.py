@@ -152,7 +152,7 @@ def base_image(base: str, ramp: ColorRamp, depth: np.ndarray) -> np.ndarray:
     return np.full(depth.shape + (3,), value, dtype=np.float32)
 
 
-MAX_BAND_ANGLE = 80.0           # límite del pan y el tilt: más allá la tangente se dispara
+MAX_BAND_ANGLE = 89.0           # límite del pan y el tilt: a 90° el plano queda de canto y la tangente se dispara
 
 
 def tilted_depth(depth: np.ndarray, pan: float, tilt: float, relief: float) -> np.ndarray:

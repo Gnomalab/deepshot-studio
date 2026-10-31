@@ -25,3 +25,21 @@ def test_ram_free_total_is_measured_on_this_system():
     from deepshot import memory
     got = memory.ram_free_total_mb()
     assert got is None or (0 < got[0] <= got[1])
+
+
+def test_on_mac_the_memory_is_measured_and_the_gpu_cache_is_returned_with_mps(monkeypatch):
+    import sys
+    import types
+
+    if sys.platform == "darwin":
+        assert memory.process_memory_mb() is not None and memory.ram_free_total_mb() is not None   # con psutil
+    calls = []
+    fake = types.SimpleNamespace(
+        cuda=types.SimpleNamespace(is_available=lambda: False, empty_cache=lambda: calls.append("cuda")),
+        backends=types.SimpleNamespace(mps=types.SimpleNamespace(is_available=lambda: True)),
+        mps=types.SimpleNamespace(empty_cache=lambda: calls.append("mps"), driver_allocated_memory=lambda: 3e9))
+    memory.empty_gpu_cache(fake)
+    assert calls == ["mps"]                                  # en Mac se vacía la caché de MPS, no la de CUDA
+    monkeypatch.setitem(sys.modules, "torch", fake)
+    assert memory.gpu_memory_mb() == 3000.0
+    memory.empty_gpu_cache(types.SimpleNamespace())          # un torch raro no rompe nada

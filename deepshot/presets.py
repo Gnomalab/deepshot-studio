@@ -1,6 +1,8 @@
 """Presets de rampa y de estilo: los de fábrica y los que guarda el usuario.
 
-Tres tipos (`kind`):
+Cuatro tipos (`kind`):
+  - "look":  la pila de efectos del paso Look (niveles, contraste, grano, resplandor…). Los de fábrica usan solo los
+             efectos de serie (numpy), nunca módulos descargables: así valen en cualquier instalación.
   - "lens":  solo el carácter del bokeh del desenfoque de lente (apertura, palas, ojo de gato…). No toca el foco ni
              el destino, que dependen de cada foto, y al aplicarlo enciende el desenfoque.
   - "ramp":  solo la rampa de color (paradas e interpolación).
@@ -29,7 +31,7 @@ from deepshot.tonemap import BLACK, WHITE, ColorRamp, RampStop, ramp_preset
 
 log = logging.getLogger(__name__)
 
-KINDS = ("ramp", "style", "lens")
+KINDS = ("ramp", "style", "lens", "look")
 PRESET_VERSION = 1
 
 
@@ -156,13 +158,60 @@ _LENS: list[tuple[str, str, dict]] = [
      {"aperture": 8.0, "sharp_range": 0.15, "near": 0.6, "far": 0.8, "blades": 6, "rotation": 0.0,
       "highlights": 0.3, "softness": 0.3, "cat_eye": 0.0}),
 ]
+# Looks de fábrica: pilas de efectos de serie (deepshot/look.py), de arriba abajo; se aplican de abajo arriba. Solo tipos de
+# serie: un test vigila que ninguno use un módulo descargable.
+_LOOKS: list[tuple[str, str, list[dict]]] = [
+    ("cinema_warm", QT_TRANSLATE_NOOP("Presets", "Cine cálido"), [
+        {"kind": "grain", "params": {"amount": 0.2, "size": 1.2}},
+        {"kind": "vignette", "params": {"amount": 0.3}},
+        {"kind": "contrast", "params": {"contrast": 0.2}},
+        {"kind": "temperature", "params": {"temp": 0.35, "tint": 0.05}}]),
+    ("cold_night", QT_TRANSLATE_NOOP("Presets", "Noche fría"), [
+        {"kind": "vignette", "params": {"amount": 0.4}},
+        {"kind": "glow", "params": {"amount": 0.4, "threshold": 0.75, "radius": 3.0}},
+        {"kind": "saturation", "params": {"amount": -0.2}},
+        {"kind": "levels", "params": {"black": 0.04, "gamma": 0.9}},
+        {"kind": "temperature", "params": {"temp": -0.5}}]),
+    ("hard_bw", QT_TRANSLATE_NOOP("Presets", "Blanco y negro duro"), [
+        {"kind": "vignette", "params": {"amount": 0.25}},
+        {"kind": "grain", "params": {"amount": 0.3}},
+        {"kind": "clarity", "params": {"amount": 0.6}},
+        {"kind": "contrast", "params": {"contrast": 0.35}},
+        {"kind": "saturation", "params": {"amount": -1.0}}]),
+    ("dreamy", QT_TRANSLATE_NOOP("Presets", "Onírico suave"), [
+        {"kind": "contrast", "params": {"contrast": -0.1}},
+        {"kind": "saturation", "params": {"amount": 0.15}},
+        {"kind": "clarity", "params": {"amount": -0.4, "radius": 3.0}},
+        {"kind": "glow", "params": {"amount": 0.8, "threshold": 0.6, "radius": 4.0, "warmth": 0.2}}]),
+    ("far_fog", QT_TRANSLATE_NOOP("Presets", "Niebla en la distancia"), [
+        {"kind": "temperature", "params": {"temp": -0.1}},
+        {"kind": "contrast", "params": {"contrast": 0.1}},
+        {"kind": "haze", "params": {"amount": 0.6, "start": 0.35, "tone": 0.85}}]),
+    ("old_film", QT_TRANSLATE_NOOP("Presets", "Película antigua"), [
+        {"kind": "vignette", "params": {"amount": 0.45}},
+        {"kind": "grain", "params": {"amount": 0.45, "size": 1.6}},
+        {"kind": "chromatic", "params": {"amount": 0.4}},
+        {"kind": "temperature", "params": {"temp": 0.25, "tint": 0.08}},
+        {"kind": "saturation", "params": {"amount": -0.25}},
+        {"kind": "levels", "params": {"black": 0.05, "white": 0.95}}]),
+    ("crisp", QT_TRANSLATE_NOOP("Presets", "Nitidez de revista"), [
+        {"kind": "contrast", "params": {"contrast": 0.15}},
+        {"kind": "saturation", "params": {"amount": 0.15}},
+        {"kind": "sharpen", "params": {"amount": 0.8, "radius": 0.15}},
+        {"kind": "clarity", "params": {"amount": 0.8}}]),
+    ("matte", QT_TRANSLATE_NOOP("Presets", "Lavado mate"), [
+        {"kind": "saturation", "params": {"amount": -0.3}},
+        {"kind": "contrast", "params": {"contrast": -0.15}},
+        {"kind": "levels", "params": {"black": 0.08, "gamma": 1.1}}]),
+]
+
 LENS_PRESET_FIELDS = ("aperture", "sharp_range", "near", "far", "blades", "rotation", "highlights", "softness",
                       "cat_eye")        # lo que guarda y aplica un preset de bokeh
 
 
 def builtin_names(kind: str) -> list[tuple[str, str]]:
     """[(clave, nombre visible)] de los presets de fábrica."""
-    table = {"ramp": _RAMPS, "style": _STYLES, "lens": _LENS}[kind]
+    table = {"ramp": _RAMPS, "style": _STYLES, "lens": _LENS, "look": _LOOKS}[kind]
     return [(k, name) for k, name, *_ in table]
 
 
@@ -176,6 +225,10 @@ def builtin(kind: str, key: str) -> dict:
         for k, _name, data in _LENS:
             if k == key:
                 return {"lens": dict(data)}
+    elif kind == "look":
+        for k, _name, layers in _LOOKS:
+            if k == key:
+                return {"look": [json.loads(json.dumps(layer)) for layer in layers]}
     elif kind == "style":
         for k, _name, data in _STYLES:
             if k == key:
@@ -334,6 +387,8 @@ def from_project(kind: str, project) -> dict:
         return {"ramp": ramp}
     if kind == "lens":
         return {"lens": {k: d["lens"][k] for k in LENS_PRESET_FIELDS}}
+    if kind == "look":
+        return {"look": d["look"]}
     composite = {k: v for k, v in d["composite"].items() if k != "painted_mask"}
     areas = [{k: v for k, v in a.items() if k != "from_style"} for a in d["areas"]]     # la marca no se guarda en el estilo
     return {"ramp": ramp, "base": d["base"], "bands": d["bands"], "areas": areas, "composite": composite,
@@ -383,6 +438,11 @@ def apply_to_project_dict(kind: str, project_dict: dict, preset: dict) -> dict:
         # Solo el carácter del bokeh; el foco, la zona nítida del foco y el destino siguen siendo los de la foto.
         known = {k: v for k, v in preset.get("lens", {}).items() if k in LENS_PRESET_FIELDS}
         out["lens"] = {**out["lens"], **known, "enabled": True}
+        return out
+    if kind == "look":
+        # Solo la pila de efectos (se sustituye entera); el resto del proyecto no se toca. Las capas que traiga un
+        # módulo que no está instalado se conservan y aparecen como «módulo no instalado».
+        out["look"] = json.loads(json.dumps(preset.get("look", [])))
         return out
     if "ramp" in preset:
         out["ramp"]["stops"] = [{"position": float(s["position"]), "color": list(s["color"])}
