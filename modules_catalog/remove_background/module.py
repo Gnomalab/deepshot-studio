@@ -10,63 +10,12 @@ import hashlib
 import numpy as np
 from scipy.ndimage import gaussian_filter
 
-MODEL_ID = "sam2-1-hiera-small"
-WORK_SIDE = 1024                       # SAM 2 trabaja a 1024 px: no hace falta darle más
-_model = {}                            # modelo y procesador cargados (se reutilizan entre vistas previas)
+# La carga de SAM 2.1, el punto automático y la segmentación viven en deepshot/maps.py (los comparte con los mapas
+# auxiliares del paso Look, p. ej. «Sujeto»): un solo modelo cargado y una sola copia de la lógica.
+from deepshot.maps import SAM_MODEL_ID as MODEL_ID, WORK_SIDE  # noqa: F401,E402
+from deepshot.maps import auto_point as _auto_point, load_sam as _load, segment_at as _segment  # noqa: F401,E402
+
 _last = {}                             # última máscara calculada: {"key": ..., "mask": ...}
-
-
-def _load():
-    """(modelo, procesador, dispositivo). Se carga una vez desde la carpeta de modelos del gestor."""
-    if not _model:
-        import torch
-        from transformers import Sam2Model, Sam2Processor
-
-        from deepshot.device import detect_device
-        from deepshot.models import ModelManager
-
-        folder = ModelManager().snapshot(MODEL_ID)
-        if folder is None:
-            raise RuntimeError("Falta el modelo SAM 2.1 Small: instálalo desde el gestor de modelos (Ctrl+M).")
-        device = detect_device("auto")
-        dtype = torch.float16 if device.kind == "cuda" else torch.float32     # en MPS y CPU, float32 (más fiable)
-        model = Sam2Model.from_pretrained(str(folder), dtype=dtype).to(device.kind).eval()
-        _model.update(model=model, processor=Sam2Processor.from_pretrained(str(folder)), device=device.kind)
-    return _model["model"], _model["processor"], _model["device"]
-
-
-def _auto_point(depth):
-    """El punto más cercano del mapa (0 = cerca) tras suavizarlo: casi siempre cae dentro del sujeto principal."""
-    h, w = depth.shape
-    smooth = gaussian_filter(depth.astype(np.float32), max(h, w) * 0.02)
-    y, x = np.unravel_index(int(np.argmin(smooth)), smooth.shape)
-    return (x + 0.5) / w, (y + 0.5) / h
-
-
-def _segment(image, point):
-    """Las máscaras suaves (n, alto, ancho) 0..1 del objeto bajo `point` (x, y en 0..1), de la más pequeña (una parte) a la
-    mayor (el conjunto): un solo punto es ambiguo y SAM da tres lecturas."""
-    import torch
-    import torch.nn.functional as F
-    from PIL import Image
-
-    model, processor, device = _load()
-    h, w = image.shape[:2]
-    scale = min(1.0, WORK_SIDE / max(h, w))
-    small = Image.fromarray((np.clip(image, 0, 1) * 255 + 0.5).astype(np.uint8)).resize(
-        (max(1, round(w * scale)), max(1, round(h * scale))), Image.LANCZOS)
-    sw, sh = small.size
-    inputs = processor(images=small, input_points=[[[[point[0] * sw, point[1] * sh]]]], input_labels=[[[1]]],
-                       return_tensors="pt")
-    inputs = {k: (v.to(device, model.dtype) if v.is_floating_point() else v.to(device)) for k, v in inputs.items()}
-    with torch.no_grad():
-        out = model(**inputs, multimask_output=True)
-    # Logits sin binarizar (el borde sale suave); original_sizes es el tamaño de la imagen que le dimos.
-    logits = processor.post_process_masks(out.pred_masks.float().cpu(), inputs["original_sizes"].cpu(), binarize=False)[0]
-    logits = logits.reshape(-1, sh, sw)
-    soft = torch.sigmoid(logits * 4.0)[:, None]
-    soft = F.interpolate(soft, size=(h, w), mode="bilinear", align_corners=False)[:, 0].numpy().astype(np.float32)
-    return soft[np.argsort(soft.reshape(len(soft), -1).sum(axis=1))]
 
 
 def _mask(image, depth, params):

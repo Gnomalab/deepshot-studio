@@ -16,7 +16,7 @@ from PySide6.QtCore import QEvent, QObject, Qt, QTimer, Signal
 from PySide6.QtGui import QImage, QUndoCommand, QUndoStack
 from PySide6.QtWidgets import QApplication, QWidget
 
-from deepshot import area_edit, presets
+from deepshot import area_edit, maps, presets
 from deepshot.areas import Area
 from deepshot.depth import load_photo
 from deepshot.paint import MaskLayer, mask_path_for
@@ -31,7 +31,8 @@ from deepshot.ui.editor_panels import (
     MixPanel,
     ReliefPanel,
 )
-from deepshot.ui.look_panel import LookPanel
+from deepshot.ui.look_panel import LookPanel, LookStack
+from deepshot.ui.map_worker import MapWorker
 from deepshot.ui.preset_bar import PresetBar
 from deepshot.ui.ramp_editor import RampEditor
 from deepshot.ui.render_controller import RenderController
@@ -96,6 +97,7 @@ class EditSession(QObject):
     userEdited = Signal()                       # el usuario cambió algún ajuste del efecto
     gestureFinished = Signal(str)               # terminó un gesto de edición de áreas (tipo)
     maskChanged = Signal()                      # cambió la máscara pintada (para repintar su vista)
+    mapsChanged = Signal()                      # cambió el estado de los mapas auxiliares (calculado, en curso, fallo)
 
     def __init__(self, undo_stack: QUndoStack, parent: QObject | None = None) -> None:
         super().__init__(parent)
@@ -129,7 +131,16 @@ class EditSession(QObject):
         self.areas_panel = AreasPanel()
         self.mix_panel = MixPanel()
         self.lens_panel = LensPanel()
-        self.look_panel = LookPanel()                    # paso Look: pila de capas de ajuste
+        self.look_panel = LookPanel("look")              # paso Look, Post FX: pila de capas sobre el resultado
+        self.pre_panel = LookPanel("pre")                # paso Look, Pre FX: pila sobre la foto antes de mezclarla
+        self.look_stack = LookStack(self.pre_panel, self.look_panel)     # conmutador Pre FX | Post FX con las dos pilas
+        self.map_arrays: dict[str, dict[str, np.ndarray]] = {}   # mapas auxiliares calculados por foto (deepshot/maps.py)
+        self.map_error: dict[str, str] = {}              # último fallo por foto y mapa ("ruta|id" -> texto)
+        self.map_worker = MapWorker(self)
+        self.map_worker.progress.connect(self._on_map_progress)
+        self.map_worker.finished.connect(self._on_map_finished)
+        self.map_worker.failed.connect(self._on_map_failed)
+        self._map_progress = ""
         self._warped: dict[int, tuple] = {}              # profundidad con el control de profundidad aplicado (caché)
         for panel in self.panels():
             panel.changed.connect(self._on_changed)
@@ -141,11 +152,16 @@ class EditSession(QObject):
         self.style_bar.setEnabled(False)
         self.style_bar.chosen.connect(self.apply_style)
         self.lens_panel.presetChosen.connect(self.apply_lens_preset)
-        self.look_panel.preset_bar.chosen.connect(self.apply_look_preset)
+        self.look_panel.preset_bar.chosen.connect(lambda preset: self.apply_look_preset(preset, "look"))
+        self.pre_panel.preset_bar.chosen.connect(lambda preset: self.apply_look_preset(preset, "pre"))
+        for panel in (self.look_panel, self.pre_panel):
+            panel.mapRequested.connect(self.request_map)
         # Al pasar el ratón por la lista de un preset se ve el resultado en la vista previa sin aplicarlo.
         for kind, bar in (("style", self.style_bar), ("ramp", self.ramp_editor.preset),
-                          ("lens", self.lens_panel.preset_bar), ("look", self.look_panel.preset_bar)):
-            bar.previewed.connect(lambda preset, k=kind: self.preview_preset(k, preset))
+                          ("lens", self.lens_panel.preset_bar), ("look", self.look_panel.preset_bar),
+                          ("look", self.pre_panel.preset_bar)):
+            stack = "pre" if bar is self.pre_panel.preset_bar else "look"
+            bar.previewed.connect(lambda preset, k=kind, st=stack: self.preview_preset(k, preset, st))
             bar.previewEnded.connect(self.end_preview)
         self._previewing = False
         self.ramp_editor.presetApplying.connect(self._base_to_ramp)
@@ -175,7 +191,7 @@ class EditSession(QObject):
 
     def panels(self) -> list:
         return [self.base_panel, self.ramp_editor, self.relief_panel, self.depth_panel, self.bands_panel,
-                self.areas_panel, self.mix_panel, self.lens_panel, self.look_panel]
+                self.areas_panel, self.mix_panel, self.lens_panel, self.pre_panel, self.look_panel]
 
     def warped(self, depth: np.ndarray | None) -> np.ndarray | None:
         """`depth` con el control de profundidad del proyecto aplicado: la profundidad que de verdad leen la rampa,
@@ -213,6 +229,7 @@ class EditSession(QObject):
         if self.path not in self.projects:
             self.projects[self.path] = self.new_project(depth)
         self.render.set_source(depth, photo)
+        self._load_cached_maps()
         self._bind()
         self._snapshot = self.project.to_dict()
         self._request_render()
@@ -236,20 +253,23 @@ class EditSession(QObject):
         self.areas_panel.bind(p)
         self.mix_panel.bind(p)
         self.lens_panel.bind(p)
+        self.pre_panel.bind(p)
         self.look_panel.bind(p)
+        self._sync_map_panels()
 
     # =====================================================================
     # Cambios, vista previa y deshacer
     # =====================================================================
     def preset_bars(self) -> list:
-        return [self.style_bar, self.ramp_editor.preset, self.lens_panel.preset_bar, self.look_panel.preset_bar]
+        return [self.style_bar, self.ramp_editor.preset, self.lens_panel.preset_bar, self.pre_panel.preset_bar,
+                self.look_panel.preset_bar]
 
-    def preview_preset(self, kind: str, preset: dict) -> None:
+    def preview_preset(self, kind: str, preset: dict, stack: str = "look") -> None:
         """Enseña en la vista previa cómo quedaría un preset sin aplicarlo ni apilar deshacer."""
         if self.project is None or self.depth is None:
             return
         try:
-            data = presets.apply_to_project_dict(kind, self.project.to_dict(), preset)
+            data = presets.apply_to_project_dict(kind, self.project.to_dict(), preset, stack=stack)
             if kind == "ramp":
                 data["base"] = "ramp"            # sobre Negro o Blanco la rampa no se pinta: se enseña sobre la base Rampa
             project = Project.from_dict(data)
@@ -290,11 +310,12 @@ class EditSession(QObject):
         sí lo está se aplica aunque su ojo esté apagado. Solo vale para la vista previa: lo que se guarda y se exporta es
         siempre el proyecto entero."""
         project = self.project
-        solos = {"areas": self.areas_panel.solo, "bands": self.bands_panel.solo, "look": self.look_panel.solo}
+        solos = {"areas": self.areas_panel.solo, "bands": self.bands_panel.solo, "look": self.look_panel.solo,
+                 "pre": self.pre_panel.solo}
         if not any(solos.values()):
             return project
         clone = Project.from_dict(project.to_dict())
-        for group, items in (("areas", clone.areas), ("bands", clone.bands), ("look", clone.look)):
+        for group, items in (("areas", clone.areas), ("bands", clone.bands), ("look", clone.look), ("pre", clone.pre)):
             solo = solos[group]
             for i, item in enumerate(items):
                 if solo:
@@ -330,6 +351,7 @@ class EditSession(QObject):
         """Olvida los ajustes de una foto que se quitó de la biblioteca."""
         self.projects.pop(path, None)
         self.masks.pop(path, None)
+        self.map_arrays.pop(path, None)
         if self.path == path:
             self.set_photo(None, None)
 
@@ -401,15 +423,89 @@ class EditSession(QObject):
         self.lens_panel.refresh()
         self.userEdited.emit()
 
-    def apply_look_preset(self, preset: dict) -> None:
-        """Aplica un look (pila de efectos) en lugar de la que había; se puede deshacer."""
+    def apply_look_preset(self, preset: dict, stack: str = "look") -> None:
+        """Aplica un look (pila de efectos) en lugar de la que había en la pila indicada («look» = Post FX, «pre» = Pre
+        FX: la de la pestaña desde la que se eligió); se puede deshacer."""
         if self.project is None:
             return
         before = self.project.to_dict()
-        after = presets.apply_to_project_dict("look", before, preset)
+        after = presets.apply_to_project_dict("look", before, preset, stack=stack)
         self.restore(self.path, after)
         self.undo_stack.push(_ProjectEdit(self, self.path, before, after, self.tr("Aplicar look")))
         self.userEdited.emit()
+
+    # =====================================================================
+    # Mapas auxiliares (deepshot/maps.py): «Limitar a mapa» de las pilas Pre y Post FX
+    # =====================================================================
+    def current_maps(self) -> dict[str, np.ndarray]:
+        """Los mapas auxiliares ya calculados de la foto actual (para la vista previa y la exportación)."""
+        return dict(self.map_arrays.get(self.path, {})) if self.path else {}
+
+    def _load_cached_maps(self) -> None:
+        """Al cambiar de foto: recoge de la caché del disco los mapas que ya se calcularon (barato: no carga ningún
+        modelo). Los que no están se calculan cuando el usuario lo pide con el botón del panel."""
+        found = {}
+        if self.path is not None and self.depth is not None:
+            for key in maps.KINDS:
+                mask = maps.cached(key, Path(self.path), self.depth, self.crops.get(self.path))
+                if mask is not None:
+                    found[key] = mask
+        if self.path is not None:
+            self.map_arrays[self.path] = found
+        self.render.set_masks(found)
+
+    def _sync_map_panels(self) -> None:
+        """Pasa el estado de los mapas de la foto actual a los dos paneles de Look."""
+        state = {}
+        text = ""
+        busy = self.map_worker.busy()
+        for key in maps.KINDS:
+            if busy is not None and busy == (self.path, key):
+                state[key] = "busy"
+                text = self._map_progress
+            elif key in self.map_arrays.get(self.path or "", {}):
+                state[key] = "ready"
+            elif self.map_error.get("{0}|{1}".format(self.path, key)):
+                state[key] = "nomodel" if not maps.is_available(key) else "missing"
+                text = self.map_error["{0}|{1}".format(self.path, key)]
+            else:
+                state[key] = "missing"
+        for panel in (self.pre_panel, self.look_panel):
+            panel.set_map_state(state, text)
+
+    def request_map(self, map_id: str) -> None:
+        """Calcula un mapa de la foto actual en segundo plano (si ya está calculado, lo recalcula)."""
+        if self.path is None or self.depth is None or map_id not in maps.KINDS:
+            return
+        key = "{0}|{1}".format(self.path, map_id)
+        self.map_error.pop(key, None)
+        again = map_id in self.map_arrays.get(self.path, {})
+        if not self.map_worker.start(Path(self.path), map_id, self.depth, self.crops.get(self.path), force=again):
+            self.map_error[key] = self.tr("Ya hay un mapa calculándose: espera a que termine.")
+        else:
+            self._map_progress = self.tr("Preparando…")
+        self._sync_map_panels()
+        self.mapsChanged.emit()
+
+    def _on_map_progress(self, path: str, map_id: str, message: str, fraction: float) -> None:
+        self._map_progress = "{0} ({1} %)".format(message, int(fraction * 100)) if 0 <= fraction < 1 else message
+        if path == self.path:
+            self._sync_map_panels()
+
+    def _on_map_finished(self, path: str, map_id: str, mask: object) -> None:
+        self.map_arrays.setdefault(path, {})[map_id] = mask
+        self.map_error.pop("{0}|{1}".format(path, map_id), None)
+        if path == self.path:
+            self.render.set_masks(self.map_arrays[path])
+            self._request_render()
+            self._sync_map_panels()
+        self.mapsChanged.emit()
+
+    def _on_map_failed(self, path: str, map_id: str, message: str, no_model: bool) -> None:
+        self.map_error["{0}|{1}".format(path, map_id)] = message
+        if path == self.path:
+            self._sync_map_panels()
+        self.mapsChanged.emit()
 
     def place_area_at(self, u: float, v: float) -> bool:
         """Centra el área seleccionada en el punto 3D bajo el clic. Crea una si no hay."""

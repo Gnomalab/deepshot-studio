@@ -286,7 +286,8 @@ class MainWindow(QMainWindow):
             self.tr("No se pudo cargar {0} al arrancar: {1}").format(label, why), 10000))
         QTimer.singleShot(1500, self._preload_model)
         self._load_modules()
-        self.editor.look_panel.modulesRequested.connect(lambda: self.open_model_manager())
+        for look_panel in (self.editor.look_panel, self.editor.pre_panel):
+            look_panel.modulesRequested.connect(lambda: self.open_model_manager())
         log.info("%s %s iniciado", APP_NAME, __version__)
 
     def _load_modules(self) -> None:
@@ -768,7 +769,7 @@ class MainWindow(QMainWindow):
                 section(self.tr("Mezcla y máscaras"), self.editor.mix_panel, key="mix"),
                 section(self.tr("Desenfoque de lente"), self.editor.lens_panel, key="lens"),
             ],
-            3: [section(self.tr("Efectos"), self.editor.look_panel, key="look", open_=True)],
+            3: [section(self.tr("Efectos"), self.editor.look_stack, key="look", open_=True)],
             4: [section(self.tr("Exportar"), self.export_panel, key="export", open_=True)],
         }
         for sections in self.sections_by_step.values():       # Ctrl+clic = solo esta; clic derecho = menú
@@ -1294,7 +1295,8 @@ class MainWindow(QMainWindow):
         if depth is None:
             return None
         return {"path": self.current_path, "depth": depth, "project": self.editor.project,
-                "mask": self.editor._mask_array(), "crop": self.crops.get(str(self.current_path))}
+                "mask": self.editor._mask_array(), "crop": self.crops.get(str(self.current_path)),
+                "maps": self.editor.current_maps()}
 
     def _on_exported(self, paths: list) -> None:
         names = ", ".join(Path(p).name for p in paths)

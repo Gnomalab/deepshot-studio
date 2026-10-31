@@ -106,3 +106,23 @@ def test_photo_size_applies_exif_rotation(tmp_path):
     plain = tmp_path / "plain.png"
     img.save(plain)
     assert pf.photo_size(plain) == (40, 20)
+
+
+def test_roundtrip_keeps_pre_and_post_fx_with_their_map_limits(tmp_path):
+    from deepshot.look import LookLayer
+    from deepshot.project import Project
+
+    photo = make_photo(tmp_path / "a.png")
+    pre = LookLayer.new("saturation")
+    pre.params["amount"] = -1.0
+    pre.limit, pre.mask_id, pre.mask_invert = "mask", "subject", True
+    post = LookLayer.new("levels")
+    post.params["black"] = 0.2
+    post.limit, post.mask_id = "mask", "subject"
+    project = Project(pre=[pre], look=[post])
+    target = tmp_path / "t.deepshot"
+    pf.save_project(target, [entry(photo, None, project.to_dict())], current=0, app_version="1")
+    back = Project.from_dict(pf.load_project(target).photos[0].project)
+    assert [(l.kind, l.limit, l.mask_id, l.mask_invert) for l in back.pre] == [("saturation", "mask", "subject", True)]
+    assert [(l.kind, l.limit, l.mask_id, l.mask_invert) for l in back.look] == [("levels", "mask", "subject", False)]
+    assert back.pre[0].params["amount"] == -1.0 and back.look[0].params["black"] == 0.2

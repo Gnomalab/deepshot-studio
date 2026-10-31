@@ -378,8 +378,9 @@ def delete_user(kind: str, name: str) -> bool:
 # ---------------------------------------------------------------------------
 # De proyecto a preset y viceversa
 # ---------------------------------------------------------------------------
-def from_project(kind: str, project) -> dict:
-    """Extrae de un `Project` lo que guarda cada tipo de preset."""
+def from_project(kind: str, project, stack: str = "look") -> dict:
+    """Extrae de un `Project` lo que guarda cada tipo de preset. `stack` (solo para «look»): la pila de efectos de la
+    que sale, «look» (Post FX) o «pre» (Pre FX); un look guardado vale para las dos."""
     d = project.to_dict()
     ramp = {"stops": [{"position": s["position"], "color": list(s["color"])} for s in d["ramp"]["stops"]],
             "interpolation": d["ramp"]["interpolation"]}
@@ -388,7 +389,7 @@ def from_project(kind: str, project) -> dict:
     if kind == "lens":
         return {"lens": {k: d["lens"][k] for k in LENS_PRESET_FIELDS}}
     if kind == "look":
-        return {"look": d["look"]}
+        return {"look": d["pre" if stack == "pre" else "look"]}
     composite = {k: v for k, v in d["composite"].items() if k != "painted_mask"}
     areas = [{k: v for k, v in a.items() if k != "from_style"} for a in d["areas"]]     # la marca no se guarda en el estilo
     return {"ramp": ramp, "base": d["base"], "bands": d["bands"], "areas": areas, "composite": composite,
@@ -426,7 +427,7 @@ def _areas_without_old_style(areas: list[dict]) -> list[dict]:
     return kept
 
 
-def apply_to_project_dict(kind: str, project_dict: dict, preset: dict) -> dict:
+def apply_to_project_dict(kind: str, project_dict: dict, preset: dict, stack: str = "look") -> dict:
     """Devuelve una copia del diccionario del proyecto con el preset aplicado.
 
     La rampa conserva su rango (el "ajustar al relieve" de la foto). Las áreas: se quitan las que trajo el estilo
@@ -441,8 +442,9 @@ def apply_to_project_dict(kind: str, project_dict: dict, preset: dict) -> dict:
         return out
     if kind == "look":
         # Solo la pila de efectos (se sustituye entera); el resto del proyecto no se toca. Las capas que traiga un
-        # módulo que no está instalado se conservan y aparecen como «módulo no instalado».
-        out["look"] = json.loads(json.dumps(preset.get("look", [])))
+        # módulo que no está instalado se conservan y aparecen como «módulo no instalado». `stack` elige la pila:
+        # «look» (Post FX, por defecto) o «pre» (Pre FX).
+        out["pre" if stack == "pre" else "look"] = json.loads(json.dumps(preset.get("look", [])))
         return out
     if "ramp" in preset:
         out["ramp"]["stops"] = [{"position": float(s["position"]), "color": list(s["color"])}

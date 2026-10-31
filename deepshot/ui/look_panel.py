@@ -12,9 +12,20 @@ from __future__ import annotations
 import copy
 
 from PySide6.QtCore import QCoreApplication, QSize, Qt, QTimer, Signal
-from PySide6.QtWidgets import QAbstractItemView, QComboBox, QHBoxLayout, QLabel, QMenu, QPushButton, QVBoxLayout, QWidget
+from PySide6.QtWidgets import (
+    QAbstractItemView,
+    QCheckBox,
+    QComboBox,
+    QHBoxLayout,
+    QLabel,
+    QMenu,
+    QPushButton,
+    QStackedWidget,
+    QVBoxLayout,
+    QWidget,
+)
 
-from deepshot import presets
+from deepshot import maps, presets
 from deepshot.look import KINDS, LookLayer
 from deepshot.ui.editor_panels import DETAIL_ROLE, MixPanel, _ListPanel
 from deepshot.ui.icons import set_icon
@@ -37,18 +48,30 @@ def _one_line(text: str) -> QLabel:
 
 
 class LookPanel(_ListPanel):
-    LIMITS = ["all", "depth"]
-    modulesRequested = Signal()                  # «Más módulos…»: abrir el gestor de modelos y módulos
+    """Una pila de efectos. `stack` = "look" (Post FX: sobre el resultado) o "pre" (Pre FX: sobre la foto, antes de
+    mezclarla con el efecto): el mismo código vale para las dos, solo cambia la lista del proyecto que edita."""
 
-    def __init__(self, parent: QWidget | None = None) -> None:
+    LIMITS = ["all", "depth", "mask"]
+    modulesRequested = Signal()                  # «Más módulos…»: abrir el gestor de modelos y módulos
+    mapRequested = Signal(str)                   # «Calcular»: hay que calcular este mapa auxiliar (id de deepshot/maps.py)
+
+    def __init__(self, stack: str = "look", parent: QWidget | None = None) -> None:
         super().__init__(self.tr("+ Añadir efecto"), self.tr("Añade un efecto a la pila (niveles, contraste, "
                                                              "saturación, grano…). Entra arriba."), parent)
+        self.stack = "pre" if stack == "pre" else "look"
+        self.map_state: dict[str, str] = {}      # estado de cada mapa de la foto: "ready" | "busy" | "missing" | "nomodel"
+        self.map_text = ""                       # mensaje del cálculo en curso (progreso) o del último fallo
         self.list.setMaximumHeight(150)
         self.list.setToolTip(self.tr("Efectos de arriba abajo; se aplican de abajo arriba, como en Photoshop. Arrastra "
                                      "para reordenar, doble clic o F2 para renombrar. El ojo aplica o salta el efecto."))
-        self.layout_.insertWidget(0, _one_line(self.tr("Se aplican de abajo arriba, como en Photoshop.")))
+        if self.stack == "pre":
+            hint = self.tr("Retocan la foto antes de mezclarla con el efecto.")
+        else:
+            hint = self.tr("Se aplican de abajo arriba, como en Photoshop.")
+        self.layout_.insertWidget(0, _one_line(hint))
         # Looks guardados: la pila entera. Los de fábrica usan solo efectos de serie, así valen en cualquier instalación.
-        self.preset_bar = PresetBar("look", self.tr("Cargar look…"), lambda: presets.from_project("look", self.project))
+        self.preset_bar = PresetBar("look", self.tr("Cargar look…"),
+                                    lambda: presets.from_project("look", self.project, stack=self.stack))
         self.preset_bar.combo.setToolTip(self.tr("Looks: una pila de efectos entera (sustituye a la actual; se puede "
                                                  "deshacer). Los de fábrica usan solo efectos de serie. Si guardas uno con "
                                                  "efectos de un módulo, hará falta ese módulo para verlo."))
@@ -76,9 +99,10 @@ class LookPanel(_ListPanel):
             self.blend.addItem(QCoreApplication.translate("Panels", label), key)
         self.blend.setToolTip(self.tr("Cómo se combina el ajuste con la imagen que llega al efecto"))
         self.blend.activated.connect(lambda _i: self._set_layer("blend", self.blend.currentData()))
-        self.limit = SegmentedControl([self.tr("Todo"), self.tr("Profundidad")])
-        self.limit.setToolTip(self.tr("Todo: el efecto afecta a toda la imagen. Profundidad: solo a un rango del mapa, "
-                                      "p. ej. solo el fondo."))
+        self.limit = SegmentedControl([self.tr("Todo"), self.tr("Profundidad"), self.tr("Mapa")])
+        self.limit.setToolTip(self.tr("Todo: el efecto afecta a toda la imagen. Profundidad: solo a un rango del mapa "
+                                      "de profundidad, p. ej. solo el fondo. Mapa: solo a un mapa auxiliar, p. ej. el "
+                                      "sujeto."))
         self.limit.changed.connect(self._on_limit)
         self.near = self.slider(self.tr("Desde"), lambda v: setattr(cur(), "depth_near", v), value=0.0, decimals=3,
                                 step=0.01)
@@ -95,13 +119,36 @@ class LookPanel(_ListPanel):
         rl.setSpacing(4)
         for w in (self.near, self.far, self.soft):
             rl.addWidget(w)
-        for w in (self.opacity, self.blend, self.limit, self.range_box):
+        # Límite por mapa auxiliar (deepshot/maps.py): qué mapa, si se invierte y el botón que lo calcula.
+        self.map_combo = QComboBox()
+        for key in maps.KINDS:
+            self.map_combo.addItem(maps.title(key), key)
+        self.map_combo.setToolTip(self.tr("El mapa auxiliar al que se limita el efecto (se calcula una vez por foto)"))
+        self.map_combo.activated.connect(lambda _i: self._on_map_chosen())
+        self.map_invert = QCheckBox(self.tr("Invertir"))
+        self.map_invert.setToolTip(self.tr("Invierte el mapa: el efecto actúa en todo menos en él (p. ej. solo el fondo)"))
+        self.map_invert.toggled.connect(lambda on: self._set_layer("mask_invert", bool(on)))
+        self.map_button = QPushButton()
+        self.map_button.clicked.connect(self._on_map_button)
+        self.map_status = _one_line("")
+        self.map_box = QWidget()
+        ml = QVBoxLayout(self.map_box)
+        ml.setContentsMargins(0, 0, 0, 0)
+        ml.setSpacing(4)
+        row = QHBoxLayout()
+        row.setSpacing(6)
+        row.addWidget(self.map_combo, 1)
+        row.addWidget(self.map_invert)
+        ml.addLayout(row)
+        ml.addWidget(self.map_button)
+        ml.addWidget(self.map_status)
+        for w in (self.opacity, self.blend, self.limit, self.range_box, self.map_box):
             common.addWidget(w)
         self.props_layout.addWidget(self.common)
 
     # --- Lista -------------------------------------------------------------
     def items(self) -> list[LookLayer]:
-        return self.project.look if self.project else []
+        return getattr(self.project, self.stack) if self.project else []
 
     def new_item(self) -> LookLayer:
         return LookLayer.new("levels")
@@ -122,7 +169,12 @@ class LookPanel(_ListPanel):
         return self.kind_title(layer) if layer.name.strip() else ""
 
     def _row_tip(self, layer: LookLayer) -> str:
-        where = self.tr("solo en un rango de profundidad") if layer.limit == "depth" else self.tr("toda la imagen")
+        if layer.limit == "depth":
+            where = self.tr("solo en un rango de profundidad")
+        elif layer.limit == "mask":
+            where = self.tr("solo en un mapa: {0}").format(maps.title(layer.mask_id))
+        else:
+            where = self.tr("toda la imagen")
         return "{0} · {1}".format(self.kind_title(layer), where)
 
     def refresh_list(self, select: int | None = None) -> None:
@@ -259,6 +311,10 @@ class LookPanel(_ListPanel):
         self.far.setValue(layer.depth_far)
         self.soft.setValue(layer.depth_softness)
         self.range_box.setVisible(layer.limit == "depth")
+        self.map_combo.setCurrentIndex(max(0, self.map_combo.findData(layer.mask_id)))
+        self.map_invert.setChecked(layer.mask_invert)
+        self.map_box.setVisible(layer.limit == "mask")
+        self._sync_map_ui()
 
     def _set_layer(self, name: str, value) -> None:
         layer = self.current()
@@ -270,6 +326,90 @@ class LookPanel(_ListPanel):
         layer = self.current()
         if layer is not None and not self._loading:
             layer.limit = self.LIMITS[index]
+            if layer.limit == "mask" and layer.mask_id not in maps.KINDS:
+                layer.mask_id = self.map_combo.currentData() or next(iter(maps.KINDS))     # el primero (p. ej. «Sujeto»)
             self.range_box.setVisible(layer.limit == "depth")
+            self.map_box.setVisible(layer.limit == "mask")
+            self._sync_map_ui()
             self.refresh_current_label()
             self.emit_both()
+
+    # --- Mapas auxiliares ------------------------------------------------------
+    def set_map_state(self, state: dict[str, str], text: str = "") -> None:
+        """El editor avisa del estado de los mapas de la foto actual (calculado, en curso, sin calcular, sin modelo)."""
+        self.map_state = dict(state)
+        self.map_text = text
+        self._sync_map_ui()
+
+    def _chosen_map(self) -> str:
+        return self.map_combo.currentData() or ""
+
+    def _on_map_chosen(self) -> None:
+        layer = self.current()
+        if layer is not None and not self._loading:
+            layer.mask_id = self._chosen_map()
+            self.refresh_current_label()
+            self.emit_both()
+            self._sync_map_ui()
+
+    def _on_map_button(self) -> None:
+        if self._chosen_map():
+            self.mapRequested.emit(self._chosen_map())
+
+    def _sync_map_ui(self) -> None:
+        """Botón y texto del mapa elegido según su estado. Nunca se calcula solo: se pide con el botón."""
+        key = self._chosen_map()
+        state = self.map_state.get(key, "missing")
+        name = maps.title(key) if key else ""
+        if state == "ready":
+            self.map_button.setText(self.tr("Recalcular {0}").format(name))
+            self.map_status.setText(self.tr("Mapa listo."))
+        elif state == "busy":
+            self.map_button.setText(self.tr("Calculando…"))
+            self.map_status.setText(self.map_text or self.tr("Calculando…"))
+        elif state == "nomodel":
+            self.map_button.setText(self.tr("Calcular {0}").format(name))
+            self.map_status.setText(self.map_text or self.tr("Falta un modelo: instálalo en el Gestor (Ctrl+M)."))
+        else:
+            self.map_button.setText(self.tr("Calcular {0}").format(name))
+            self.map_status.setText(self.map_text or self.tr("Sin calcular: el efecto no actúa hasta entonces."))
+        self.map_button.setEnabled(state != "busy" and bool(key) and self.project is not None)
+        self.map_button.setToolTip(self.tr("Calcula el mapa de esta foto en segundo plano (la primera vez tarda unos "
+                                           "segundos; queda guardado)."))
+        self.map_status.setToolTip(self.map_status.text())
+
+
+class LookStack(QWidget):
+    """El paso Look entero: un conmutador «Pre FX | Post FX» y, debajo, la pila elegida (dos `LookPanel`).
+
+    Pre FX retoca la foto antes de mezclarla con el efecto; Post FX, el resultado. Cada pila es un `LookPanel` con su
+    lista, sus presets y su «solo»; esta clase solo cambia de una a otra."""
+
+    def __init__(self, pre: LookPanel, post: LookPanel, parent: QWidget | None = None) -> None:
+        super().__init__(parent)
+        self.pre, self.post = pre, post
+        self.switch = SegmentedControl([self.tr("Pre FX"), self.tr("Post FX")], current=1)
+        self.switch.set_tooltips([
+            self.tr("Pre FX: efectos sobre la foto ANTES de mezclarla con el efecto de profundidad (solo se ven si la "
+                    "mezcla con la foto está activa)."),
+            self.tr("Post FX: efectos sobre el resultado final, después de la mezcla."),
+        ])
+        self.pages = QStackedWidget()
+        self.pages.addWidget(pre)
+        self.pages.addWidget(post)
+        self.pages.setCurrentIndex(1)
+        self.switch.changed.connect(self.pages.setCurrentIndex)
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(6)
+        layout.addWidget(self.switch)
+        layout.addWidget(self.pages)
+
+    def current_panel(self) -> LookPanel:
+        return self.pages.currentWidget()
+
+    def show_stack(self, stack: str) -> None:
+        """Pasa a la pila "pre" o "look"."""
+        index = 0 if stack == "pre" else 1
+        self.switch.set_current_index(index)
+        self.pages.setCurrentIndex(index)

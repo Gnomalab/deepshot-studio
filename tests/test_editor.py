@@ -189,3 +189,111 @@ def test_a_look_preset_replaces_the_stack_in_one_undo_step_and_previews_on_hover
     assert stack.index() == steps + 1
     stack.undo()
     assert [l.kind for l in session.project.look] == ["levels"]
+
+
+def test_pre_and_post_fx_are_two_independent_stacks_with_undo_solo_and_presets(tmp_path):
+    from deepshot import presets
+    from deepshot.look import LookLayer
+
+    app, session, stack, *_ = _setup(tmp_path)
+    p = session.project
+    assert p.pre == [] and p.look == [] and session.look_stack.current_panel() is session.look_panel
+    session.look_stack.show_stack("pre")
+    assert session.look_stack.current_panel() is session.pre_panel
+    session.pre_panel.add_item(LookLayer.new("saturation"))                  # entra en Pre FX, no en Post FX
+    assert [l.kind for l in p.pre] == ["saturation"] and p.look == []
+    session.look_panel.add_item(LookLayer.new("levels"))
+    assert [l.kind for l in p.look] == ["levels"] and len(p.pre) == 1
+    # Solo: cada pila tiene el suyo y la vista previa lo respeta.
+    p.pre[0].enabled = False
+    session.pre_panel.toggle_row_solo(0)
+    assert session._preview_project().pre[0].enabled is True
+    session.pre_panel.toggle_row_solo(0)
+    # Un preset de look se aplica a la pila de su pestaña, con un solo paso de deshacer.
+    preset = presets.builtin("look", "old_film")
+    steps = stack.index()
+    session.pre_panel.preset_bar.chosen.emit(preset)
+    p = session.project                                                      # el preset rehace el proyecto
+    assert [l.kind for l in p.pre] == [l["kind"] for l in preset["look"]] and [l.kind for l in p.look] == ["levels"]
+    assert stack.index() == steps + 1
+    stack.undo()
+    assert [l.kind for l in session.project.pre] == ["saturation"]
+    # Vista previa al pasar el ratón por un preset de Pre FX: solo cambia Pre.
+    sent = []
+    session.render.request = lambda project, mask=None: sent.append(project)
+    session.preview_preset("look", preset, "pre")
+    assert [l.kind for l in sent[-1].pre] == [l["kind"] for l in preset["look"]] and [l.kind for l in sent[-1].look] == ["levels"]
+    # Se guardan y se recuperan en el JSON del proyecto (y un proyecto antiguo, sin «pre», sigue abriendo).
+    p = session.project
+    again = type(p).from_dict(p.to_dict())
+    assert [l.kind for l in again.pre] == ["saturation"]
+    old = p.to_dict()
+    old.pop("pre")
+    assert type(p).from_dict(old).pre == []
+
+
+def test_limit_to_a_map_in_the_panel_computes_on_demand_and_applies_in_preview_and_export(tmp_path, monkeypatch):
+    from deepshot import export as ex
+    from deepshot import maps
+    from deepshot.look import LookLayer
+    from deepshot.project import Project
+
+    monkeypatch.setenv("DEEPSHOT_DATA_DIR", str(tmp_path / "datos"))       # caché de mapas vacía
+    app, session, stack, photo, depth = _setup(tmp_path)
+    subject = np.zeros((80, 120), np.float32)
+    subject[:, 60:] = 1.0                                        # el sujeto es la mitad derecha
+    monkeypatch.setattr(maps, "sam_installed", lambda: True)
+    monkeypatch.setattr(maps, "segment_at", lambda image, point: np.stack([subject]))
+    panel = session.look_panel
+    layer = LookLayer.new("levels")
+    layer.params["black"] = 0.9
+    panel.add_item(layer)
+    panel._on_limit(2)                                           # «Mapa»
+    assert layer.limit == "mask" and layer.mask_id == "subject"
+    assert panel.map_state["subject"] == "missing" and "subject" not in session.current_maps()
+    dark_before = _wait_result(app, session)
+    assert dark_before.pixelColor(100, 40).value() > 30          # sin mapa calculado, el efecto no actúa
+    panel.map_button.click()                                     # «Calcular sujeto»: en segundo plano
+    t = time.time()
+    while "subject" not in session.current_maps() and time.time() - t < 10:
+        app.processEvents()
+        time.sleep(0.01)
+    assert panel.map_state["subject"] == "ready" and session.pre_panel.map_state["subject"] == "ready"
+    session.result = None
+    session._request_render()
+    img = _wait_result(app, session)
+    assert img.pixelColor(100, 40).value() < 15 and img.pixelColor(20, 40).value() > 30     # solo la mitad derecha
+    layer.mask_invert = True
+    panel.emit_both()
+    t = time.time()                                              # puede llegar antes un render anterior: se espera al nuevo
+    while time.time() - t < 5:
+        img = _wait_result(app, session)
+        if img is not None and img.pixelColor(100, 40).value() > 30:
+            break
+    assert img.pixelColor(100, 40).value() > 30 and img.pixelColor(20, 40).value() < 15     # todo menos el sujeto
+    # Exportación: el mapa viaja a la imagen final a resolución completa.
+    opts = ex.ExportOptions("final", "png8", tmp_path / "out", "x")
+    out = ex.export_effect(Project.from_dict(session.project.to_dict()), depth, photo, opts, masks=session.current_maps())[0]
+    with Image.open(out) as im:
+        arr = np.asarray(im.convert("RGB"))
+    assert arr[40, 100].max() > 30 and arr[40, 20].max() < 15
+
+
+def test_without_the_model_the_map_button_reports_it_and_nothing_breaks(tmp_path, monkeypatch):
+    from deepshot import maps
+    from deepshot.look import LookLayer
+
+    monkeypatch.setenv("DEEPSHOT_DATA_DIR", str(tmp_path / "datos"))
+    app, session, *_ = _setup(tmp_path)
+    monkeypatch.setattr(maps, "sam_installed", lambda: False)
+    panel = session.look_panel
+    panel.add_item(LookLayer.new("levels"))
+    panel._on_limit(2)
+    panel.map_button.click()
+    t = time.time()
+    while panel.map_state.get("subject") == "busy" or (panel.map_state.get("subject") == "missing"
+                                                       and time.time() - t < 5 and not panel.map_text):
+        app.processEvents()
+        time.sleep(0.01)
+    assert panel.map_state["subject"] == "nomodel" and "SAM" in panel.map_text
+    assert session.current_maps() == {}

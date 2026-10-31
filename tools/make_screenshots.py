@@ -215,6 +215,14 @@ def main() -> None:
     settle(app, win)
     shot(app, win, "11-export")
 
+    print("Quick")
+    quick = win.open_simple_depth()                                   # con la foto de ejemplo de la biblioteca
+    quick.folder_edit.setText(str(Path.home() / "Pictures" / "Deepshot"))          # una carpeta neutra para la captura
+    quick.resize(640, quick.sizeHint().height())
+    wait(app, 0.8)
+    shot(app, quick, "00-quick")
+    quick.close()
+
     print("Gestor de modelos y módulos")
     from deepshot.ui.model_manager import ModelManagerDialog
 

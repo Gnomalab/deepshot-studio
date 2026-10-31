@@ -32,6 +32,14 @@ def guide_html() -> str:
 lo cercano y lo lejano se convierten en luz, sombra o color. El trabajo sigue cinco pasos,
 visibles en la barra superior (<b>Alt+1…5</b>).</p>
 
+<h3>0 · Quick (mapas de profundidad rápidos)</h3>
+<p>El botón <b>0 Quick</b> de la barra superior abre el modo sencillo: eliges una o varias fotos (o las de la biblioteca) y
+obtienes solo el <b>mapa de profundidad</b> y/o el de <b>normales</b>, sin editor ni proyecto, para usarlos en cualquier otra
+aplicación. Elige el modelo, la calidad y la resolución, la carpeta de salida y el formato; <i>Normalizar</i> usa todo el rango
+y <i>Cerca = claro</i> invierte el sentido del gris. Puede guardar también los datos en un <b>.json</b>, y <i>Revisar</i> abre
+los mapas recién creados. Lo ya calculado sale de la caché. La misma función existe como aplicación suelta
+(<code>deepshot-quick</code>).</p>
+
 <h3>1 · Importar</h3>
 <p>Arrastra fotos a la ventana o usa <b>Archivo › Importar fotografía</b> (Ctrl+O).
 Aparecen en la <b>Biblioteca</b> de la izquierda; haz clic en una para trabajar con ella.</p>
@@ -122,6 +130,11 @@ Cada efecto se puede limitar a un rango de profundidad, mezclar con una opacidad
 reordenar. <i>Cargar look…</i> trae looks de fábrica (hechos solo con efectos de serie) y puedes guardar los tuyos.
 Los <b>módulos</b> (Profundidad › Gestor de modelos y módulos, filtro <i>Look modules</i>) añaden efectos más complejos:
 relighting por profundidad, quitar fondo y superresolución.</p>
+<p>Hay <b>dos pilas</b>, con el conmutador <b>Pre FX | Post FX</b>: <b>Pre FX</b> retoca la foto <i>antes</i> de mezclarla con
+el efecto (solo se nota con la mezcla con la foto activa) y <b>Post FX</b> retoca el resultado final. En cada efecto,
+<i>Todo | Profundidad | Mapa</i> elige dónde actúa: con <b>Mapa</b> se limita, por ejemplo, al <b>sujeto</b> (con
+<i>Invertir</i>, a todo menos el sujeto). El mapa se calcula una vez por foto con el botón <i>Calcular sujeto</i>
+(usa el modelo SAM 2.1 Small del gestor de modelos) y queda guardado.</p>
 
 <h3>5 · Exportar</h3>
 <p>Elige <b>Efecto</b>, <b>Mapa de profundidad</b> o <b>Imagen final</b> (el efecto con el Look aplicado, en JPG, TIFF, PNG o

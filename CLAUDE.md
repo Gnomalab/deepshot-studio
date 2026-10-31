@@ -106,6 +106,7 @@ deepshot-studio/
 │   ├── paint.py        # máscara pintada con pincel (sin interfaz)
 │   ├── presets.py      # presets de rampa y de estilo, de fábrica y del usuario
 │   ├── look.py         # paso Look: pila de efectos al estilo Photoshop (niveles, contraste, saturación, grano, nitidez, viñeta + módulos), sin interfaz
+│   ├── maps.py         # mapas auxiliares por foto (p. ej. «subject» con SAM 2.1) para limitar efectos de Pre / Post FX; caché en <datos>/map_cache (sin interfaz)
 │   ├── modules.py      # módulos descargables con modelo o librerías (module.json + module.py), en <modelos>/looks: catálogo local, instalar, aprobar, cargar (sin interfaz)
 │   ├── export.py       # PNG 8/16, EXR 32; efecto o mapa de profundidad
 │   ├── errors.py       # errores inesperados: registro y aviso

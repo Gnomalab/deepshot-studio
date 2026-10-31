@@ -23,6 +23,7 @@ from PIL import Image
 from PySide6.QtCore import QObject, QTimer, Signal
 from PySide6.QtGui import QImage
 
+from deepshot.maps import resize as resize_map
 from deepshot.project import Project, render, to_uint8
 
 log = logging.getLogger(__name__)
@@ -50,6 +51,18 @@ class _Level:
         self._points = None
         self._mask_src = None         # máscara (uint8) de la que sale `_mask_scaled`
         self._mask_scaled = None
+        self._maps_src: dict | None = None     # mapas auxiliares de los que salen `_maps_scaled`
+        self._maps_scaled: dict[str, np.ndarray] = {}
+
+    def maps(self, masks: dict[str, np.ndarray] | None) -> dict[str, np.ndarray] | None:
+        """Mapas auxiliares (p. ej. el sujeto) reescalados al tamaño de este nivel, con caché por objeto."""
+        if not masks:
+            return None
+        if masks is not self._maps_src:
+            h, w = self.depth.shape
+            self._maps_scaled = {k: resize_map(v, (w, h)) for k, v in masks.items()}
+            self._maps_src = masks
+        return self._maps_scaled
 
     def mask(self, mask: np.ndarray | None) -> np.ndarray | None:
         """Máscara pintada reescalada al tamaño de este nivel (con caché por objeto de máscara)."""
@@ -126,6 +139,7 @@ class RenderController(QObject):
         self._lock = threading.Lock()
         self._last_project: Project | None = None
         self._last_mask: np.ndarray | None = None
+        self._masks: dict[str, np.ndarray] = {}      # mapas auxiliares de la foto (deepshot/maps.py); se sustituye el dict entero
         self._alive = True
         self._preview_worker = _Worker(self._run)
         self._full_worker = _Worker(self._run)
@@ -187,6 +201,10 @@ class RenderController(QObject):
         """Mapa de la vista previa (sin el control de profundidad; ver `Editor.warped`)."""
         return self._preview.depth if self._preview else None
 
+    def set_masks(self, masks: dict[str, np.ndarray] | None) -> None:
+        """Mapas auxiliares de la foto actual para las capas limitadas a un mapa. No pide render: quien llama lo hace."""
+        self._masks = dict(masks or {})
+
     # --- Peticiones -----------------------------------------------------------------
     def request(self, project: Project, mask: np.ndarray | None = None) -> None:
         """Pide una vista previa con estos ajustes (copia: se pueden seguir editando).
@@ -226,7 +244,8 @@ class RenderController(QObject):
                 return
             t = time.perf_counter()
             painted = level.mask(mask) if project.composite.mask == "painted" else None
-            image = render(project, level.depth, level.photo, points=level.points(project), painted_mask=painted)
+            image = render(project, level.depth, level.photo, points=level.points(project), painted_mask=painted,
+                           masks=level.maps(self._masks))
             ms = (time.perf_counter() - t) * 1000
             if generation == self._generation and self._alive:   # descartar si ya no vale
                 self._emit(self.rendered, to_qimage(image), full, ms)

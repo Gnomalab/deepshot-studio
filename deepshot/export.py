@@ -27,6 +27,7 @@ from PIL import Image
 from deepshot.depth import load_photo
 from deepshot.depth_control import DepthControl
 from deepshot.depth_view import PALETTES, colorize_float
+from deepshot.maps import resize as resize_map
 from deepshot.project import Project, render
 
 log = logging.getLogger(__name__)
@@ -299,7 +300,8 @@ def export_depth(depth: np.ndarray, options: ExportOptions, progress: Progress =
 
 
 def _render_full(project: Project, depth: np.ndarray, photo_path: Path, painted_mask: np.ndarray | None,
-                 progress: Progress, with_look: bool, crop: tuple | None = None) -> np.ndarray:
+                 progress: Progress, with_look: bool, crop: tuple | None = None,
+                 masks: dict[str, np.ndarray] | None = None) -> np.ndarray:
     """Carga la foto y procesa la imagen a la resolución del mapa de profundidad (con o sin la pila de Look)."""
     progress(QCoreApplication.translate("Export", "Cargando la fotografía…"), 0.05)
     photo = load_photo(Path(photo_path), crop)               # con el reencuadre previo, solo esa zona (como el mapa)
@@ -311,21 +313,24 @@ def _render_full(project: Project, depth: np.ndarray, photo_path: Path, painted_
             img = img.resize((w, h), Image.BILINEAR)
         mask = np.asarray(img, dtype=np.float32) / 255.0
     progress(QCoreApplication.translate("Export", "Procesando la imagen a resolución completa…"), 0.2)
-    return render(project, depth, photo, painted_mask=mask, with_look=with_look)
+    h, w = depth.shape
+    aux = {k: resize_map(v, (w, h)) for k, v in (masks or {}).items()}      # mapas auxiliares al tamaño del mapa
+    return render(project, depth, photo, painted_mask=mask, with_look=with_look, masks=aux)
 
 
 def export_effect(project: Project, depth: np.ndarray, photo_path: Path, options: ExportOptions,
                   painted_mask: np.ndarray | None = None, progress: Progress = _no_progress,
-                  crop: tuple | None = None) -> list[Path]:
+                  crop: tuple | None = None, masks: dict[str, np.ndarray] | None = None) -> list[Path]:
     """Procesa el efecto a resolución completa y lo guarda (y los ajustes en JSON, si se pide).
 
     painted_mask: máscara pintada (uint8, 2D) en memoria; se reescala al tamaño del mapa.
+    masks: mapas auxiliares (id -> float32 0..1) para las capas Pre / Post FX limitadas a un mapa; se reescalan.
     Devuelve las rutas escritas.
     """
     options.validate()
     options.folder.mkdir(parents=True, exist_ok=True)
     final = options.content == "final"
-    image = _render_full(project, depth, photo_path, painted_mask, progress, with_look=final, crop=crop)
+    image = _render_full(project, depth, photo_path, painted_mask, progress, with_look=final, crop=crop, masks=masks)
     exif = _exif_bytes(Path(photo_path)) if final and options.keep_metadata else None
     if final:                                                                # tamaño elegido, con Lanczos
         h, w = image.shape[:2]
