@@ -75,6 +75,9 @@ Versiones y licencias leídas de los metadatos del entorno `.venv` (2026-10-18).
 |---|---|---|
 | Marigold V1.0 (prs-eth/marigold-depth-v1-0) | Apache-2.0 (model card en Hugging Face) | Modelo de profundidad usado. Pesos fp16 en safetensors (~2,6 GB), descargados la primera vez a la carpeta de datos de la app. |
 | Depth Anything V2 Small (depth-anything/Depth-Anything-V2-Small-hf) | Apache-2.0 (model card en Hugging Face) | Modelo de profundidad rápido opcional. safetensors (~99 MB), descargado a la carpeta de datos. Base y Large son CC-BY-NC: **no se usan**. |
+| SAM 2.1 Hiera Small (facebook/sam2.1-hiera-small) | Apache-2.0 (model card en Hugging Face) | Lo usa el módulo de Look «Quitar fondo» (`modules_catalog/remove_background`). `Sam2Model` oficial de transformers, solo `model.safetensors` (~184 MB; el `.pt` del repositorio no se descarga). Sin dependencias nuevas. Comprobado el 2026-10-31. |
+| Swin2SR x2 (caidas/swin2SR-classical-sr-x2-64) | Apache-2.0 (model card en Hugging Face) | Lo usa el módulo de Look «Superresolución» (`modules_catalog/superres`). `Swin2SRForImageSuperResolution` oficial de transformers, solo `model.safetensors` (~48 MB). Sin dependencias nuevas. Comprobado el 2026-10-31. |
+| BiRefNet / RMBG-1.4 y 2.0 | MIT (BiRefNet) / no comercial (RMBG) | **No se usan**: RMBG es no comercial y BiRefNet solo se carga con `trust_remote_code` (código remoto), prohibido por la política. Mask2Former (licencia «other» en la ficha) y DETR / UperNet (solo `.bin`) tampoco. |
 | Apple SHARP / Depth Pro | Licencia de modelo solo para investigación | **No se usan**: prohíben el uso comercial. |
 | Marigold V1.1 (prs-eth/marigold-depth-v1-1) | OpenRAIL++ | **No se usa**: licencia con restricciones de uso, fuera de la política del proyecto. |
 | Marigold V2 (huawei-bayerlab/marigold-v2-0) | Apache-2.0 (base Qwen-Image-Edit-2509: Apache-2.0) | **No se usa** por requisitos de hardware (~17 GB de VRAM, solo Linux). Ver ROADMAP.md. |

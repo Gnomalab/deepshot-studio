@@ -261,6 +261,8 @@ class ModelManagerDialog(QDialog):
 
     # --- Tipo y destino (modelos y módulos) ------------------------------------------------------------------------------
     def kind_text(self, entry: ModelEntry) -> str:
+        if entry.is_helper:
+            return self.tr("Modelo de apoyo de módulos")
         return {"look": self.tr("Módulo de Look")}.get(entry.kind, self.tr("Modelo de profundidad"))
 
     def dest_path(self, entry: ModelEntry) -> Path:
@@ -341,9 +343,9 @@ class ModelManagerDialog(QDialog):
         """Los modelos que la app aún no sabe usar (Marigold V2) no salen mientras no estén descargados. Del catálogo solo
         se ven por defecto los de licencia permisiva. Siempre se ven los que el usuario añadió, los
         que ya están instalados y el que se está usando: no se esconde nada que ya forme parte de su trabajo."""
-        if entry.is_module:
-            return True                       # los módulos no tienen licencias «de prueba»: se ven siempre (su licencia va en la lista)
-        if not can_compute(entry) and not self.manager.is_installed(entry.id):
+        if entry.is_module or entry.is_helper:
+            return True                       # los módulos (y los modelos de apoyo, que son suyos) no tienen licencias «de prueba»: se ven siempre (su licencia va en la lista)
+        if not can_compute(entry) and not entry.is_helper and not self.manager.is_installed(entry.id):
             return False                      # lo que la app aún no sabe usar no se ofrece (si ya está bajado, se ve para poder borrarlo)
         if self.shows_more_licenses() or entry.source != "catalog" or is_permissive(entry.license):
             return True
@@ -394,7 +396,7 @@ class ModelManagerDialog(QDialog):
             item.setToolTip(self.COL_DEST, self.tr("La carpeta donde se guarda esta entrada al instalarla"))
             if entry.is_module:
                 item.setToolTip(self.COL_NAME, entry.description)
-            else:
+            elif not entry.is_helper:     # un modelo de apoyo de los módulos no sale en el selector de profundidad
                 item.setFlags(item.flags() | Qt.ItemIsUserCheckable)   # casilla: ¿sale en el selector de modelos?
                 item.setCheckState(self.COL_NAME, Qt.Checked if self.manager.is_enabled(entry.id)
                                    or entry.id == self.active_id else Qt.Unchecked)
@@ -407,7 +409,7 @@ class ModelManagerDialog(QDialog):
                 item.setForeground(self.COL_LICENSE, QBrush(theme.color("warn")))
                 item.setToolTip(self.COL_LICENSE, self.tr("Licencia no verificada como permisiva"))
             misfit = self.misfit_reason(entry)
-            if not can_compute(entry):
+            if not can_compute(entry) and not entry.is_helper:
                 for col in (self.COL_NAME, self.COL_STATE):
                     item.setForeground(col, QBrush(theme.color("bad")))
                     item.setToolTip(col, self.no_compute_reason(entry))
@@ -421,7 +423,7 @@ class ModelManagerDialog(QDialog):
                 for col in (self.COL_NAME, self.COL_STATE):
                     item.setForeground(col, QBrush(theme.color("warn")))
                     item.setToolTip(col, entry.display_warning)
-            if not entry.is_module and self.manager.is_installed(entry.id):     # «Al arrancar»: solo uno, y solo si está instalado
+            if not entry.is_module and not entry.is_helper and self.manager.is_installed(entry.id):     # «Al arrancar»: solo uno, y solo si está instalado
                 item.setCheckState(self.COL_PRELOAD, Qt.Checked if entry.id == preload else Qt.Unchecked)
                 item.setToolTip(self.COL_PRELOAD, self.tr("Carga este modelo en la memoria de la GPU al abrir la "
                                                           "aplicación. Solo uno a la vez."))
@@ -480,7 +482,7 @@ class ModelManagerDialog(QDialog):
                 kind_text=self.kind_text(entry), dest=str(self.dest_path(entry)), is_module=True,
                 description=entry.description, url=entry.url)
         misfit = self.misfit_reason(entry)
-        if not can_compute(entry):
+        if not can_compute(entry) and not entry.is_helper:
             status, tone = self.tr("Sin cálculo todavía · {0:.1f} GB").format(
                 self.manager.disk_size(entry.id) / 1e9 if installed else entry.approx_gb or 0), "bad"
         elif misfit and not installed:
@@ -502,7 +504,7 @@ class ModelManagerDialog(QDialog):
             enabled=self.manager.is_enabled(entry.id) or entry.id == self.active_id, preload=entry.id == preload,
             removable_files=installed, can_install=entry.source not in ("local", "folder"),
             warn_license=not is_permissive(entry.license), note=entry.display_warning, misfit=misfit,
-            kind_text=self.kind_text(entry), dest=str(self.dest_path(entry)))
+            kind_text=self.kind_text(entry), dest=str(self.dest_path(entry)), helper=entry.is_helper)
 
     def _rebuild_cards(self, entries: list[ModelEntry], preload: str | None) -> None:
         for card in self._cards.values():
@@ -571,7 +573,8 @@ class ModelManagerDialog(QDialog):
         installed = bool(entry) and self.manager.is_installed(entry.id)
         idle = not self._busy
         is_module = bool(entry) and entry.is_module
-        self.btn_activate.setEnabled(idle and entry is not None and not is_module and entry.id != self.active_id)
+        self.btn_activate.setEnabled(idle and entry is not None and not is_module and not entry.is_helper
+                                     and entry.id != self.active_id)
         self.btn_download.setEnabled(idle and entry is not None and not installed
                                      and entry.source not in ("local", "folder"))
         # El botón desactivado explica por qué, en vez de quedarse mudo.

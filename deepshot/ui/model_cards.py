@@ -36,6 +36,7 @@ class CardData:
     is_module: bool = False   # los módulos no se «usan» ni se ocultan del selector: solo se instalan y se quitan
     description: str = ""     # módulos: qué hacen
     url: str = ""             # módulos: su página web
+    helper: bool = False      # modelo de apoyo de un módulo (no calcula profundidad): no se «usa» ni sale en el selector
 
 
 class ModelCard(QFrame):
@@ -115,8 +116,8 @@ class ModelCard(QFrame):
         self.preload_check.setChecked(data.preload)
         self.preload_check.setEnabled(data.installed)
         self.preload_check.toggled.connect(lambda on: self.preloadChanged.emit(id_, on))
-        self.enabled_check.setVisible(not data.is_module)          # un módulo no sale en el selector de modelos
-        self.preload_check.setVisible(not data.is_module)
+        self.enabled_check.setVisible(not data.is_module and not data.helper)   # ni un módulo ni su modelo de apoyo salen en el selector
+        self.preload_check.setVisible(not data.is_module and not data.helper)
 
         buttons = QHBoxLayout()
         buttons.setContentsMargins(0, 0, 0, 0)
@@ -130,7 +131,7 @@ class ModelCard(QFrame):
             self.install_button.clicked.connect(lambda: self.installRequested.emit(id_))
             buttons.addWidget(self.install_button)
         else:
-            if not data.is_module:
+            if not data.is_module and not data.helper:
                 self.use_button = QPushButton(self.tr("Usar"))
                 self.use_button.setObjectName("Primary")
                 self.use_button.setToolTip(self.tr("Usa este modelo para calcular la profundidad"))

@@ -62,11 +62,124 @@ def loaded(catalog):
 
 
 # --- Catálogo de la app ----------------------------------------------------------------------------------------------
-def test_el_catalogo_de_la_app_no_trae_modulos_de_ejemplo_solo_las_instrucciones():
+def test_el_catalogo_de_la_app_trae_sus_modulos_y_las_instrucciones():
     assert (SHIPPED / "README.md").is_file()
-    assert modules._scan(SHIPPED) == []                                # grano, nitidez y viñeta son efectos de serie
+    assert sorted(m.id for m in modules._scan(SHIPPED)) == ["relight", "remove_background", "superres"]       # grano, nitidez y viñeta son efectos de serie
     for kind in ("grain", "sharpen", "vignette"):
         assert kind in KINDS and not KINDS[kind].module_id
+
+
+def test_relighting_ilumina_el_relieve_desde_el_lado_que_se_pide_y_no_toca_el_tamano():
+    import importlib.util
+
+    import numpy as np
+
+    spec = importlib.util.spec_from_file_location("relight_module", SHIPPED / "relight" / "module.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    h, w = 120, 160
+    yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
+    depth = np.clip(((xx - 80) ** 2 + (yy - 60) ** 2) / 4000.0, 0.0, 1.0)        # un hoyo: lo más cerca en el centro
+    image = np.full((h, w, 3), 0.5, dtype=np.float32)
+    out = module.process(image, depth, {"strength": 1.0, "azimuth": 90.0, "elevation": 30.0, "relief": 2.0})
+    assert out.shape == image.shape and out.dtype == np.float32 and 0.0 <= out.min() and out.max() <= 1.0
+    left, right = out[60, 30:60].mean(), out[60, 100:130].mean()              # luz desde la derecha: el lado derecho se aclara
+    assert right > left + 0.05
+    top = module.process(image, depth, {"strength": 1.0, "azimuth": 0.0, "elevation": 30.0, "relief": 2.0})
+    assert top[15:40, 80].mean() > top[80:105, 80].mean() + 0.05             # 0° = desde arriba: se aclara la parte de arriba
+    assert module.process(image, depth, {"strength": 0.0}) is image            # sin fuerza no hace nada
+
+
+def _shipped(name):
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location("shipped_" + name, SHIPPED / name / "module.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def test_los_modulos_con_modelo_piden_modelos_del_catalogo_permisivos_y_solo_safetensors():
+    by_id = {e.id: e for e in m.MODELS_CATALOG}
+    for info in modules._scan(SHIPPED):
+        for model_id in info.requires_models:
+            entry = by_id[model_id]
+            assert entry.is_helper and not m.can_compute(entry)           # apoyo de un módulo: no es un modelo de profundidad
+            assert m.is_permissive(entry.license) and not entry.dev_only and not entry.warning
+            assert "model.safetensors" in entry.patterns
+            assert not any(pat.endswith((".bin", ".pt", ".pth", ".ckpt")) for pat in entry.patterns)
+            assert entry.family in m.ALL_FAMILIES and m.ALL_FAMILIES[entry.family].index_file in entry.patterns
+    assert {i.id: i.requires_models for i in modules._scan(SHIPPED)} == {
+        "relight": [], "remove_background": ["sam2-1-hiera-small"], "superres": ["swin2sr-classical-sr-x2"]}
+
+
+def test_los_modelos_de_apoyo_no_salen_como_modelos_de_profundidad_pero_el_modulo_los_pide(tmp_path, monkeypatch):
+    manager = m.ModelManager(tmp_path / "models")
+    assert not m.can_compute(manager.get("sam2-1-hiera-small")) and m.can_compute(manager.get("marigold-v1-0"))
+    monkeypatch.setenv("DEEPSHOT_MODULES_CATALOG", str(SHIPPED))
+    entry = manager.get("module:superres")
+    assert [e.id for e in manager.missing_requirements(entry)] == ["swin2sr-classical-sr-x2"]
+
+
+def test_quitar_fondo_elige_el_sujeto_por_profundidad_y_pone_negro_blanco_o_la_foto_difuminada(monkeypatch):
+    module = _shipped("remove_background")
+    h, w = 60, 80
+    image = _image(h, w)
+    depth = np.ones((h, w), dtype=np.float32)
+    depth[20:40, 50:70] = 0.0                                              # lo más cerca, a la derecha
+    x, y = module._auto_point(depth)
+    assert 0.6 < x < 0.8 and 0.4 < y < 0.6
+    seen = []
+    small, big = np.zeros((h, w), np.float32), np.zeros((h, w), np.float32)
+    small[28:32, 58:62], big[10:50, 40:75] = 1.0, 1.0
+
+    def fake_segment(img, point):
+        seen.append(point)
+        return np.stack([small, big])
+
+    monkeypatch.setattr(module, "_segment", fake_segment)
+    module._last.clear()
+    out = module.process(image, depth, {"background": 0, "feather": 0.0, "extent": 1.0})      # mayor = el conjunto
+    assert out.shape == image.shape and out.dtype == np.float32
+    assert np.allclose(out[30, 60], image[30, 60]) and np.allclose(out[0, 0], 0.0)
+    white = module.process(image, depth, {"background": 1, "feather": 0.0, "extent": 1.0})
+    assert np.allclose(white[0, 0], 1.0) and np.allclose(white[30, 60], image[30, 60])
+    blurred = module.process(image, depth, {"background": 2, "blur": 5.0, "feather": 0.0, "extent": 1.0})
+    assert not np.allclose(blurred[0, 0], image[0, 0]) and np.allclose(blurred[30, 60], image[30, 60])
+    part = module.process(image, depth, {"background": 0, "feather": 0.0, "extent": 0.0})     # menor = solo una parte
+    assert np.allclose(part[15, 45], 0.0) and np.allclose(part[30, 60], image[30, 60])
+    assert len(seen) == 1                                                  # la máscara se reutiliza al cambiar solo los ajustes
+    module.process(image, depth, {"point_x": 0.1, "point_y": 0.9})
+    assert seen[-1] == (0.1, 0.9) and len(seen) == 2                       # un punto del usuario manda sobre el automático
+    module._last.clear()
+
+
+@pytest.mark.parametrize("size, tile", [((50, 70), 64), ((33, 41), 64), ((120, 90), 256)])
+def test_superresolucion_trabaja_por_mosaicos_y_devuelve_el_tamano_original(monkeypatch, size, tile):
+    import types
+
+    import torch
+    import torch.nn.functional as F
+
+    module = _shipped("superres")
+
+    class FakeSwin:
+        """Hace de Swin2SR x2: ampliación por vecino más próximo (reducirla otra vez devuelve la imagen tal cual)."""
+        config = types.SimpleNamespace(upscale=2, window_size=8)
+        dtype = torch.float32
+
+        def __call__(self, pixel_values):
+            assert pixel_values.shape[-1] % 8 == 0 and pixel_values.shape[-2] % 8 == 0     # el modelo pide múltiplos de 8
+            return types.SimpleNamespace(reconstruction=F.interpolate(pixel_values, scale_factor=2, mode="nearest"))
+
+    monkeypatch.setattr(module, "_load", lambda: (FakeSwin(), "cpu"))
+    module._last.clear()
+    image = _image(*size)
+    out = module.process(image, None, {"strength": 1.0, "tile": tile})
+    assert out.shape == image.shape and out.dtype == np.float32
+    assert np.allclose(out, image, atol=1e-5)                              # mosaicos bien pegados: sin costuras
+    assert module.process(image, None, {"strength": 0.0}) is image
+    module._last.clear()
 
 
 # --- Formato -------------------------------------------------------------------------------------------------------

@@ -386,7 +386,9 @@ def test_model_manager_cards_view_mirrors_the_list_with_buttons_checkboxes_and_u
     dialog.view_switch.set_current_index(1)                                   # a la vista de tarjetas
     dialog._on_view_changed(1)
     assert dialog.view_stack.currentIndex() == 1 and QSettings().value("models/view") == "cards"
-    assert set(dialog._cards) == {e.id for e in manager.all(with_modules=True) if m.can_compute(e)}   # una tarjeta por modelo o módulo que se puede usar
+    assert set(dialog._cards) == {e.id for e in manager.all(with_modules=True) if m.can_compute(e) or e.is_helper}   # una tarjeta por modelo o módulo que se puede usar (y por modelo de apoyo)
+    helper = dialog._cards["sam2-1-hiera-small"]
+    assert helper.use_button is None and not helper.enabled_check.isVisibleTo(helper) and helper.install_button is not None
     installed, missing = dialog._cards["marigold-v1-0"], dialog._cards["depth-pro"]
     assert installed.use_button is not None and installed.uninstall_button is not None and installed.install_button is None
     assert missing.install_button is not None and missing.use_button is None

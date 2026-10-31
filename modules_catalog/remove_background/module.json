@@ -1,0 +1,75 @@
+{
+  "id": "remove_background",
+  "name": "Quitar fondo",
+  "version": "1.0",
+  "license": "Apache-2.0 (SAM 2.1 de Meta; código del módulo propio de Deepshot Studio)",
+  "author": "Gnomalab Estudio",
+  "kind": "look",
+  "homepage": "https://huggingface.co/facebook/sam2.1-hiera-small",
+  "description": "Aísla al sujeto con SAM 2.1 y cambia el fondo por negro, blanco o la propia foto difuminada. El sujeto se elige solo (lo más cercano del mapa de profundidad) o con un punto que marcas tú. Necesita el modelo «SAM 2.1 Small» (0,2 GB, Apache 2.0), que se descarga una vez y se usa en local.",
+  "requires_models": [
+    "sam2-1-hiera-small"
+  ],
+  "params": [
+    {
+      "name": "background",
+      "label": "Fondo",
+      "default": 0,
+      "min": 0,
+      "max": 2,
+      "decimals": 0,
+      "step": 1,
+      "tooltip": "Qué sustituye al fondo: 0 = negro, 1 = blanco, 2 = la propia foto difuminada."
+    },
+    {
+      "name": "blur",
+      "label": "Difuminado",
+      "default": 3.0,
+      "min": 0.0,
+      "max": 10.0,
+      "decimals": 1,
+      "step": 0.1,
+      "tooltip": "Cuánto se difumina el fondo cuando «Fondo» es 2, en % del lado largo de la imagen."
+    },
+    {
+      "name": "feather",
+      "label": "Suavizar borde",
+      "default": 0.3,
+      "min": 0.0,
+      "max": 3.0,
+      "decimals": 2,
+      "step": 0.05,
+      "tooltip": "Suaviza el contorno del sujeto, en % del lado largo de la imagen. 0 = borde duro."
+    },
+    {
+      "name": "extent",
+      "label": "Alcance",
+      "default": 1.0,
+      "min": 0.0,
+      "max": 1.0,
+      "decimals": 2,
+      "step": 0.5,
+      "tooltip": "Qué se considera sujeto cuando el punto es ambiguo: 0 = solo la parte bajo el punto (una camiseta), 0,5 = el objeto (la persona), 1 = el conjunto (la persona y lo que toca)."
+    },
+    {
+      "name": "point_x",
+      "label": "Sujeto X",
+      "default": -1.0,
+      "min": -1.0,
+      "max": 1.0,
+      "decimals": 2,
+      "step": 0.01,
+      "tooltip": "Posición horizontal (0 = izquierda, 1 = derecha) de un punto sobre el sujeto. -1 = elegir solo, por profundidad."
+    },
+    {
+      "name": "point_y",
+      "label": "Sujeto Y",
+      "default": -1.0,
+      "min": -1.0,
+      "max": 1.0,
+      "decimals": 2,
+      "step": 0.01,
+      "tooltip": "Posición vertical (0 = arriba, 1 = abajo) de un punto sobre el sujeto. -1 = elegir solo, por profundidad."
+    }
+  ]
+}

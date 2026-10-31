@@ -93,7 +93,13 @@ ALL_FAMILIES: dict[str, Family] = {
     # Modelos de profundidad de transformers que traen su propio procesador de imágenes: MiDaS (DPT), ZoeDepth y
     # Depth Pro. Se cargan con AutoModelForDepthEstimation; el tipo de salida se lee de su configuración.
     "transformers-depth": Family("transformers-depth", "MiDaS / ZoeDepth / Depth Pro (transformers)", "", "config.json"),
+    # Modelos de apoyo de los módulos de Look (no calculan profundidad): SAM 2 (segmentar) y Swin2SR (superresolución).
+    "sam2": Family("sam2", "SAM 2 (transformers)", "", "config.json"),
+    "swin2sr": Family("swin2sr", "Swin2SR (transformers)", "", "config.json"),
 }
+# Familias que NO calculan profundidad: modelos que usan los módulos de Look. Se instalan desde el gestor pero no se
+# eligen como modelo de profundidad.
+HELPER_FAMILIES = {"sam2", "swin2sr"}
 
 
 @dataclass
@@ -129,6 +135,11 @@ class ModelEntry:
     @property
     def is_module(self) -> bool:
         return self.kind != "depth"
+
+    @property
+    def is_helper(self) -> bool:
+        """Modelo de apoyo de un módulo de Look (segmentar, ampliar…): se instala pero no calcula profundidad."""
+        return self.family in HELPER_FAMILIES
 
     @property
     def display_label(self) -> str:
@@ -291,6 +302,23 @@ MODELS_CATALOG: list[ModelEntry] = [
                       "1024²; con 8 GB solo puede funcionar de forma experimental y lenta. Marigold V1 y "
                       "Depth Anything no tienen estos requisitos."),
     ),
+    # Modelos de apoyo de los módulos de Look (modules_catalog/): no calculan profundidad. Ambos Apache 2.0, de
+    # transformers, solo safetensors (el repositorio de SAM 2.1 trae además un .pt que NO se descarga).
+    ModelEntry(
+        id="sam2-1-hiera-small",
+        label=QT_TRANSLATE_NOOP("Models", "SAM 2.1 Small (segmentación, para «Quitar fondo»)"),
+        family="sam2", source="catalog", repo_id="facebook/sam2.1-hiera-small", license="apache-2.0",
+        patterns=["config.json", "preprocessor_config.json", "processor_config.json", "video_preprocessor_config.json",
+                  "model.safetensors"],
+        approx_gb=0.2,
+    ),
+    ModelEntry(
+        id="swin2sr-classical-sr-x2",
+        label=QT_TRANSLATE_NOOP("Models", "Swin2SR x2 (superresolución, para «Superresolución»)"),
+        family="swin2sr", source="catalog", repo_id="caidas/swin2SR-classical-sr-x2-64", license="apache-2.0",
+        patterns=["config.json", "preprocessor_config.json", "model.safetensors"],
+        approx_gb=0.05,
+    ),
 ]
 DEFAULT_MODEL = "marigold-v1-0"
 MODULE_ID_PREFIX = "module:"          # los módulos comparten la lista con los modelos: su id es «module:<id>»
@@ -423,7 +451,7 @@ UNIMPLEMENTED_FAMILIES = {"marigold-v2"}
 
 def can_compute(entry: ModelEntry) -> bool:
     """¿Sabe la app calcular la profundidad con este modelo? Si no, descargarlo no sirve de nada todavía."""
-    return entry.family not in UNIMPLEMENTED_FAMILIES
+    return entry.family not in UNIMPLEMENTED_FAMILIES and entry.family not in HELPER_FAMILIES
 
 
 def is_permissive(license_id: str | None) -> bool:

@@ -32,183 +32,183 @@
 <context>
     <name>AreasPanel</name>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="645"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="646"/>
         <source>+ Añadir área</source>
         <translation>+ Add area</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="645"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="646"/>
         <source>Añade un área 3D de luz o enfoque en el centro; después se mueve y se escala sobre la imagen</source>
         <translation>Adds a 3D light or focus area in the center; you then move and scale it over the image</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="650"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="651"/>
         <source>Dibujar</source>
         <translation>Draw</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="653"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="654"/>
         <source>Dibuja un área nueva sobre la imagen: pulsa en el centro y arrastra para darle tamaño; el efecto se ve al instante (Mayús+A). Mayús al arrastrar: caja rectangular.</source>
         <translation>Draws a new area over the image: click at the center and drag to set its size; the effect shows instantly (Shift+A). Shift while dragging: rectangular box.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="656"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="657"/>
         <source>Colocar</source>
         <translation>Place</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="659"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="660"/>
         <source>Mueve el área seleccionada: pulsa y arrastra por la imagen y el área sigue al puntero, pegada a la superficie, hasta soltar (P)</source>
         <translation>Moves the selected area: click and drag over the image and the area follows the pointer, stuck to the surface, until you release (P)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="671"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="672"/>
         <source>Áreas. Cuadro: color en la imagen · doble clic: renombrar · ojo: aplicar o saltar el área</source>
         <translation>Areas. Square: colour on the image · double-click: rename · eye: apply or bypass the area</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="674"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="675"/>
         <source>Elipsoide</source>
         <translation>Ellipsoid</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="674"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="675"/>
         <source>Caja</source>
         <translation>Box</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="675"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="676"/>
         <source>Zona ovalada con el borde que se desvanece</source>
         <translation>Oval zone with a fading edge</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="676"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="677"/>
         <source>Zona rectangular (caja 3D)</source>
         <translation>Rectangular zone (3D box)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="697"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="698"/>
         <source>Posición horizontal del centro del área</source>
         <translation>Horizontal position of the area&apos;s center</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="698"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="699"/>
         <source>Posición vertical del centro del área (arriba = positivo)</source>
         <translation>Vertical position of the area&apos;s center (up = positive)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="699"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="700"/>
         <source>Profundidad del centro: 0 = lo más cercano</source>
         <translation>Depth of the center: 0 = closest</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="700"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="701"/>
         <source>Tamaño horizontal (semieje X)</source>
         <translation>Horizontal size (X semi-axis)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="700"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="701"/>
         <source>Tamaño vertical (semieje Y)</source>
         <translation>Vertical size (Y semi-axis)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="701"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="702"/>
         <source>Grosor en profundidad (semieje Z): qué tanto abarca hacia delante y atrás</source>
         <translation>Thickness in depth (Z semi-axis): how far it reaches forward and backward</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="702"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="703"/>
         <source>Giro sobre el eje horizontal</source>
         <translation>Rotation around the horizontal axis</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="702"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="703"/>
         <source>Giro sobre el eje vertical</source>
         <translation>Rotation around the vertical axis</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="703"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="704"/>
         <source>Giro sobre la imagen (el que se ve al arrastrar el tirador de giro)</source>
         <translation>Rotation within the image (the one you see when dragging the rotation handle)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="707"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="708"/>
         <source>Fuerza</source>
         <translation>Strength</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="709"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="710"/>
         <source>Positiva aclara, negativa oscurece</source>
         <translation>Positive lightens, negative darkens</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="710"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="711"/>
         <source>Suavidad del borde</source>
         <translation>Edge softness</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="712"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="713"/>
         <source>Cuánto se difumina el borde del área. Se ve como el anillo punteado interior; también: Alt + rueda sobre la imagen</source>
         <translation>How much the area&apos;s edge is blurred. Shown as the dotted inner ring; also: Alt + wheel over the image</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="714"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="715"/>
         <source>Caída</source>
         <translation>Falloff</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="715"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="716"/>
         <source>0 = intensidad uniforme; 1 = se apaga del centro hacia el borde</source>
         <translation>0 = uniform intensity; 1 = fades from the center to the edge</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="722"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="723"/>
         <source>Transformación</source>
         <translation>Transform</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="723"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="724"/>
         <source>Centro, escala y rotación del área con números exactos</source>
         <translation>Center, scale and rotation of the area with exact numbers</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="724"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="725"/>
         <source>Centro</source>
         <translation>Center</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="724"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="725"/>
         <source>Escala</source>
         <translation>Scale</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="725"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="726"/>
         <source>Rotación</source>
         <translation>Rotation</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="734"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="735"/>
         <source>En la imagen: arrastra el área para moverla; tiradores para escalar y girar. G mover · S escalar · R girar (X / Y / Z fijan el eje). Rueda con Ctrl: tamaño · Mayús: profundidad · Alt: suavidad.</source>
         <translation>On the image: drag the area to move it; handles to scale and rotate. G move · S scale · R rotate (X / Y / Z lock the axis). Wheel with Ctrl: size · Shift: depth · Alt: softness.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="762"/>
-        <location filename="../../deepshot/ui/editor_panels.py" line="773"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="763"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="774"/>
         <source>Área {0}</source>
         <translation>Area {0}</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="769"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="770"/>
         <source>elipsoide</source>
         <translation>ellipsoid</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="769"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="770"/>
         <source>caja</source>
         <translation>box</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="802"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="803"/>
         <source>Color del área</source>
         <translation>Area color</translation>
     </message>
@@ -216,98 +216,98 @@
 <context>
     <name>BandsPanel</name>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="538"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="539"/>
         <source>+ Añadir banda</source>
         <translation>+ Add band</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="538"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="539"/>
         <source>Añade una franja de profundidad que se ilumina u oscurece sobre la base</source>
         <translation>Adds a depth stripe that lights or darkens over the base</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="541"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="542"/>
         <source>Posición</source>
         <translation>Position</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="543"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="544"/>
         <source>Profundidad del centro de la banda (0 = cerca, 1 = lejos)</source>
         <translation>Depth of the band&apos;s center (0 = near, 1 = far)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="544"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="545"/>
         <source>Anchura</source>
         <translation>Width</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="546"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="547"/>
         <source>Anchura de la franja con efecto pleno, en el rango de la rampa (0 a 1)</source>
         <translation>Width of the stripe at full effect, within the ramp range (0 to 1)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="547"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="548"/>
         <source>Suavidad</source>
         <translation>Softness</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="549"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="550"/>
         <source>Cuánto se difumina la franja a cada lado: 0 = borde duro</source>
         <translation>How much the stripe is blurred on each side: 0 = hard edge</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="550"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="551"/>
         <source>Intensidad</source>
         <translation>Intensity</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="551"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="552"/>
         <source>Opacidad de la banda: 0 = invisible, 1 = totalmente visible</source>
         <translation>Band opacity: 0 = invisible, 1 = fully visible</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="553"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="554"/>
         <source>Pan</source>
         <translation>Pan</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="555"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="556"/>
         <source>Gira la banda sobre el eje vertical: la franja se aleja hacia la derecha (+) o hacia la izquierda (−). El centro de la imagen no cambia.</source>
         <translation>Rotates the band around the vertical axis: the strip moves away toward the right (+) or the left (−). The image centre does not change.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="557"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="558"/>
         <source>Tilt</source>
         <translation>Tilt</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="559"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="560"/>
         <source>Gira la banda sobre el eje horizontal: la franja se aleja hacia arriba (+) o se acerca (−). El centro de la imagen no cambia.</source>
         <translation>Rotates the band around the horizontal axis: the strip moves away toward the top (+) or comes closer (−). The image centre does not change.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="561"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="562"/>
         <source>Bandas. Cuadro: color · doble clic: renombrar · ojo: aplicar o saltar la banda</source>
         <translation>Bands. Square: colour · double-click: rename · eye: apply or bypass the band</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="562"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="563"/>
         <source>Color de la rampa</source>
         <translation>Colour from ramp</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="563"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="564"/>
         <source>La banda toma el color de la rampa artística en su posición, así siempre casa con el resto. Si está marcado, el color del cuadro de la lista no se usa.</source>
         <translation>The band takes the colour of the art ramp at its position, so it always matches the rest. When checked, the colour square in the list is not used.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="582"/>
-        <location filename="../../deepshot/ui/editor_panels.py" line="592"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="583"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="593"/>
         <source>Banda {0}</source>
         <translation>Band {0}</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="623"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="624"/>
         <source>Color de la banda</source>
         <translation>Band color</translation>
     </message>
@@ -459,162 +459,162 @@
 <context>
     <name>DepthControlPanel</name>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1175"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1176"/>
         <source>Activar control de profundidad</source>
         <translation>Enable depth control</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1176"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1177"/>
         <source>Mueve la profundidad de lo cercano, lo medio y lo lejano por separado. Cambia la rampa, las bandas, el desenfoque y la posición de las áreas. Tocar cualquier ajuste lo activa.</source>
         <translation>Moves the depth of the near, middle and far parts separately. Changes the ramp, bands, blur and the position of the areas. Touching any setting turns it on.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1182"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1183"/>
         <source>Centros desde el mapa</source>
         <translation>Centers from the map</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1183"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1184"/>
         <source>Coloca el centro de cada zona donde hay profundidad de verdad en esta foto (los destinos se quedan iguales: la imagen no cambia).</source>
         <translation>Places the center of each zone where there is real depth in this photo (the targets stay the same: the image does not change).</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1186"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1187"/>
         <source>Restablecer</source>
         <translation>Reset</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1187"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1188"/>
         <source>Devuelve las tres zonas a su estado inicial y apaga el control</source>
         <translation>Returns the three zones to their initial state and turns the control off</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1189"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1190"/>
         <source>Añadir zona</source>
         <translation>Add zone</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1190"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1191"/>
         <source>Añade otra zona de profundidad (hasta {0} más) para mover un tramo concreto del mapa sin tocar el resto.</source>
         <translation>Adds another depth zone (up to {0} more) to move a specific stretch of the map without touching the rest.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1202"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1203"/>
         <source>Cerca</source>
         <translation>Near</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1202"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1203"/>
         <source>Lo más cercano a la cámara (valores bajos del mapa).</source>
         <translation>The closest to the camera (low values of the map).</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1203"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1204"/>
         <source>Medio</source>
         <translation>Middle</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1203"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1204"/>
         <source>Lo que queda a media distancia.</source>
         <translation>What is at mid distance.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1204"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1205"/>
         <source>Lejos</source>
         <translation>Far</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1204"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1205"/>
         <source>Lo más lejano: fondo y cielo (valores altos del mapa).</source>
         <translation>The farthest: background and sky (high values of the map).</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1207"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1208"/>
         <source>Zona {0}</source>
         <translation>Zone {0}</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1208"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1209"/>
         <source>Zona añadida por ti: se reparte el eje de profundidad con las demás.</source>
         <translation>Zone added by you: it shares the depth axis with the others.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1213"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1214"/>
         <source>Zona «{0}»: activa o desactiva este tramo de profundidad. {1}</source>
         <translation>Zone “{0}”: turns this depth stretch on or off. {1}</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1215"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1216"/>
         <source>Centro</source>
         <translation>Center</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1217"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1218"/>
         <source>Valor de profundidad que representa a la zona: 0 = lo más cercano, 1 = lo más lejano (en la vista Profundidad, cerca = claro)</source>
         <translation>Depth value that represents the zone: 0 = closest, 1 = farthest (in the Depth view, near = bright)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1219"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1220"/>
         <source>Destino</source>
         <translation>Target</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1221"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1222"/>
         <source>Adónde se lleva el centro de la zona. Igual que el centro: no cambia nada. Más alto: la zona se aleja. Más bajo: se acerca.</source>
         <translation>Where the zone&apos;s center is moved to. Same as the center: nothing changes. Higher: the zone moves away. Lower: it comes closer.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1223"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1224"/>
         <source>Suavizado</source>
         <translation>Smoothing</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1225"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1226"/>
         <source>Anchura de la transición entre esta zona y las vecinas. Más alto: el cambio se reparte de forma más gradual.</source>
         <translation>Width of the transition between this zone and its neighbors. Higher: the change is spread more gradually.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1227"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1228"/>
         <source>Límites automáticos</source>
         <translation>Automatic limits</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1228"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1229"/>
         <source>Los límites de la zona se reparten a medio camino entre los centros. Desmárcalo para fijar a mano desde dónde hasta dónde llega.</source>
         <translation>The zone&apos;s limits are split halfway between the centers. Uncheck to set by hand where it starts and ends.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1231"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1232"/>
         <source>Desde</source>
         <translation>From</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1233"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1234"/>
         <source>Valor de profundidad donde empieza la zona (solo sin límites automáticos)</source>
         <translation>Depth value where the zone starts (only without automatic limits)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1234"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1235"/>
         <source>Hasta</source>
         <translation>To</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1236"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1237"/>
         <source>Valor de profundidad donde termina la zona (solo sin límites automáticos)</source>
         <translation>Depth value where the zone ends (only without automatic limits)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1239"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1240"/>
         <source>Quitar esta zona</source>
         <translation>Remove this zone</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1240"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1241"/>
         <source>Borra la zona añadida (las de fábrica no se quitan)</source>
         <translation>Deletes the added zone (the built-in ones cannot be removed)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1246"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1247"/>
         <source>Mueve el destino de una zona para acercarla o alejarla sin tocar las demás. Se ve en las vistas Efecto y 3D.</source>
         <translation>Move a zone&apos;s target to bring it closer or push it away without touching the others. Visible in the Effect and 3D views.</translation>
     </message>
@@ -645,57 +645,57 @@
         <translation>Load style…</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor.py" line="330"/>
+        <location filename="../../deepshot/ui/editor.py" line="341"/>
         <source>Editar ajustes</source>
         <translation>Edit settings</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor.py" line="377"/>
+        <location filename="../../deepshot/ui/editor.py" line="388"/>
         <source>Aplicar estilo</source>
         <translation>Apply style</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor.py" line="388"/>
+        <location filename="../../deepshot/ui/editor.py" line="399"/>
         <source>Aplicar bokeh</source>
         <translation>Apply bokeh</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor.py" line="502"/>
+        <location filename="../../deepshot/ui/editor.py" line="513"/>
         <source>Borrar máscara</source>
         <translation>Delete mask</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor.py" line="502"/>
+        <location filename="../../deepshot/ui/editor.py" line="513"/>
         <source>Pintar máscara</source>
         <translation>Paint mask</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor.py" line="531"/>
+        <location filename="../../deepshot/ui/editor.py" line="542"/>
         <source>Rellenar máscara</source>
         <translation>Fill mask</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor.py" line="531"/>
+        <location filename="../../deepshot/ui/editor.py" line="542"/>
         <source>Vaciar máscara</source>
         <translation>Clear mask</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor.py" line="532"/>
+        <location filename="../../deepshot/ui/editor.py" line="543"/>
         <source>Invertir máscara</source>
         <translation>Invert mask</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor.py" line="532"/>
+        <location filename="../../deepshot/ui/editor.py" line="543"/>
         <source>Cargar máscara</source>
         <translation>Load mask</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor.py" line="752"/>
+        <location filename="../../deepshot/ui/editor.py" line="763"/>
         <source>Área {0}</source>
         <translation>Area {0}</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor.py" line="858"/>
+        <location filename="../../deepshot/ui/editor.py" line="869"/>
         <source>Cargar ajustes</source>
         <translation>Load settings</translation>
     </message>
@@ -1839,162 +1839,162 @@ and &lt;i&gt;Open folder&lt;/i&gt; shows the log file, which is always saved.&lt
 <context>
     <name>LensPanel</name>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1044"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1045"/>
         <source>Cargar bokeh…</source>
         <translation>Load bokeh…</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1045"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1046"/>
         <source>Presets de bokeh: apertura, diafragma y ojo de gato de un tipo de objetivo. No tocan el foco ni el destino de tu foto.</source>
         <translation>Bokeh presets: aperture, diaphragm and cat&apos;s eye of a lens type. They do not touch the focus or the target of your photo.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1049"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1050"/>
         <source>Activar desenfoque de lente</source>
         <translation>Enable lens blur</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1050"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1051"/>
         <source>Desenfoca lo que queda lejos de la profundidad en foco, como una cámara real. Tocar cualquier ajuste lo activa.</source>
         <translation>Blurs what is far from the depth in focus, like a real camera. Touching any setting turns it on.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1053"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1054"/>
         <source>Imagen final</source>
         <translation>Final image</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1053"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1054"/>
         <source>Solo la foto</source>
         <translation>Photo only</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1054"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1055"/>
         <source>Imagen final: desenfoca todo lo que ves. Solo la foto: desenfoca la foto antes de mezclarla (necesita opacidad de mezcla mayor que 0).</source>
         <translation>Final image: blurs everything you see. Photo only: blurs the photo before blending it (needs a blend opacity greater than 0).</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1061"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1062"/>
         <source>Foco</source>
         <translation>Focus</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1063"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1064"/>
         <source>Profundidad que queda nítida: 0 = lo más cercano, 1 = lo más lejano (se ve en la vista Profundidad: cerca = claro)</source>
         <translation>Depth that stays sharp: 0 = closest, 1 = farthest (seen in the Depth view: near = bright)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1065"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1066"/>
         <source>Elegir foco en la imagen</source>
         <translation>Pick focus on the image</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1068"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1069"/>
         <source>Cuentagotas: pulsa sobre la imagen en lo que quieres nítido y el foco toma su profundidad (puedes arrastrar para probar). Esc cancela.</source>
         <translation>Eyedropper: click on the image on what you want sharp and the focus takes its depth (you can drag to try). Esc cancels.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1071"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1072"/>
         <source>Ver zona en foco</source>
         <translation>Show in-focus zone</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1072"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1073"/>
         <source>Tiñe de verde sobre la imagen lo que queda nítido (cuanto más verde, más nítido). Solo es una ayuda: no se exporta. Atajo: Z.</source>
         <translation>Tints green over the image what stays sharp (the greener, the sharper). It is only a visual aid: it is not exported. Shortcut: Z.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1075"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1076"/>
         <source>Zona nítida</source>
         <translation>Sharp zone</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1077"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1078"/>
         <source>Cuánta profundidad a cada lado del foco se mantiene sin desenfocar</source>
         <translation>How much depth on each side of the focus stays unblurred</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1078"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1079"/>
         <source>Apertura (f/)</source>
         <translation>Aperture (f/)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1080"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1081"/>
         <source>Número f del objetivo: f/1.4 muy abierto (mucho desenfoque), f/16 muy cerrado (casi todo nítido)</source>
         <translation>Lens f-number: f/1.4 very open (a lot of blur), f/16 very closed (almost everything sharp)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1082"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1083"/>
         <source>Delante del foco</source>
         <translation>In front of the focus</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1084"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1085"/>
         <source>Multiplica el desenfoque de lo que está por delante del foco (0 = nada)</source>
         <translation>Multiplies the blur of what is in front of the focus (0 = none)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1085"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1086"/>
         <source>Detrás del foco</source>
         <translation>Behind the focus</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1087"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1088"/>
         <source>Multiplica el desenfoque de lo que está por detrás del foco (0 = nada)</source>
         <translation>Multiplies the blur of what is behind the focus (0 = none)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1088"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1089"/>
         <source>Palas del diafragma</source>
         <translation>Diaphragm blades</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1090"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1091"/>
         <source>0 = diafragma redondo. De 3 a 12: los puntos de luz desenfocados toman la forma de un polígono con ese número de lados</source>
         <translation>0 = round diaphragm. From 3 to 12: out-of-focus lights take the shape of a polygon with that many sides</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1092"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1093"/>
         <source>Giro del diafragma</source>
         <translation>Diaphragm rotation</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1094"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1095"/>
         <source>Gira el polígono del diafragma (no se nota con el diafragma redondo)</source>
         <translation>Rotates the diaphragm polygon (not noticeable with the round diaphragm)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1095"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1096"/>
         <source>Altas luces</source>
         <translation>Highlights</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1097"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1098"/>
         <source>Cuánto más brillan los puntos de luz en el desenfoque (discos de bokeh)</source>
         <translation>How much brighter the lights are in the blur (bokeh discs)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1098"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1099"/>
         <source>Borde del disco</source>
         <translation>Disc edge</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1100"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1101"/>
         <source>0 = disco de borde duro y definido; 1 = borde difuso, más suave</source>
         <translation>0 = hard, well-defined disc edge; 1 = soft, diffuse edge</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1101"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1102"/>
         <source>Ojo de gato</source>
         <translation>Cat&apos;s eye</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1103"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1104"/>
         <source>Los puntos de luz desenfocados de los bordes de la imagen se recortan en forma de almendra, como en muchos objetivos reales. Cuanto más alto, más pronunciado. Calcular con esto activo tarda algo más.</source>
         <translation>Out-of-focus lights at the edges of the image are clipped into an almond shape, as in many real lenses. The higher, the more pronounced. Computing with this on takes a little longer.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1111"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1112"/>
         <source>El foco y la apertura se ven en la vista Efecto. El desenfoque usa el mapa de profundidad: cuanto mejor el mapa, mejor el bokeh.</source>
         <translation>The focus and aperture are seen in the Effect view. The blur uses the depth map: the better the map, the better the bokeh.</translation>
     </message>
@@ -2452,8 +2452,8 @@ and &lt;i&gt;Open folder&lt;/i&gt; shows the log file, which is always saved.&lt
     <message>
         <location filename="../../deepshot/ui/main_window.py" line="93"/>
         <location filename="../../deepshot/ui/main_window.py" line="426"/>
-        <location filename="../../deepshot/ui/main_window.py" line="1196"/>
-        <location filename="../../deepshot/ui/main_window.py" line="2564"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1198"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2567"/>
         <source>Profundidad</source>
         <translation>Depth</translation>
     </message>
@@ -2470,7 +2470,7 @@ and &lt;i&gt;Open folder&lt;/i&gt; shows the log file, which is always saved.&lt
     <message>
         <location filename="../../deepshot/ui/main_window.py" line="95"/>
         <location filename="../../deepshot/ui/main_window.py" line="772"/>
-        <location filename="../../deepshot/ui/main_window.py" line="1315"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1317"/>
         <source>Exportar</source>
         <translation>Export</translation>
     </message>
@@ -2548,7 +2548,7 @@ Approve and load them?</translation>
     </message>
     <message>
         <location filename="../../deepshot/ui/main_window.py" line="355"/>
-        <location filename="../../deepshot/ui/main_window.py" line="2631"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2634"/>
         <source>the art of depthing</source>
         <translation>the art of depthing</translation>
     </message>
@@ -2569,15 +2569,15 @@ Approve and load them?</translation>
     </message>
     <message>
         <location filename="../../deepshot/ui/main_window.py" line="426"/>
-        <location filename="../../deepshot/ui/main_window.py" line="2111"/>
-        <location filename="../../deepshot/ui/main_window.py" line="2130"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2114"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2133"/>
         <source>Foto</source>
         <translation>Photo</translation>
     </message>
     <message>
         <location filename="../../deepshot/ui/main_window.py" line="427"/>
-        <location filename="../../deepshot/ui/main_window.py" line="2112"/>
-        <location filename="../../deepshot/ui/main_window.py" line="2133"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2115"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2136"/>
         <source>Efecto</source>
         <translation>Effect</translation>
     </message>
@@ -2956,7 +2956,7 @@ Approve and load them?</translation>
     </message>
     <message>
         <location filename="../../deepshot/ui/main_window.py" line="845"/>
-        <location filename="../../deepshot/ui/main_window.py" line="1613"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1615"/>
         <source>Proyecto nuevo</source>
         <translation>New project</translation>
     </message>
@@ -2967,8 +2967,8 @@ Approve and load them?</translation>
     </message>
     <message>
         <location filename="../../deepshot/ui/main_window.py" line="849"/>
-        <location filename="../../deepshot/ui/main_window.py" line="1806"/>
-        <location filename="../../deepshot/ui/main_window.py" line="1823"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1808"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1825"/>
         <source>Guardar proyecto</source>
         <translation>Save project</translation>
     </message>
@@ -3238,393 +3238,393 @@ Approve and load them?</translation>
         <translation>Removed {0} photo(s) from the library (the files are not deleted).</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1153"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1155"/>
         <source>Encuadre cambiado: calcula la profundidad de esta zona (paso 2).</source>
         <translation>Framing changed: compute the depth of this area (step 2).</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1185"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1187"/>
         <source>Esta foto aún no tiene mapa de profundidad.</source>
         <translation>This photo has no depth map yet.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1198"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1200"/>
         <source>Lo elegido en A o B no está disponible para esta foto.</source>
         <translation>What is chosen in A or B is not available for this photo.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1248"/>
-        <location filename="../../deepshot/ui/main_window.py" line="1389"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1250"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1391"/>
         <source>Calcula o carga primero el mapa de profundidad.</source>
         <translation>Compute or load the depth map first.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1300"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1302"/>
         <source>Exportado: {0}</source>
         <translation>Exported: {0}</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1304"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1306"/>
         <source>Error inesperado. Consulta el panel Registro.</source>
         <translation>Unexpected error. See the Log panel.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1305"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1307"/>
         <source>Error inesperado</source>
         <translation>Unexpected error</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1306"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1308"/>
         <source>Algo no ha salido como se esperaba. Puedes seguir trabajando; si se repite, copia el registro (Ver › Registro › Copiar) y envíalo a quien mantiene la app.</source>
         <translation>Something did not go as expected. You can keep working; if it happens again, copy the log (View › Log › Copy) and send it to whoever maintains the app.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1314"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1316"/>
         <source>No se pudo exportar.</source>
         <translation>The export failed.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1331"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1333"/>
         <source>{0}: {1:.0f} ms   |</source>
         <translation>{0}: {1:.0f} ms   |</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1332"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1334"/>
         <source>Completo</source>
         <translation>Full</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1332"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1334"/>
         <source>Vista previa</source>
         <translation>Preview</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1415"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1417"/>
         <source>Pincel: arrastra sobre la imagen. [ y ] cambian el tamaño · Esc para dejar de pintar.</source>
         <translation>Brush: drag over the image. [ and ] change the size · Esc to stop painting.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1447"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1449"/>
         <source>Dibujar: pulsa en el centro del área y arrastra para darle tamaño (Mayús: rectangular). Esc para cancelar.</source>
         <translation>Draw: click at the area&apos;s center and drag to set its size (Shift: rectangular). Esc to cancel.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1449"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1451"/>
         <source>Colocar: pulsa y arrastra; el área sigue al puntero hasta que sueltes. Esc para cancelar.</source>
         <translation>Place: click and drag; the area follows the pointer until you release. Esc to cancel.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1473"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1475"/>
         <source>Cuentagotas: pulsa en lo que quieres nítido (puedes arrastrar). Esc para cancelar.</source>
         <translation>Eyedropper: click on what you want sharp (you can drag). Esc to cancel.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1493"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1495"/>
         <source>Foco elegido.</source>
         <translation>Focus chosen.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1497"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1499"/>
         <source>Listo. Ajusta el área con los tiradores o con los valores.</source>
         <translation>Done. Adjust the area with the handles or with the values.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1526"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1528"/>
         <source>Proyectos de {0} (*{1})</source>
         <translation>{0} projects (*{1})</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1598"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1600"/>
         <source>el proyecto sin título</source>
         <translation>the untitled project</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1600"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1602"/>
         <source>Hay cambios sin guardar en {0}. ¿Quieres guardarlos?</source>
         <translation>There are unsaved changes in {0}. Do you want to save them?</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1602"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1604"/>
         <source>Guardar</source>
         <translation>Save</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1603"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1605"/>
         <source>No guardar</source>
         <translation>Don&apos;t save</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1604"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1606"/>
         <source>Cancelar</source>
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1618"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1620"/>
         <source>Proyecto nuevo: importa fotografías para empezar.</source>
         <translation>New project: import photographs to start.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1710"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1712"/>
         <source>Guardar la disposición actual…</source>
         <translation>Save the current layout…</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1712"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1714"/>
         <source>Restablecer disposición</source>
         <translation>Reset layout</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1726"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1728"/>
         <source>Disposición restablecida.</source>
         <translation>Layout reset.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1732"/>
-        <location filename="../../deepshot/ui/main_window.py" line="1740"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1734"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1742"/>
         <source>Guardar disposición</source>
         <translation>Save layout</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1732"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1734"/>
         <source>No se pudo guardar: {0}</source>
         <translation>Could not save: {0}</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1734"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1736"/>
         <source>Disposición guardada: {0}</source>
         <translation>Layout saved: {0}</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1740"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1742"/>
         <source>Nombre de la disposición:</source>
         <translation>Layout name:</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1767"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1769"/>
         <source>(ninguno)</source>
         <translation>(none)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1770"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1772"/>
         <source>Vaciar la lista</source>
         <translation>Clear the list</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1777"/>
-        <location filename="../../deepshot/ui/main_window.py" line="1837"/>
-        <location filename="../../deepshot/ui/main_window.py" line="1845"/>
-        <location filename="../../deepshot/ui/main_window.py" line="1848"/>
-        <location filename="../../deepshot/ui/main_window.py" line="1927"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1779"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1839"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1847"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1850"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1929"/>
         <source>Abrir proyecto</source>
         <translation>Open project</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1777"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1779"/>
         <source>«{0}» ya no está en su sitio. Se quita de la lista.</source>
         <translation>“{0}” is no longer in its place. It is removed from the list.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1802"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1804"/>
         <source>No hay nada que guardar: importa alguna fotografía.</source>
         <translation>Nothing to save: import some photograph.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1824"/>
-        <location filename="../../deepshot/ui/main_window.py" line="1952"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1826"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1954"/>
         <source>No se pudo guardar «{0}»: {1}</source>
         <translation>Could not save “{0}”: {1}</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1830"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1832"/>
         <source>Proyecto guardado: {0}</source>
         <translation>Project saved: {0}</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1846"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1848"/>
         <source>No se pudo abrir «{0}»: {1}</source>
         <translation>Could not open “{0}”: {1}</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1878"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1880"/>
         <source>Localizar «{0}»</source>
         <translation>Locate “{0}”</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1919"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1921"/>
         <source>Proyecto abierto: {0}</source>
         <translation>Project opened: {0}</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1921"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1923"/>
         <source>El proyecto se abrió, pero:</source>
         <translation>The project was opened, but:</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1923"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1925"/>
         <source>• No se encontraron estas fotos y quedan fuera: {0}</source>
         <translation>• These photos were not found and are left out: {0}</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1925"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1927"/>
         <source>• Estas fotos han cambiado desde que se guardó el proyecto (revisa su mapa y su efecto): {0}</source>
         <translation>• These photos have changed since the project was saved (check their map and effect): {0}</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1934"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1936"/>
         <source>Estilos de {0} (*{1} *.json)</source>
         <translation>{0} styles (*{1} *.json)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1938"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1940"/>
         <source>No hay estilo que guardar: falta el mapa de profundidad.</source>
         <translation>No style to save: the depth map is missing.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1942"/>
-        <location filename="../../deepshot/ui/main_window.py" line="1951"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1944"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1953"/>
         <source>Guardar estilo</source>
         <translation>Save style</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1955"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1957"/>
         <source>Estilo guardado: {0}</source>
         <translation>Style saved: {0}</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1959"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1961"/>
         <source>Selecciona una foto con mapa de profundidad.</source>
         <translation>Select a photo with a depth map.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1962"/>
-        <location filename="../../deepshot/ui/main_window.py" line="1974"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1964"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1976"/>
         <source>Cargar estilo</source>
         <translation>Load style</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1975"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1977"/>
         <source>El archivo no contiene un estilo válido de {0}.</source>
         <translation>The file does not contain a valid {0} style.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="1978"/>
+        <location filename="../../deepshot/ui/main_window.py" line="1980"/>
         <source>Estilo aplicado: {0}</source>
         <translation>Style applied: {0}</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="2049"/>
-        <location filename="../../deepshot/ui/main_window.py" line="2338"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2052"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2341"/>
         <source>refinado</source>
         <translation>refined</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="2057"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2060"/>
         <source>Sin datos de tiempo.</source>
         <translation>No timing data.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="2058"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2061"/>
         <source>Modelo + refinado: {0}</source>
         <translation>Model + refining: {0}</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="2060"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2063"/>
         <source>  de ellos, refinar bordes: {0}</source>
         <translation>  of which, refining edges: {0}</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="2062"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2065"/>
         <source>Cargar el modelo: {0} (solo la primera vez)</source>
         <translation>Loading the model: {0} (only the first time)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="2065"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2068"/>
         <source>Recuperado de la caché: el tiempo es el del cálculo original.</source>
         <translation>Recovered from the cache: the time is that of the original computation.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="2113"/>
-        <location filename="../../deepshot/ui/main_window.py" line="2135"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2116"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2138"/>
         <source>Mapa en uso</source>
         <translation>Map in use</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="2115"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2118"/>
         <source>Profundidad: {0}</source>
         <translation>Depth: {0}</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="2160"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2163"/>
         <source>Comparando: clic izquierdo en un cálculo lo pone a la izquierda (A); clic derecho, a la derecha (B).</source>
         <translation>Comparing: left-click a calculation to put it on the left (A); right-click to put it on the right (B).</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="2163"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2166"/>
         <source>Comparando los dos primeros con el divisor (arrástralo).</source>
         <translation>Comparing the first two with the divider (drag it).</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="2165"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2168"/>
         <source>Estás viendo un cálculo que NO es el que se usa. Pulsa «Usar este mapa» para seguir con él.</source>
         <translation>You are viewing a computation that is NOT the one in use. Press “Use this map” to continue with it.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="2168"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2171"/>
         <source>Selecciona un cálculo para verlo, o dos para compararlos.</source>
         <translation>Select a computation to view it, or two to compare them.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="2234"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2237"/>
         <source>Listo en {0} · {1} · {2}</source>
         <translation>Done in {0} · {1} · {2}</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="2237"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2240"/>
         <source>  (de la caché)</source>
         <translation>  (from the cache)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="2239"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2242"/>
         <source>  (+{0} cargando el modelo)</source>
         <translation>  (+{0} loading the model)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="2277"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2280"/>
         <source>Cálculos</source>
         <translation>Computations</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="2277"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2280"/>
         <source>No se pudo leer este mapa (¿se borró la caché?). Quítalo de la lista y vuelve a calcularlo.</source>
         <translation>This map could not be read (was the cache deleted?). Remove it from the list and compute it again.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="2288"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2291"/>
         <source>Se usa el mapa: {0}</source>
         <translation>Using the map: {0}</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="2338"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2341"/>
         <source>sin refinar</source>
         <translation>unrefined</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="2375"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2378"/>
         <source>  (sin cálculo aún)</source>
         <translation>  (not computable yet)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="2380"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2383"/>
         <source>  (no descargado)</source>
         <translation>  (not downloaded)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="2382"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2385"/>
         <source>  (se descargará)</source>
         <translation>  (will be downloaded)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="2378"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2381"/>
         <source>  (no disponible)</source>
         <translation>  (not available)</translation>
     </message>
@@ -3684,99 +3684,99 @@ Approve and load them?</translation>
         <translation>Model and module manager…</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="2431"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2434"/>
         <source>No se puede liberar memoria mientras se calcula o se exporta.</source>
         <translation>Memory cannot be freed while computing or exporting.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="2442"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2445"/>
         <source>Memoria liberada.</source>
         <translation>Memory freed.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="2444"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2447"/>
         <source>RAM: {0:,.0f} → {1:,.0f} MB.</source>
         <translation>RAM: {0:,.0f} → {1:,.0f} MB.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="2446"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2449"/>
         <source>Vídeo: {0:,.0f} → {1:,.0f} MB.</source>
         <translation>Video: {0:,.0f} → {1:,.0f} MB.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="2470"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2473"/>
         <source>Memoria casi llena</source>
         <translation>Memory almost full</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="2471"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2474"/>
         <source>Queda muy poca memoria libre (VRAM o RAM). Calcular ahora puede fallar o ir muy lento.</source>
         <translation>Very little free memory is left (VRAM or RAM). Computing now may fail or be very slow.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="2473"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2476"/>
         <source>Puedes liberar memoria (descarga el modelo y suelta cachés; el proyecto no cambia) y continuar.</source>
         <translation>You can free memory (unloads the model and drops caches; the project does not change) and continue.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="2475"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2478"/>
         <source>Liberar memoria y continuar</source>
         <translation>Free memory and continue</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="2476"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2479"/>
         <source>Continuar igualmente</source>
         <translation>Continue anyway</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="2486"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2489"/>
         <source>Selecciona primero una fotografía.</source>
         <translation>Select a photograph first.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="2491"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2494"/>
         <source>Ya hay un cálculo en marcha.</source>
         <translation>A computation is already in progress.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="2498"/>
-        <location filename="../../deepshot/ui/main_window.py" line="2504"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2501"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2507"/>
         <source>Preparando…</source>
         <translation>Preparing…</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="2540"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2543"/>
         <source>Profundidad lista: {0}{1}</source>
         <translation>Depth ready: {0}{1}</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="2563"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2566"/>
         <source>No se pudo calcular la profundidad.</source>
         <translation>The depth could not be computed.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="2565"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2568"/>
         <source>Foto: {0}</source>
         <translation>Photo: {0}</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="2570"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2573"/>
         <source>Liberar memoria y reintentar</source>
         <translation>Free memory and retry</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="2582"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2585"/>
         <source>Selecciona primero la fotografía a la que corresponde el mapa.</source>
         <translation>First select the photograph the map belongs to.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/main_window.py" line="2585"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2588"/>
         <source>Cargar mapa de profundidad</source>
         <translation>Load depth map</translation>
     </message>
     <message>
         <location filename="../../deepshot/ui/main_window.py" line="890"/>
-        <location filename="../../deepshot/ui/main_window.py" line="2669"/>
+        <location filename="../../deepshot/ui/main_window.py" line="2672"/>
         <source>Salir</source>
         <translation>Quit</translation>
     </message>
@@ -3802,212 +3802,212 @@ Approve and load them?</translation>
 <context>
     <name>MixPanel</name>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="845"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="846"/>
         <source>Cómo se combina la foto con el resultado</source>
         <translation>How the photo is combined with the result</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="847"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="848"/>
         <source>Foto</source>
         <translation>Photo</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="849"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="850"/>
         <source>Cantidad de foto: 0 = solo el resultado</source>
         <translation>Amount of photo: 0 = only the result</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="850"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="851"/>
         <source>Foto en blanco y negro</source>
         <translation>Black and white photo</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="851"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="852"/>
         <source>Convierte la foto a blanco y negro antes de mezclarla</source>
         <translation>Converts the photo to black and white before blending it</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="857"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="858"/>
         <source>Dónde se aplica la foto: en todas partes, solo dentro de las áreas, en un rango de profundidad o donde la pintes con el pincel</source>
         <translation>Where the photo is applied: everywhere, only inside the areas, in a depth range, or where you paint it with the brush</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="860"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="861"/>
         <source>Invertir máscara</source>
         <translation>Invert mask</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="861"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="862"/>
         <source>Intercambia dónde se aplica y dónde no la foto</source>
         <translation>Swaps where the photo is applied and where it is not</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="863"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="864"/>
         <source>Desde</source>
         <translation>From</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="865"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="866"/>
         <source>Hasta</source>
         <translation>To</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="867"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="868"/>
         <source>Suavidad</source>
         <translation>Softness</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="869"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="870"/>
         <source>Profundidad desde la que se aplica la foto (0 = lo más cercano)</source>
         <translation>Depth from which the photo is applied (0 = closest)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="870"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="871"/>
         <source>Profundidad hasta la que se aplica la foto (1 = lo más lejano)</source>
         <translation>Depth up to which the photo is applied (1 = farthest)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="871"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="872"/>
         <source>Cuánto se difumina el paso entre lo que se aplica y lo que no</source>
         <translation>How much the transition between what is applied and what is not is blurred</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="873"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="874"/>
         <source>Suavizado</source>
         <translation>Smoothing</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="874"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="875"/>
         <source>Difumina el borde de la máscara (de la que sea). Con valores altos la foto se funde poco a poco en lugar de cortar en seco.</source>
         <translation>Blurs the mask&apos;s edge (whichever mask it is). With high values the photo fades in gradually instead of cutting abruptly.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="876"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="877"/>
         <source>Pegar a bordes</source>
         <translation>Snap to edges</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="877"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="878"/>
         <source>Ajusta el borde de la máscara a los bordes de la foto: no hace falta pintar con precisión, la máscara se pega al objeto. Tarda algo más en fotos grandes.</source>
         <translation>Fits the mask&apos;s edge to the photo&apos;s edges: you do not need to paint precisely, the mask sticks to the object. It takes a bit longer on large photos.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="894"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="895"/>
         <source>Modo</source>
         <translation>Mode</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="897"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="898"/>
         <source>Máscara</source>
         <translation>Mask</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="944"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="945"/>
         <source>Pincel</source>
         <translation>Brush</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="946"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="947"/>
         <source>Pinta la máscara con el ratón sobre la imagen: ahí se aplica la foto (B). [ y ] cambian el tamaño.</source>
         <translation>Paints the mask with the mouse over the image: the photo is applied there (B). [ and ] change the size.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="948"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="949"/>
         <source>Borrador</source>
         <translation>Eraser</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="950"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="951"/>
         <source>Borra la máscara con el ratón: ahí no se aplica la foto (E)</source>
         <translation>Erases the mask with the mouse: the photo is not applied there (E)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="962"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="963"/>
         <source>Tamaño</source>
         <translation>Size</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="963"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="964"/>
         <source>Diámetro del pincel en % del lado largo de la foto (también: [ y ])</source>
         <translation>Brush diameter as % of the photo&apos;s long side (also: [ and ])</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="964"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="965"/>
         <source>Dureza</source>
         <translation>Hardness</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="965"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="966"/>
         <source>0 = borde muy difuminado · 1 = borde nítido. Se ve como el anillo punteado del cursor</source>
         <translation>0 = very blurred edge · 1 = sharp edge. Shown as the dotted ring of the cursor</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="967"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="968"/>
         <source>Opacidad</source>
         <translation>Opacity</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="968"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="969"/>
         <source>Cuánto pinta cada pasada: con valores bajos se va acumulando</source>
         <translation>How much each pass paints: with low values it builds up</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="975"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="976"/>
         <source>Rellenar</source>
         <translation>Fill</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="975"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="976"/>
         <source>Todo blanco: la foto se aplica en toda la imagen</source>
         <translation>All white: the photo is applied over the whole image</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="976"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="977"/>
         <source>Vaciar</source>
         <translation>Clear</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="976"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="977"/>
         <source>Todo negro: la foto no se aplica en ninguna parte</source>
         <translation>All black: the photo is applied nowhere</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="977"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="978"/>
         <source>Invertir</source>
         <translation>Invert</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="977"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="978"/>
         <source>Cambia blanco por negro y al revés</source>
         <translation>Swaps white for black and vice versa</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="984"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="985"/>
         <source>Ver máscara sobre la imagen</source>
         <translation>Show mask over the image</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="986"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="987"/>
         <source>Tiñe de rojo lo que está pintado en la máscara</source>
         <translation>Tints red what is painted in the mask</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="989"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="990"/>
         <source>Cargar máscara desde PNG…</source>
         <translation>Load mask from PNG…</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="990"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="991"/>
         <source>Sustituye la máscara por un PNG en gris: blanco = se aplica, negro = no</source>
         <translation>Replaces the mask with a gray PNG: white = applied, black = not</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1024"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1025"/>
         <source>Máscara desde PNG</source>
         <translation>Mask from PNG</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1025"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1026"/>
         <source>Imágenes (*.png *.tif *.tiff)</source>
         <translation>Images (*.png *.tif *.tiff)</translation>
     </message>
@@ -4015,101 +4015,101 @@ Approve and load them?</translation>
 <context>
     <name>ModelCard</name>
     <message>
-        <location filename="../../deepshot/ui/model_cards.py" line="82"/>
+        <location filename="../../deepshot/ui/model_cards.py" line="83"/>
         <source>Abrir la página del módulo
 {0}</source>
         <translation>Open the module&apos;s page
 {0}</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_cards.py" line="83"/>
+        <location filename="../../deepshot/ui/model_cards.py" line="84"/>
         <source>Ver la ficha en Hugging Face
 {0}</source>
         <translation>View the page on Hugging Face
 {0}</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_cards.py" line="87"/>
+        <location filename="../../deepshot/ui/model_cards.py" line="88"/>
         <source>(carpeta local)</source>
         <translation>(local folder)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_cards.py" line="100"/>
+        <location filename="../../deepshot/ui/model_cards.py" line="101"/>
         <source>Se instala en: {0}</source>
         <translation>Installs to: {0}</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_cards.py" line="104"/>
+        <location filename="../../deepshot/ui/model_cards.py" line="105"/>
         <source>La carpeta donde se guarda esta entrada al instalarla</source>
         <translation>The folder where this entry is stored when installed</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_cards.py" line="107"/>
+        <location filename="../../deepshot/ui/model_cards.py" line="108"/>
         <source>Mostrar en el selector</source>
         <translation>Show in the selector</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_cards.py" line="108"/>
+        <location filename="../../deepshot/ui/model_cards.py" line="109"/>
         <source>Si está marcado, el modelo sale en el selector de modelos del panel de profundidad. Desmarcarlo no lo borra: solo lo oculta.</source>
         <translation>If checked, the model appears in the model selector of the depth panel. Unchecking it does not delete it: it only hides it.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_cards.py" line="112"/>
+        <location filename="../../deepshot/ui/model_cards.py" line="113"/>
         <source>Cargar al arrancar</source>
         <translation>Load at startup</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_cards.py" line="113"/>
+        <location filename="../../deepshot/ui/model_cards.py" line="114"/>
         <source>Carga este modelo en la memoria de la GPU al abrir la aplicación, para que el primer cálculo sea más rápido. Solo uno a la vez.</source>
         <translation>Loads this model into GPU memory when the application opens, so the first calculation is faster. Only one at a time.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_cards.py" line="126"/>
+        <location filename="../../deepshot/ui/model_cards.py" line="127"/>
         <source>Instalar</source>
         <translation>Install</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_cards.py" line="127"/>
+        <location filename="../../deepshot/ui/model_cards.py" line="128"/>
         <source>Instala el módulo en la carpeta de módulos</source>
         <translation>Installs the module in the modules folder</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_cards.py" line="128"/>
+        <location filename="../../deepshot/ui/model_cards.py" line="129"/>
         <source>Descarga el modelo a la carpeta de modelos</source>
         <translation>Downloads the model to the models folder</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_cards.py" line="134"/>
+        <location filename="../../deepshot/ui/model_cards.py" line="135"/>
         <source>Usar</source>
         <translation>Use</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_cards.py" line="136"/>
+        <location filename="../../deepshot/ui/model_cards.py" line="137"/>
         <source>Usa este modelo para calcular la profundidad</source>
         <translation>Uses this model to compute depth</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_cards.py" line="141"/>
+        <location filename="../../deepshot/ui/model_cards.py" line="142"/>
         <source>Actualizar</source>
         <translation>Update</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_cards.py" line="142"/>
+        <location filename="../../deepshot/ui/model_cards.py" line="143"/>
         <source>Hay una versión más nueva en Hugging Face: la descarga y borra la anterior cuando termina bien.</source>
         <translation>There is a newer version on Hugging Face: it downloads it and deletes the old one when it finishes successfully.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_cards.py" line="148"/>
+        <location filename="../../deepshot/ui/model_cards.py" line="149"/>
         <source>Desinstalar</source>
         <translation>Uninstall</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_cards.py" line="149"/>
+        <location filename="../../deepshot/ui/model_cards.py" line="150"/>
         <source>Borra los archivos del módulo de la carpeta de módulos</source>
         <translation>Deletes the module&apos;s files from the modules folder</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_cards.py" line="151"/>
+        <location filename="../../deepshot/ui/model_cards.py" line="152"/>
         <source>Borra los archivos del modelo de la carpeta de modelos</source>
         <translation>Deletes the model&apos;s files from the models folder</translation>
     </message>
@@ -4133,13 +4133,13 @@ Approve and load them?</translation>
     </message>
     <message>
         <location filename="../../deepshot/ui/model_manager.py" line="90"/>
-        <location filename="../../deepshot/ui/model_manager.py" line="942"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="945"/>
         <source>Ficha</source>
         <translation>Page</translation>
     </message>
     <message>
         <location filename="../../deepshot/ui/model_manager.py" line="91"/>
-        <location filename="../../deepshot/ui/model_manager.py" line="871"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="874"/>
         <source>Licencia</source>
         <translation>License</translation>
     </message>
@@ -4255,7 +4255,7 @@ Approve and load them?</translation>
     </message>
     <message>
         <location filename="../../deepshot/ui/model_manager.py" line="158"/>
-        <location filename="../../deepshot/ui/model_manager.py" line="589"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="592"/>
         <source>Descarga el modelo a la carpeta de modelos</source>
         <translation>Downloads the model to the models folder</translation>
     </message>
@@ -4365,91 +4365,96 @@ Approve and load them?</translation>
         <translation>Models folder</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="264"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="265"/>
+        <source>Modelo de apoyo de módulos</source>
+        <translation>Helper model for modules</translation>
+    </message>
+    <message>
+        <location filename="../../deepshot/ui/model_manager.py" line="266"/>
         <source>Módulo de Look</source>
         <translation>Look module</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="264"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="266"/>
         <source>Modelo de profundidad</source>
         <translation>Depth model</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="281"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="283"/>
         <source>Instalado · v{0}</source>
         <translation>Installed · v{0}</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="281"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="283"/>
         <source>Instalado</source>
         <translation>Installed</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="282"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="284"/>
         <source>No instalado</source>
         <translation>Not installed</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="285"/>
-        <location filename="../../deepshot/ui/model_manager.py" line="491"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="287"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="493"/>
         <source>Instalado · {0:.1f} GB</source>
         <translation>Installed · {0:.1f} GB</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="287"/>
-        <location filename="../../deepshot/ui/model_manager.py" line="493"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="289"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="495"/>
         <source>No descargado · {0:.1f} GB</source>
         <translation>Not downloaded · {0:.1f} GB</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="288"/>
-        <location filename="../../deepshot/ui/model_manager.py" line="495"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="290"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="497"/>
         <source>No descargado</source>
         <translation>Not downloaded</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="307"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="309"/>
         <source>No cabe en este equipo: necesita {0:.0f} GB de VRAM y tienes {1:.0f} GB.</source>
         <translation>Does not fit this computer: it needs {0:.0f} GB of VRAM and you have {1:.0f} GB.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="314"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="316"/>
         <source>Esta versión de la aplicación todavía no puede calcular la profundidad con «{0}»: se puede descargar, pero no usar. No hace falta que lo descargues ahora.</source>
         <translation>This version of the application cannot compute depth with «{0}» yet: it can be downloaded but not used. There is no need to download it now.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="330"/>
-        <location filename="../../deepshot/ui/model_manager.py" line="554"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="332"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="556"/>
         <source>El modelo activo no se puede ocultar: elige antes otro.</source>
         <translation>The active model cannot be hidden: choose another one first.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="355"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="357"/>
         <source>Ocultar licencias no comerciales</source>
         <translation>Hide non-commercial licenses</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="356"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="358"/>
         <source>Vuelve a enseñar solo los modelos cuya licencia permite el uso comercial (los instalados y el activo se siguen viendo).</source>
         <translation>Shows only models whose license allows commercial use again (installed models and the active one stay visible).</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="359"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="361"/>
         <source>Mostrar más licencias…</source>
         <translation>Show more licenses…</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="361"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="363"/>
         <source>Ahora solo se ven los modelos con licencia que permite uso comercial. Pulsa para ver también los de licencia no comercial o sin verificar ({0} ocultos); te pediremos confirmación.</source>
         <translation>Only models with a license that allows commercial use are shown now. Click to also see those with a non-commercial or unverified license ({0} hidden); we will ask for confirmation.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="368"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="370"/>
         <source>Más licencias</source>
         <translation>More licenses</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="369"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="371"/>
         <source>Vas a ver modelos con licencia NO comercial (p. ej. CC-BY-NC) o sin verificar. Sirven para probar y comparar la calidad, pero NO se pueden usar para trabajos comerciales sin revisar su licencia. Nunca se descargan solos.
 
 ¿Mostrarlos?</source>
@@ -4458,111 +4463,111 @@ Approve and load them?</translation>
 Show them?</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="394"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="396"/>
         <source>La carpeta donde se guarda esta entrada al instalarla</source>
         <translation>The folder where this entry is stored when installed</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="405"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="407"/>
         <source>Modelo activo</source>
         <translation>Active model</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="408"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="410"/>
         <source>Licencia no verificada como permisiva</source>
         <translation>License not verified as permissive</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="414"/>
-        <location filename="../../deepshot/ui/model_manager.py" line="484"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="416"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="486"/>
         <source>Sin cálculo todavía · {0:.1f} GB</source>
         <translation>Not computable yet · {0:.1f} GB</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="426"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="428"/>
         <source>Carga este modelo en la memoria de la GPU al abrir la aplicación. Solo uno a la vez.</source>
         <translation>Loads this model into GPU memory when the application opens. Only one at a time.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="487"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="489"/>
         <source>No cabe en este equipo</source>
         <translation>Does not fit this computer</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="489"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="491"/>
         <source>Actualización disponible</source>
         <translation>Update available</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="564"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="566"/>
         <source>Se cargará al arrancar: {0}.</source>
         <translation>It will be loaded at startup: {0}.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="565"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="567"/>
         <source>No se cargará ningún modelo al arrancar.</source>
         <translation>No model will be loaded at startup.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="579"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="582"/>
         <source>Espera: hay una tarea de profundidad en marcha.</source>
         <translation>Wait: a depth task is running.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="581"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="584"/>
         <source>Elige primero un modelo de la lista.</source>
         <translation>Choose a model from the list first.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="583"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="586"/>
         <source>Este modelo ya está instalado.</source>
         <translation>This model is already installed.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="585"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="588"/>
         <source>Este modelo viene de una carpeta local: no hay nada que descargar.</source>
         <translation>This model comes from a local folder: there is nothing to download.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="588"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="591"/>
         <source>Instala el módulo en la carpeta de módulos</source>
         <translation>Installs the module in the modules folder</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="621"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="624"/>
         <source>«{0}» se descargará la primera vez que calcules una profundidad.</source>
         <translation>“{0}” will be downloaded the first time you compute a depth.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="638"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="641"/>
         <source>¿Descargarlo igualmente ({0:.0f} GB)?</source>
         <translation>Download it anyway ({0:.0f} GB)?</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="649"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="652"/>
         <source>No se pudo medir la memoria de la GPU de este equipo.</source>
         <translation>The memory of this computer&apos;s GPU could not be measured.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="651"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="654"/>
         <source>Esta GPU ({0}) tiene {1:.0f} GB de memoria y los autores piden unos {2:.0f} GB: puede no funcionar bien aquí.</source>
         <translation>This GPU ({0}) has {1:.0f} GB of memory and the authors ask for about {2:.0f} GB: it may not work well here.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="654"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="657"/>
         <source>Esta GPU ({0}, {1:.0f} GB) cumple lo que piden sus autores (unos {2:.0f} GB).</source>
         <translation>This GPU ({0}, {1:.0f} GB) meets what its authors ask for (about {2:.0f} GB).</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="609"/>
-        <location filename="../../deepshot/ui/model_manager.py" line="613"/>
-        <location filename="../../deepshot/ui/model_manager.py" line="637"/>
-        <location filename="../../deepshot/ui/model_manager.py" line="657"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="612"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="616"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="640"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="660"/>
         <source>Aviso sobre el modelo</source>
         <translation>Model notice</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="614"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="617"/>
         <source>{0}
 
 Puede fallar por falta de memoria o ir muy lento. ¿Usarlo igualmente?</source>
@@ -4571,7 +4576,7 @@ Puede fallar por falta de memoria o ir muy lento. ¿Usarlo igualmente?</source>
 It may fail for lack of memory or be very slow. Use it anyway?</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="658"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="661"/>
         <source>{0}
 
 ¿Descargar «{1}» ({2:.0f} GB)?</source>
@@ -4580,17 +4585,17 @@ It may fail for lack of memory or be very slow. Use it anyway?</translation>
 Download “{1}” ({2:.0f} GB)?</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="663"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="666"/>
         <source>«{0}» descargado.</source>
         <translation>“{0}” downloaded.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="670"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="673"/>
         <source>Falta un modelo</source>
         <translation>A model is missing</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="671"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="674"/>
         <source>El módulo «{0}» necesita estos modelos, que todavía no están instalados:
 
 {1}
@@ -4603,12 +4608,12 @@ Instálalos primero desde esta misma lista (con el filtro «Modelos») y vuelve 
 Install them first from this same list (with the “Models” filter) and try again.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="676"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="679"/>
         <source>Instalar módulo</source>
         <translation>Install module</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="677"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="680"/>
         <source>«{0}» es código Python que se ejecutará en tu equipo con tus permisos, igual que la propia aplicación. Instálalo solo si confías en quien lo ha escrito.
 
 Licencia: {1}
@@ -4623,169 +4628,169 @@ It will be installed in: {2}
 Install it?</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="693"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="696"/>
         <source>Módulo «{0}» instalado: ya sale en «+ Añadir capa» del paso Look.</source>
         <translation>Module “{0}” installed: it now appears in “+ Add layer” in the Look step.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="704"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="707"/>
         <source>Espera a que termine el cálculo de profundidad.</source>
         <translation>Wait for the depth computation to finish.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="708"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="711"/>
         <source>Desinstalar módulo</source>
         <translation>Uninstall module</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="709"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="712"/>
         <source>¿Desinstalar el módulo «{0}»?
 Las capas de tus proyectos que lo usen se conservan, pero no hacen nada hasta que lo vuelvas a instalar.</source>
         <translation>Uninstall the module “{0}”?
 Layers in your projects that use it are kept, but do nothing until you install it again.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="715"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="718"/>
         <source>Módulo «{0}» desinstalado.</source>
         <translation>Module “{0}” uninstalled.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="720"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="723"/>
         <source>¿Borrar «{0}» ({1:.1f} GB)?</source>
         <translation>Delete “{0}” ({1:.1f} GB)?</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="722"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="725"/>
         <source>Seguirá en la lista y podrás volver a descargarlo.</source>
         <translation>It will stay in the list and you can download it again.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="723"/>
-        <location filename="../../deepshot/ui/model_manager.py" line="731"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="726"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="734"/>
         <source>Borrar modelo</source>
         <translation>Delete model</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="732"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="735"/>
         <source>No se pudo borrar el modelo: {0}</source>
         <translation>The model could not be deleted: {0}</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="739"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="742"/>
         <source>«{0}» borrado.</source>
         <translation>“{0}” deleted.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="751"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="754"/>
         <source>Actualizar modelo</source>
         <translation>Update model</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="752"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="755"/>
         <source>¿Actualizar «{0}»? Se descargará la versión nueva y se borrará la anterior al terminar.</source>
         <translation>Update “{0}”? The new version will be downloaded and the old one deleted when it finishes.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="763"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="766"/>
         <source>«{0}» actualizado.</source>
         <translation>“{0}” updated.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="772"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="775"/>
         <source>Hay {0} actualización(es) disponible(s).</source>
         <translation>{0} update(s) available.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="773"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="776"/>
         <source>Todos los modelos están al día.</source>
         <translation>All models are up to date.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="778"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="781"/>
         <source>Comprobación terminada.</source>
         <translation>Check finished.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="786"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="789"/>
         <source>Modelos añadidos. Selecciona uno y pulsa «Descargar».</source>
         <translation>Models added. Select one and press “Download”.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="800"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="803"/>
         <source>Abrir la página del módulo
 {0}</source>
         <translation>Open the module&apos;s page
 {0}</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="801"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="804"/>
         <source>Ver la ficha en Hugging Face
 {0}</source>
         <translation>View the page on Hugging Face
 {0}</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="809"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="812"/>
         <source>Carpeta de modelos: {0}</source>
         <translation>Models folder: {0}</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="810"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="813"/>
         <source>Aquí se guardan y se buscan los modelos</source>
         <translation>Models are stored and searched for here</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="821"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="824"/>
         <source>Lista actualizada. Modelos encontrados en la carpeta: {0}.</source>
         <translation>List refreshed. Models found in the folder: {0}.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="827"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="830"/>
         <source>Mover modelos</source>
         <translation>Move models</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="828"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="831"/>
         <source>¿Mover los modelos de «{0}» a «{1}»?</source>
         <translation>Move the models from “{0}” to “{1}”?</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="833"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="836"/>
         <source>Modelos movidos.</source>
         <translation>Models moved.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="837"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="840"/>
         <source>Carpeta para los modelos</source>
         <translation>Folder for the models</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="849"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="852"/>
         <source>Carpeta de modelos cambiada. Los modelos de la carpeta anterior no se han movido.</source>
         <translation>Models folder changed. The models in the previous folder have not been moved.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="853"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="856"/>
         <source>Carpeta del modelo (formato diffusers, con model_index.json)</source>
         <translation>Model folder (diffusers format, with model_index.json)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="856"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="859"/>
         <source>Nombre del modelo</source>
         <translation>Model name</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="857"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="860"/>
         <source>Nombre con el que aparecerá en la lista:</source>
         <translation>Name it will have in the list:</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="862"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="865"/>
         <source>Modelo instalado.</source>
         <translation>Model installed.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="872"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="875"/>
         <source>La licencia de «{0}» es «{1}», que no está verificada como permisiva (MIT, BSD, Apache 2.0). Revísala antes de usar el modelo.
 
 ¿Continuar?</source>
@@ -4794,12 +4799,12 @@ Layers in your projects that use it are kept, but do nothing until you install i
 Continue?</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="904"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="907"/>
         <source>No se pudo completar la operación. Consulta el panel Registro para ver el detalle.</source>
         <translation>The operation could not be completed. See the Log panel for details.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="955"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="958"/>
         <source>Espera a que termine la operación en curso.</source>
         <translation>Wait for the current operation to finish.</translation>
     </message>
@@ -4807,180 +4812,190 @@ Continue?</translation>
 <context>
     <name>Models</name>
     <message>
-        <location filename="../../deepshot/models.py" line="161"/>
+        <location filename="../../deepshot/models.py" line="172"/>
         <source>Licencia CC-BY-NC 4.0: este modelo es para investigación y uso personal, NO para uso comercial. Úsalo para probar y comparar la calidad; revisa su licencia antes de usar sus resultados en un trabajo comercial. Solo se descarga si lo pides.</source>
         <translation>CC-BY-NC 4.0 license: this model is for research and personal use, NOT for commercial use. Use it to test and compare quality; check its license before using its results in commercial work. It is only downloaded if you ask for it.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/models.py" line="181"/>
+        <location filename="../../deepshot/models.py" line="192"/>
         <source>Marigold LCM V1.0 (rápido)</source>
         <translation>Marigold LCM V1.0 (fast)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/models.py" line="194"/>
+        <location filename="../../deepshot/models.py" line="205"/>
         <source>Depth Anything V2 Small (muy rápido)</source>
         <translation>Depth Anything V2 Small (very fast)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/models.py" line="207"/>
+        <location filename="../../deepshot/models.py" line="218"/>
         <source>Depth Anything V2 Base (solo uso no comercial)</source>
         <translation>Depth Anything V2 Base (non-commercial use only)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/models.py" line="219"/>
+        <location filename="../../deepshot/models.py" line="230"/>
         <source>Depth Anything V2 Large (solo uso no comercial)</source>
         <translation>Depth Anything V2 Large (non-commercial use only)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/models.py" line="234"/>
+        <location filename="../../deepshot/models.py" line="245"/>
         <source>MiDaS 3.1 BEiT Large 512 (prueba)</source>
         <translation>MiDaS 3.1 BEiT Large 512 (test)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/models.py" line="240"/>
+        <location filename="../../deepshot/models.py" line="251"/>
         <source>MiDaS 3.0 DPT Large (prueba)</source>
         <translation>MiDaS 3.0 DPT Large (test)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/models.py" line="246"/>
+        <location filename="../../deepshot/models.py" line="257"/>
         <source>ZoeDepth interior y exterior (prueba)</source>
         <translation>ZoeDepth indoor and outdoor (test)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/models.py" line="252"/>
+        <location filename="../../deepshot/models.py" line="263"/>
         <source>ZoeDepth interior NYU (prueba)</source>
         <translation>ZoeDepth indoor NYU (test)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/models.py" line="258"/>
+        <location filename="../../deepshot/models.py" line="269"/>
         <source>ZoeDepth exterior KITTI (prueba)</source>
         <translation>ZoeDepth outdoor KITTI (test)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/models.py" line="264"/>
+        <location filename="../../deepshot/models.py" line="275"/>
         <source>Depth Pro de Apple (prueba, solo investigación)</source>
         <translation>Apple Depth Pro (test, research only)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/models.py" line="267"/>
+        <location filename="../../deepshot/models.py" line="278"/>
         <source>Licencia de investigación de Apple (apple-amlr): este modelo es solo para investigación y pruebas, NO para uso comercial. Úsalo para comparar la calidad y revisa su licencia antes de usar sus resultados en un trabajo comercial. Solo se descarga si lo pides.</source>
         <translation>Apple research license (apple-amlr): this model is for research and testing only, NOT for commercial use. Use it to compare quality and check its license before using its results in commercial work. It is only downloaded if you ask for it.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/models.py" line="277"/>
+        <location filename="../../deepshot/models.py" line="288"/>
         <source>Marigold V2 (máxima calidad, exige GPU potente)</source>
         <translation>Marigold V2 (top quality, needs a powerful GPU)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/models.py" line="288"/>
+        <location filename="../../deepshot/models.py" line="299"/>
         <source>Necesita un equipo potente: unos 43 GB de descarga (y ~55 GB libres durante la instalación), una GPU NVIDIA con CUDA y mucha RAM. Sus autores indican ~17 GB de VRAM a 1024²; con 8 GB solo puede funcionar de forma experimental y lenta. Marigold V1 y Depth Anything no tienen estos requisitos.</source>
         <translation>Needs a powerful machine: about 43 GB to download (and ~55 GB free during installation), an NVIDIA GPU with CUDA and plenty of RAM. Its authors state ~17 GB of VRAM at 1024²; with 8 GB it can only work experimentally and slowly. Marigold V1 and Depth Anything do not have these requirements.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/models.py" line="540"/>
+        <location filename="../../deepshot/models.py" line="309"/>
+        <source>SAM 2.1 Small (segmentación, para «Quitar fondo»)</source>
+        <translation>SAM 2.1 Small (segmentation, for the background-removal module)</translation>
+    </message>
+    <message>
+        <location filename="../../deepshot/models.py" line="568"/>
         <source>Moviendo {0}…</source>
         <translation>Moving {0}…</translation>
     </message>
     <message>
-        <location filename="../../deepshot/models.py" line="545"/>
+        <location filename="../../deepshot/models.py" line="573"/>
         <source>No se pudo mover {0}: {1}</source>
         <translation>Could not move {0}: {1}</translation>
     </message>
     <message>
-        <location filename="../../deepshot/models.py" line="591"/>
+        <location filename="../../deepshot/models.py" line="619"/>
         <source>El modelo «{0}» no está en la lista.</source>
         <translation>The model “{0}” is not in the list.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/models.py" line="666"/>
+        <location filename="../../deepshot/models.py" line="694"/>
         <source>Instalando el módulo {0}…</source>
         <translation>Installing the module {0}…</translation>
     </message>
     <message>
-        <location filename="../../deepshot/models.py" line="680"/>
+        <location filename="../../deepshot/models.py" line="708"/>
         <source>«{0}» se instaló desde una carpeta y no se puede descargar.</source>
         <translation>“{0}” was installed from a folder and cannot be downloaded.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/models.py" line="682"/>
+        <location filename="../../deepshot/models.py" line="710"/>
         <source>Consultando {0}…</source>
         <translation>Checking {0}…</translation>
     </message>
     <message>
-        <location filename="../../deepshot/models.py" line="698"/>
-        <location filename="../../deepshot/models.py" line="702"/>
+        <location filename="../../deepshot/models.py" line="726"/>
+        <location filename="../../deepshot/models.py" line="730"/>
         <source>«{0}» no tiene un formato compatible y seguro.</source>
         <translation>“{0}” does not have a compatible and safe format.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/models.py" line="710"/>
+        <location filename="../../deepshot/models.py" line="738"/>
         <source>No hay espacio suficiente en el disco: «{0}» necesita {1:.0f} GB libres y hay {2:.0f} GB.</source>
         <translation>Not enough disk space: “{0}” needs {1:.0f} GB free and only {2:.0f} GB are available.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/models.py" line="732"/>
+        <location filename="../../deepshot/models.py" line="760"/>
         <source>Descargando {0}… {1:,.0f} / {2:,.0f} MB</source>
         <translation>Downloading {0}… {1:,.0f} / {2:,.0f} MB</translation>
     </message>
     <message>
-        <location filename="../../deepshot/models.py" line="793"/>
-        <location filename="../../deepshot/models.py" line="864"/>
+        <location filename="../../deepshot/models.py" line="821"/>
+        <location filename="../../deepshot/models.py" line="892"/>
         <source>No se pudo conectar con Hugging Face. Comprueba la conexión.</source>
         <translation>Could not connect to Hugging Face. Check the connection.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/models.py" line="893"/>
+        <location filename="../../deepshot/models.py" line="921"/>
         <source>Escribe el nombre del repositorio como «organización/modelo».</source>
         <translation>Write the repository name as “organization/model”.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/models.py" line="896"/>
+        <location filename="../../deepshot/models.py" line="924"/>
         <source>«{0}» ya está en la lista.</source>
         <translation>“{0}” is already in the list.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/models.py" line="787"/>
-        <location filename="../../deepshot/models.py" line="898"/>
+        <location filename="../../deepshot/models.py" line="815"/>
+        <location filename="../../deepshot/models.py" line="926"/>
         <source>Comprobando {0}…</source>
         <translation>Checking {0}…</translation>
     </message>
     <message>
-        <location filename="../../deepshot/models.py" line="905"/>
+        <location filename="../../deepshot/models.py" line="317"/>
+        <source>Swin2SR x2 (superresolución, para «Superresolución»)</source>
+        <translation>Swin2SR x2 (super-resolution, for the super-resolution module)</translation>
+    </message>
+    <message>
+        <location filename="../../deepshot/models.py" line="933"/>
         <source>No se encontró un modelo diffusers en «{0}».</source>
         <translation>No diffusers model was found in “{0}”.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/models.py" line="909"/>
+        <location filename="../../deepshot/models.py" line="937"/>
         <source>«{0}» no es de una familia soportada ({1}).</source>
         <translation>“{0}” is not of a supported family ({1}).</translation>
     </message>
     <message>
-        <location filename="../../deepshot/models.py" line="925"/>
+        <location filename="../../deepshot/models.py" line="953"/>
         <source>La carpeta no contiene un modelo diffusers (falta model_index.json).</source>
         <translation>The folder does not contain a diffusers model (model_index.json is missing).</translation>
     </message>
     <message>
-        <location filename="../../deepshot/models.py" line="929"/>
+        <location filename="../../deepshot/models.py" line="957"/>
         <source>El archivo model_index.json no es válido.</source>
         <translation>The model_index.json file is not valid.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/models.py" line="931"/>
+        <location filename="../../deepshot/models.py" line="959"/>
         <source>El modelo de la carpeta no es de una familia soportada ({0}).</source>
         <translation>The model in the folder is not of a supported family ({0}).</translation>
     </message>
     <message>
-        <location filename="../../deepshot/models.py" line="936"/>
+        <location filename="../../deepshot/models.py" line="964"/>
         <source>La carpeta no tiene pesos en formato .safetensors. Por seguridad no se aceptan .bin, .pt ni .ckpt.</source>
         <translation>The folder has no weights in .safetensors format. For safety, .bin, .pt and .ckpt are not accepted.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/models.py" line="957"/>
+        <location filename="../../deepshot/models.py" line="985"/>
         <source>Copiando {0}… {1:,.0f} / {2:,.0f} MB</source>
         <translation>Copying {0}… {1:,.0f} / {2:,.0f} MB</translation>
     </message>
     <message>
-        <location filename="../../deepshot/models.py" line="960"/>
+        <location filename="../../deepshot/models.py" line="988"/>
         <source>No se pudo copiar el modelo: {0}</source>
         <translation>The model could not be copied: {0}</translation>
     </message>
@@ -5067,67 +5082,67 @@ Continue?</translation>
 <context>
     <name>Panels</name>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="825"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="826"/>
         <source>Normal</source>
         <translation>Normal</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="825"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="826"/>
         <source>Multiplicar</source>
         <translation>Multiply</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="826"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="827"/>
         <source>Trama</source>
         <translation>Screen</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="826"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="827"/>
         <source>Superponer</source>
         <translation>Overlay</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="827"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="828"/>
         <source>Luz suave</source>
         <translation>Soft light</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="827"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="828"/>
         <source>Sumar</source>
         <translation>Add</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="828"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="829"/>
         <source>Oscurecer</source>
         <translation>Darken</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="828"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="829"/>
         <source>Aclarar</source>
         <translation>Lighten</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="829"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="830"/>
         <source>Diferencia</source>
         <translation>Difference</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="830"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="831"/>
         <source>Sin máscara</source>
         <translation>No mask</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="830"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="831"/>
         <source>Áreas</source>
         <translation>Areas</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="830"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="831"/>
         <source>Rango de profundidad</source>
         <translation>Depth range</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="831"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="832"/>
         <source>Pintada con pincel</source>
         <translation>Painted with brush</translation>
     </message>
@@ -6006,57 +6021,57 @@ Continue?</translation>
 <context>
     <name>RampEditor</name>
     <message>
-        <location filename="../../deepshot/ui/ramp_editor.py" line="189"/>
+        <location filename="../../deepshot/ui/ramp_editor.py" line="190"/>
         <source>Cargar preset de rampa…</source>
         <translation>Load ramp preset…</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/ramp_editor.py" line="194"/>
+        <location filename="../../deepshot/ui/ramp_editor.py" line="195"/>
         <source>Añadir parada (también: doble clic en la barra)</source>
         <translation>Add stop (also: double-click on the bar)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/ramp_editor.py" line="197"/>
+        <location filename="../../deepshot/ui/ramp_editor.py" line="198"/>
         <source>Borrar la parada seleccionada (Supr)</source>
         <translation>Delete the selected stop (Del)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/ramp_editor.py" line="205"/>
+        <location filename="../../deepshot/ui/ramp_editor.py" line="206"/>
         <source>Cómo se pasa de una parada a la siguiente</source>
         <translation>How to go from one stop to the next</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/ramp_editor.py" line="208"/>
+        <location filename="../../deepshot/ui/ramp_editor.py" line="209"/>
         <source>Pos</source>
         <translation>Pos</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/ramp_editor.py" line="209"/>
+        <location filename="../../deepshot/ui/ramp_editor.py" line="210"/>
         <source>Posición de la parada seleccionada: 0 = cerca, 1 = lejos</source>
         <translation>Position of the selected stop: 0 = near, 1 = far</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/ramp_editor.py" line="214"/>
+        <location filename="../../deepshot/ui/ramp_editor.py" line="215"/>
         <source>Color de la parada seleccionada (también: doble clic en su triángulo)</source>
         <translation>Color of the selected stop (also: double-click on its triangle)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/ramp_editor.py" line="217"/>
+        <location filename="../../deepshot/ui/ramp_editor.py" line="218"/>
         <source>Ajustar rampa al relieve</source>
         <translation>Fit ramp to relief</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/ramp_editor.py" line="218"/>
+        <location filename="../../deepshot/ui/ramp_editor.py" line="219"/>
         <source>Ajusta la rampa al rango real de profundidad de la foto</source>
         <translation>Fits the ramp to the real depth range of the photo</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/ramp_editor.py" line="220"/>
+        <location filename="../../deepshot/ui/ramp_editor.py" line="221"/>
         <source>Izquierda = cerca · derecha = lejos</source>
         <translation>Left = near · right = far</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/ramp_editor.py" line="287"/>
+        <location filename="../../deepshot/ui/ramp_editor.py" line="288"/>
         <source>Color de la parada</source>
         <translation>Stop color</translation>
     </message>
@@ -6092,113 +6107,113 @@ Continue?</translation>
 <context>
     <name>SearchDialog</name>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="968"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="971"/>
         <source>Añadir desde Hugging Face</source>
         <translation>Add from Hugging Face</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="981"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="984"/>
         <source>Modelos públicos de Hugging Face que la app sabe ejecutar ({0}). Los «oficiales» son de los autores originales; los de terceros suelen ser copias o variantes sin verificar. El icono de cada fila abre su ficha en Hugging Face (licencia, autor, archivos).</source>
         <translation>Public Hugging Face models the app can run ({0}). The “official” ones are from the original authors; third-party ones are usually unverified copies or variants. Each row&apos;s icon opens its page on Hugging Face (license, author, files).</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="988"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="991"/>
         <source>Repositorio</source>
         <translation>Repository</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="988"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="991"/>
         <source>Ficha</source>
         <translation>Page</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="988"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="991"/>
         <source>Autor</source>
         <translation>Author</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="989"/>
-        <location filename="../../deepshot/ui/model_manager.py" line="1182"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="992"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="1185"/>
         <source>Licencia</source>
         <translation>License</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="989"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="992"/>
         <source>Descargas</source>
         <translation>Downloads</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="989"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="992"/>
         <source>Estado</source>
         <translation>Status</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="1007"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="1010"/>
         <source>Añadir a la lista</source>
         <translation>Add to the list</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="1010"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="1013"/>
         <source>Buscar de nuevo</source>
         <translation>Search again</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="1012"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="1015"/>
         <source>Cerrar</source>
         <translation>Close</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="1022"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="1025"/>
         <source>organización/modelo</source>
         <translation>organization/model</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="1024"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="1027"/>
         <source>Añadir</source>
         <translation>Add</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="1027"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="1030"/>
         <source>¿No está en la lista? Escribe el repositorio:</source>
         <translation>Not in the list? Type the repository:</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="1043"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="1046"/>
         <source>Buscando en Hugging Face…</source>
         <translation>Searching Hugging Face…</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="1061"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="1064"/>
         <source>Oficial</source>
         <translation>Official</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="1061"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="1064"/>
         <source>Terceros</source>
         <translation>Third party</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="1064"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="1067"/>
         <source>En la lista</source>
         <translation>In the list</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="1078"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="1081"/>
         <source>Licencia no verificada como permisiva</source>
         <translation>License not verified as permissive</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="1099"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="1102"/>
         <source> (terceros)</source>
         <translation> (third party)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="1102"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="1105"/>
         <source>Revisa antes de añadir</source>
         <translation>Review before adding</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="1103"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="1106"/>
         <source>Estos modelos tienen una licencia no verificada como permisiva o no son de los autores originales:
 
 {0}
@@ -6211,44 +6226,44 @@ Continue?</translation>
 Add them anyway?</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="1108"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="1111"/>
         <source>Añadiendo…</source>
         <translation>Adding…</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="1135"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="1138"/>
         <source>Ver la ficha en Hugging Face
 {0}</source>
         <translation>View the page on Hugging Face
 {0}</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="1146"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="1149"/>
         <source>Comprobando {0}…</source>
         <translation>Checking {0}…</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="1175"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="1178"/>
         <source>{0} modelos compatibles encontrados.</source>
         <translation>{0} compatible models found.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="1179"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="1182"/>
         <source>«{0}» añadido. Descárgalo desde el gestor de modelos.</source>
         <translation>“{0}” added. Download it from the model manager.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="1183"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="1186"/>
         <source>La licencia de «{0}» es «{1}», que no está verificada como permisiva. ¿Mantenerlo en la lista?</source>
         <translation>The license of “{0}” is “{1}”, which is not verified as permissive. Keep it in the list?</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="1188"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="1191"/>
         <source>«{0}» descartado.</source>
         <translation>“{0}” discarded.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/model_manager.py" line="1191"/>
+        <location filename="../../deepshot/ui/model_manager.py" line="1194"/>
         <source>Añadidos. Descárgalos desde el gestor de modelos.</source>
         <translation>Added. Download them from the model manager.</translation>
     </message>

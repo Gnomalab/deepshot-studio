@@ -1,0 +1,17 @@
+{
+  "id": "superres",
+  "name": "Superresolución (recuperar detalle)",
+  "version": "1.0",
+  "license": "Apache-2.0 (Swin2SR; código del módulo propio de Deepshot Studio)",
+  "author": "Gnomalab Estudio",
+  "kind": "look",
+  "homepage": "https://huggingface.co/caidas/swin2SR-classical-sr-x2-64",
+  "description": "Pasa la imagen por Swin2SR x2 (ampliar con IA) y la devuelve al tamaño original: recupera detalle fino y limpia la compresión y el ruido sin cambiar el tamaño (las capas de Look conservan siempre el tamaño de la imagen). Necesita el modelo «Swin2SR x2» (50 MB, Apache 2.0), que se descarga una vez y se usa en local. Con imágenes grandes tarda; en CPU, mucho.",
+  "requires_models": ["swin2sr-classical-sr-x2"],
+  "params": [
+    {"name": "strength", "label": "Fuerza", "default": 1.0, "min": 0.0, "max": 1.0, "decimals": 2, "step": 0.01,
+     "tooltip": "Cuánto se aplica el detalle recuperado: 0 = la imagen tal cual, 1 = el resultado del modelo."},
+    {"name": "tile", "label": "Mosaico", "default": 256, "min": 64, "max": 768, "decimals": 0, "step": 32,
+     "tooltip": "Tamaño en píxeles de los trozos en que se procesa la imagen. Más pequeño = menos memoria (útil con 8 GB de VRAM o en Mac); más grande = algo más rápido."}
+  ]
+}
