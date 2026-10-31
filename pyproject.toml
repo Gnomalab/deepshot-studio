@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Deepshot Studio: aplicación de escritorio local para crear imágenes a partir del mapa de profundidad de una foto."
 authors = [{ name = "Juanjo Fernández (Gnomalab Estudio)" }]
 requires-python = ">=3.11,<3.14"
-readme = "ROADMAP.md"
+readme = "README.md"
 dependencies = [
     "PySide6-Essentials>=6.7",  # LGPL-3.0, enlazado dinámicamente (sin Addons ni WebEngine)
     "numpy>=1.26",         # BSD-3-Clause
