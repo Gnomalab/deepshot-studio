@@ -32,183 +32,183 @@
 <context>
     <name>AreasPanel</name>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="504"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="588"/>
         <source>+ Añadir área</source>
         <translation>+ Add area</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="504"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="588"/>
         <source>Añade un área 3D de luz o enfoque en el centro; después se mueve y se escala sobre la imagen</source>
         <translation>Adds a 3D light or focus area in the center; you then move and scale it over the image</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="509"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="593"/>
         <source>Dibujar</source>
         <translation>Draw</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="512"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="596"/>
         <source>Dibuja un área nueva sobre la imagen: pulsa en el centro y arrastra para darle tamaño; el efecto se ve al instante (Mayús+A). Mayús al arrastrar: caja rectangular.</source>
         <translation>Draws a new area over the image: click at the center and drag to set its size; the effect shows instantly (Shift+A). Shift while dragging: rectangular box.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="515"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="599"/>
         <source>Colocar</source>
         <translation>Place</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="518"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="602"/>
         <source>Mueve el área seleccionada: pulsa y arrastra por la imagen y el área sigue al puntero, pegada a la superficie, hasta soltar (P)</source>
         <translation>Moves the selected area: click and drag over the image and the area follows the pointer, stuck to the surface, until you release (P)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="530"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="614"/>
         <source>Áreas. Cuadro: color en la imagen · doble clic: renombrar · ojo: aplicar o saltar el área</source>
         <translation>Areas. Square: colour on the image · double-click: rename · eye: apply or bypass the area</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="533"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="617"/>
         <source>Elipsoide</source>
         <translation>Ellipsoid</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="533"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="617"/>
         <source>Caja</source>
         <translation>Box</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="534"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="618"/>
         <source>Zona ovalada con el borde que se desvanece</source>
         <translation>Oval zone with a fading edge</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="535"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="619"/>
         <source>Zona rectangular (caja 3D)</source>
         <translation>Rectangular zone (3D box)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="556"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="640"/>
         <source>Posición horizontal del centro del área</source>
         <translation>Horizontal position of the area&apos;s center</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="557"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="641"/>
         <source>Posición vertical del centro del área (arriba = positivo)</source>
         <translation>Vertical position of the area&apos;s center (up = positive)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="558"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="642"/>
         <source>Profundidad del centro: 0 = lo más cercano</source>
         <translation>Depth of the center: 0 = closest</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="559"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="643"/>
         <source>Tamaño horizontal (semieje X)</source>
         <translation>Horizontal size (X semi-axis)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="559"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="643"/>
         <source>Tamaño vertical (semieje Y)</source>
         <translation>Vertical size (Y semi-axis)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="560"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="644"/>
         <source>Grosor en profundidad (semieje Z): qué tanto abarca hacia delante y atrás</source>
         <translation>Thickness in depth (Z semi-axis): how far it reaches forward and backward</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="561"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="645"/>
         <source>Giro sobre el eje horizontal</source>
         <translation>Rotation around the horizontal axis</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="561"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="645"/>
         <source>Giro sobre el eje vertical</source>
         <translation>Rotation around the vertical axis</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="562"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="646"/>
         <source>Giro sobre la imagen (el que se ve al arrastrar el tirador de giro)</source>
         <translation>Rotation within the image (the one you see when dragging the rotation handle)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="566"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="650"/>
         <source>Fuerza</source>
         <translation>Strength</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="568"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="652"/>
         <source>Positiva aclara, negativa oscurece</source>
         <translation>Positive lightens, negative darkens</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="569"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="653"/>
         <source>Suavidad del borde</source>
         <translation>Edge softness</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="571"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="655"/>
         <source>Cuánto se difumina el borde del área. Se ve como el anillo punteado interior; también: Alt + rueda sobre la imagen</source>
         <translation>How much the area&apos;s edge is blurred. Shown as the dotted inner ring; also: Alt + wheel over the image</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="573"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="657"/>
         <source>Caída</source>
         <translation>Falloff</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="574"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="658"/>
         <source>0 = intensidad uniforme; 1 = se apaga del centro hacia el borde</source>
         <translation>0 = uniform intensity; 1 = fades from the center to the edge</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="581"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="665"/>
         <source>Transformación</source>
         <translation>Transform</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="582"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="666"/>
         <source>Centro, escala y rotación del área con números exactos</source>
         <translation>Center, scale and rotation of the area with exact numbers</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="583"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="667"/>
         <source>Centro</source>
         <translation>Center</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="583"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="667"/>
         <source>Escala</source>
         <translation>Scale</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="584"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="668"/>
         <source>Rotación</source>
         <translation>Rotation</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="593"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="677"/>
         <source>En la imagen: arrastra el área para moverla; tiradores para escalar y girar. G mover · S escalar · R girar (X / Y / Z fijan el eje). Rueda con Ctrl: tamaño · Mayús: profundidad · Alt: suavidad.</source>
         <translation>On the image: drag the area to move it; handles to scale and rotate. G move · S scale · R rotate (X / Y / Z lock the axis). Wheel with Ctrl: size · Shift: depth · Alt: softness.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="621"/>
-        <location filename="../../deepshot/ui/editor_panels.py" line="632"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="705"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="716"/>
         <source>Área {0}</source>
         <translation>Area {0}</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="628"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="712"/>
         <source>elipsoide</source>
         <translation>ellipsoid</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="628"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="712"/>
         <source>caja</source>
         <translation>box</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="661"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="745"/>
         <source>Color del área</source>
         <translation>Area color</translation>
     </message>
@@ -216,98 +216,98 @@
 <context>
     <name>BandsPanel</name>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="391"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="481"/>
         <source>+ Añadir banda</source>
         <translation>+ Add band</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="391"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="481"/>
         <source>Añade una franja de profundidad que se ilumina u oscurece sobre la base</source>
         <translation>Adds a depth stripe that lights or darkens over the base</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="394"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="484"/>
         <source>Posición</source>
         <translation>Position</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="396"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="486"/>
         <source>Profundidad del centro de la banda (0 = cerca, 1 = lejos)</source>
         <translation>Depth of the band&apos;s center (0 = near, 1 = far)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="397"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="487"/>
         <source>Anchura</source>
         <translation>Width</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="399"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="489"/>
         <source>Anchura de la franja con efecto pleno, en el rango de la rampa (0 a 1)</source>
         <translation>Width of the stripe at full effect, within the ramp range (0 to 1)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="400"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="490"/>
         <source>Suavidad</source>
         <translation>Softness</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="402"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="492"/>
         <source>Cuánto se difumina la franja a cada lado: 0 = borde duro</source>
         <translation>How much the stripe is blurred on each side: 0 = hard edge</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="403"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="493"/>
         <source>Intensidad</source>
         <translation>Intensity</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="404"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="494"/>
         <source>Opacidad de la banda: 0 = invisible, 1 = totalmente visible</source>
         <translation>Band opacity: 0 = invisible, 1 = fully visible</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="406"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="496"/>
         <source>Pan</source>
         <translation>Pan</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="408"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="498"/>
         <source>Gira la banda sobre el eje vertical: la franja se aleja hacia la derecha (+) o hacia la izquierda (−). El centro de la imagen no cambia.</source>
         <translation>Rotates the band around the vertical axis: the strip moves away toward the right (+) or the left (−). The image centre does not change.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="410"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="500"/>
         <source>Tilt</source>
         <translation>Tilt</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="412"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="502"/>
         <source>Gira la banda sobre el eje horizontal: la franja se aleja hacia arriba (+) o se acerca (−). El centro de la imagen no cambia.</source>
         <translation>Rotates the band around the horizontal axis: the strip moves away toward the top (+) or comes closer (−). The image centre does not change.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="414"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="504"/>
         <source>Bandas. Cuadro: color · doble clic: renombrar · ojo: aplicar o saltar la banda</source>
         <translation>Bands. Square: colour · double-click: rename · eye: apply or bypass the band</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="415"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="505"/>
         <source>Color de la rampa</source>
         <translation>Colour from ramp</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="416"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="506"/>
         <source>La banda toma el color de la rampa artística en su posición, así siempre casa con el resto. Si está marcado, el color del cuadro de la lista no se usa.</source>
         <translation>The band takes the colour of the art ramp at its position, so it always matches the rest. When checked, the colour square in the list is not used.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="435"/>
-        <location filename="../../deepshot/ui/editor_panels.py" line="444"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="525"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="535"/>
         <source>Banda {0}</source>
         <translation>Band {0}</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="475"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="566"/>
         <source>Color de la banda</source>
         <translation>Band color</translation>
     </message>
@@ -459,162 +459,162 @@
 <context>
     <name>DepthControlPanel</name>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1034"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1118"/>
         <source>Activar control de profundidad</source>
         <translation>Enable depth control</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1035"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1119"/>
         <source>Mueve la profundidad de lo cercano, lo medio y lo lejano por separado. Cambia la rampa, las bandas, el desenfoque y la posición de las áreas. Tocar cualquier ajuste lo activa.</source>
         <translation>Moves the depth of the near, middle and far parts separately. Changes the ramp, bands, blur and the position of the areas. Touching any setting turns it on.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1041"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1125"/>
         <source>Centros desde el mapa</source>
         <translation>Centers from the map</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1042"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1126"/>
         <source>Coloca el centro de cada zona donde hay profundidad de verdad en esta foto (los destinos se quedan iguales: la imagen no cambia).</source>
         <translation>Places the center of each zone where there is real depth in this photo (the targets stay the same: the image does not change).</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1045"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1129"/>
         <source>Restablecer</source>
         <translation>Reset</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1046"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1130"/>
         <source>Devuelve las tres zonas a su estado inicial y apaga el control</source>
         <translation>Returns the three zones to their initial state and turns the control off</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1048"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1132"/>
         <source>Añadir zona</source>
         <translation>Add zone</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1049"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1133"/>
         <source>Añade otra zona de profundidad (hasta {0} más) para mover un tramo concreto del mapa sin tocar el resto.</source>
         <translation>Adds another depth zone (up to {0} more) to move a specific stretch of the map without touching the rest.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1061"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1145"/>
         <source>Cerca</source>
         <translation>Near</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1061"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1145"/>
         <source>Lo más cercano a la cámara (valores bajos del mapa).</source>
         <translation>The closest to the camera (low values of the map).</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1062"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1146"/>
         <source>Medio</source>
         <translation>Middle</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1062"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1146"/>
         <source>Lo que queda a media distancia.</source>
         <translation>What is at mid distance.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1063"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1147"/>
         <source>Lejos</source>
         <translation>Far</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1063"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1147"/>
         <source>Lo más lejano: fondo y cielo (valores altos del mapa).</source>
         <translation>The farthest: background and sky (high values of the map).</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1066"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1150"/>
         <source>Zona {0}</source>
         <translation>Zone {0}</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1067"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1151"/>
         <source>Zona añadida por ti: se reparte el eje de profundidad con las demás.</source>
         <translation>Zone added by you: it shares the depth axis with the others.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1072"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1156"/>
         <source>Zona «{0}»: activa o desactiva este tramo de profundidad. {1}</source>
         <translation>Zone “{0}”: turns this depth stretch on or off. {1}</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1074"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1158"/>
         <source>Centro</source>
         <translation>Center</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1076"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1160"/>
         <source>Valor de profundidad que representa a la zona: 0 = lo más cercano, 1 = lo más lejano (en la vista Profundidad, cerca = claro)</source>
         <translation>Depth value that represents the zone: 0 = closest, 1 = farthest (in the Depth view, near = bright)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1078"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1162"/>
         <source>Destino</source>
         <translation>Target</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1080"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1164"/>
         <source>Adónde se lleva el centro de la zona. Igual que el centro: no cambia nada. Más alto: la zona se aleja. Más bajo: se acerca.</source>
         <translation>Where the zone&apos;s center is moved to. Same as the center: nothing changes. Higher: the zone moves away. Lower: it comes closer.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1082"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1166"/>
         <source>Suavizado</source>
         <translation>Smoothing</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1084"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1168"/>
         <source>Anchura de la transición entre esta zona y las vecinas. Más alto: el cambio se reparte de forma más gradual.</source>
         <translation>Width of the transition between this zone and its neighbors. Higher: the change is spread more gradually.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1086"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1170"/>
         <source>Límites automáticos</source>
         <translation>Automatic limits</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1087"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1171"/>
         <source>Los límites de la zona se reparten a medio camino entre los centros. Desmárcalo para fijar a mano desde dónde hasta dónde llega.</source>
         <translation>The zone&apos;s limits are split halfway between the centers. Uncheck to set by hand where it starts and ends.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1090"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1174"/>
         <source>Desde</source>
         <translation>From</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1092"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1176"/>
         <source>Valor de profundidad donde empieza la zona (solo sin límites automáticos)</source>
         <translation>Depth value where the zone starts (only without automatic limits)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1093"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1177"/>
         <source>Hasta</source>
         <translation>To</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1095"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1179"/>
         <source>Valor de profundidad donde termina la zona (solo sin límites automáticos)</source>
         <translation>Depth value where the zone ends (only without automatic limits)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1098"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1182"/>
         <source>Quitar esta zona</source>
         <translation>Remove this zone</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1099"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1183"/>
         <source>Borra la zona añadida (las de fábrica no se quitan)</source>
         <translation>Deletes the added zone (the built-in ones cannot be removed)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="1105"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1189"/>
         <source>Mueve el destino de una zona para acercarla o alejarla sin tocar las demás. Se ve en las vistas Efecto y 3D.</source>
         <translation>Move a zone&apos;s target to bring it closer or push it away without touching the others. Visible in the Effect and 3D views.</translation>
     </message>
@@ -1791,162 +1791,162 @@ and &lt;i&gt;Open folder&lt;/i&gt; shows the log file, which is always saved.&lt
 <context>
     <name>LensPanel</name>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="903"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="987"/>
         <source>Cargar bokeh…</source>
         <translation>Load bokeh…</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="904"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="988"/>
         <source>Presets de bokeh: apertura, diafragma y ojo de gato de un tipo de objetivo. No tocan el foco ni el destino de tu foto.</source>
         <translation>Bokeh presets: aperture, diaphragm and cat&apos;s eye of a lens type. They do not touch the focus or the target of your photo.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="908"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="992"/>
         <source>Activar desenfoque de lente</source>
         <translation>Enable lens blur</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="909"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="993"/>
         <source>Desenfoca lo que queda lejos de la profundidad en foco, como una cámara real. Tocar cualquier ajuste lo activa.</source>
         <translation>Blurs what is far from the depth in focus, like a real camera. Touching any setting turns it on.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="912"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="996"/>
         <source>Imagen final</source>
         <translation>Final image</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="912"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="996"/>
         <source>Solo la foto</source>
         <translation>Photo only</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="913"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="997"/>
         <source>Imagen final: desenfoca todo lo que ves. Solo la foto: desenfoca la foto antes de mezclarla (necesita opacidad de mezcla mayor que 0).</source>
         <translation>Final image: blurs everything you see. Photo only: blurs the photo before blending it (needs a blend opacity greater than 0).</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="920"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1004"/>
         <source>Foco</source>
         <translation>Focus</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="922"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1006"/>
         <source>Profundidad que queda nítida: 0 = lo más cercano, 1 = lo más lejano (se ve en la vista Profundidad: cerca = claro)</source>
         <translation>Depth that stays sharp: 0 = closest, 1 = farthest (seen in the Depth view: near = bright)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="924"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1008"/>
         <source>Elegir foco en la imagen</source>
         <translation>Pick focus on the image</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="927"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1011"/>
         <source>Cuentagotas: pulsa sobre la imagen en lo que quieres nítido y el foco toma su profundidad (puedes arrastrar para probar). Esc cancela.</source>
         <translation>Eyedropper: click on the image on what you want sharp and the focus takes its depth (you can drag to try). Esc cancels.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="930"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1014"/>
         <source>Ver zona en foco</source>
         <translation>Show in-focus zone</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="931"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1015"/>
         <source>Tiñe de verde sobre la imagen lo que queda nítido (cuanto más verde, más nítido). Solo es una ayuda: no se exporta. Atajo: Z.</source>
         <translation>Tints green over the image what stays sharp (the greener, the sharper). It is only a visual aid: it is not exported. Shortcut: Z.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="934"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1018"/>
         <source>Zona nítida</source>
         <translation>Sharp zone</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="936"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1020"/>
         <source>Cuánta profundidad a cada lado del foco se mantiene sin desenfocar</source>
         <translation>How much depth on each side of the focus stays unblurred</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="937"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1021"/>
         <source>Apertura (f/)</source>
         <translation>Aperture (f/)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="939"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1023"/>
         <source>Número f del objetivo: f/1.4 muy abierto (mucho desenfoque), f/16 muy cerrado (casi todo nítido)</source>
         <translation>Lens f-number: f/1.4 very open (a lot of blur), f/16 very closed (almost everything sharp)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="941"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1025"/>
         <source>Delante del foco</source>
         <translation>In front of the focus</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="943"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1027"/>
         <source>Multiplica el desenfoque de lo que está por delante del foco (0 = nada)</source>
         <translation>Multiplies the blur of what is in front of the focus (0 = none)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="944"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1028"/>
         <source>Detrás del foco</source>
         <translation>Behind the focus</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="946"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1030"/>
         <source>Multiplica el desenfoque de lo que está por detrás del foco (0 = nada)</source>
         <translation>Multiplies the blur of what is behind the focus (0 = none)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="947"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1031"/>
         <source>Palas del diafragma</source>
         <translation>Diaphragm blades</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="949"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1033"/>
         <source>0 = diafragma redondo. De 3 a 12: los puntos de luz desenfocados toman la forma de un polígono con ese número de lados</source>
         <translation>0 = round diaphragm. From 3 to 12: out-of-focus lights take the shape of a polygon with that many sides</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="951"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1035"/>
         <source>Giro del diafragma</source>
         <translation>Diaphragm rotation</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="953"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1037"/>
         <source>Gira el polígono del diafragma (no se nota con el diafragma redondo)</source>
         <translation>Rotates the diaphragm polygon (not noticeable with the round diaphragm)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="954"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1038"/>
         <source>Altas luces</source>
         <translation>Highlights</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="956"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1040"/>
         <source>Cuánto más brillan los puntos de luz en el desenfoque (discos de bokeh)</source>
         <translation>How much brighter the lights are in the blur (bokeh discs)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="957"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1041"/>
         <source>Borde del disco</source>
         <translation>Disc edge</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="959"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1043"/>
         <source>0 = disco de borde duro y definido; 1 = borde difuso, más suave</source>
         <translation>0 = hard, well-defined disc edge; 1 = soft, diffuse edge</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="960"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1044"/>
         <source>Ojo de gato</source>
         <translation>Cat&apos;s eye</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="962"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1046"/>
         <source>Los puntos de luz desenfocados de los bordes de la imagen se recortan en forma de almendra, como en muchos objetivos reales. Cuanto más alto, más pronunciado. Calcular con esto activo tarda algo más.</source>
         <translation>Out-of-focus lights at the edges of the image are clipped into an almond shape, as in many real lenses. The higher, the more pronounced. Computing with this on takes a little longer.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="970"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="1054"/>
         <source>El foco y la apertura se ven en la vista Efecto. El desenfoque usa el mapa de profundidad: cuanto mejor el mapa, mejor el bokeh.</source>
         <translation>The focus and aperture are seen in the Effect view. The blur uses the depth map: the better the map, the better the bokeh.</translation>
     </message>
@@ -2279,37 +2279,27 @@ and &lt;i&gt;Open folder&lt;/i&gt; shows the log file, which is always saved.&lt
 <context>
     <name>LookPanel</name>
     <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="54"/>
-        <source>Subir</source>
-        <translation>Move up</translation>
-    </message>
-    <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="59"/>
-        <source>Bajar</source>
-        <translation>Move down</translation>
-    </message>
-    <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="83"/>
+        <location filename="../../deepshot/ui/look_panel.py" line="63"/>
         <source>Opacidad</source>
         <translation>Opacity</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="91"/>
+        <location filename="../../deepshot/ui/look_panel.py" line="71"/>
         <source>Todo</source>
         <translation>All</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="91"/>
+        <location filename="../../deepshot/ui/look_panel.py" line="71"/>
         <source>Profundidad</source>
         <translation>Depth</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="95"/>
+        <location filename="../../deepshot/ui/look_panel.py" line="75"/>
         <source>Desde</source>
         <translation>From</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="98"/>
+        <location filename="../../deepshot/ui/look_panel.py" line="78"/>
         <source>Hasta</source>
         <translation>To</translation>
     </message>
@@ -2329,87 +2319,77 @@ and &lt;i&gt;Open folder&lt;/i&gt; shows the log file, which is always saved.&lt
         <translation>Effects from top to bottom; they are applied bottom to top, as in Photoshop. Drag to reorder, double-click or F2 to rename. The eye applies or bypasses the effect.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="56"/>
-        <source>Sube el efecto: se aplica después de los de debajo (el orden cambia el resultado)</source>
-        <translation>Moves the effect up: it is applied after the ones below (the order changes the result)</translation>
-    </message>
-    <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="61"/>
-        <source>Baja el efecto: se aplica antes (el orden cambia el resultado)</source>
-        <translation>Moves the effect down: it is applied earlier (the order changes the result)</translation>
-    </message>
-    <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="67"/>
+        <location filename="../../deepshot/ui/look_panel.py" line="47"/>
         <source>Se aplican de abajo arriba, como en Photoshop.</source>
         <translation>Applied from bottom to top, as in Photoshop.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="74"/>
+        <location filename="../../deepshot/ui/look_panel.py" line="54"/>
         <source>Módulo no instalado: no hace nada. Instálalo en el Gestor (Ctrl+M).</source>
         <translation>Module not installed: it does nothing. Install it in the Manager (Ctrl+M).</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="85"/>
+        <location filename="../../deepshot/ui/look_panel.py" line="65"/>
         <source>Cuánto se nota el efecto: 0 = nada, 1 = por completo</source>
         <translation>How visible the effect is: 0 = not at all, 1 = fully</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="89"/>
+        <location filename="../../deepshot/ui/look_panel.py" line="69"/>
         <source>Cómo se combina el ajuste con la imagen que llega al efecto</source>
         <translation>How the adjustment is combined with the image reaching the effect</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="92"/>
+        <location filename="../../deepshot/ui/look_panel.py" line="72"/>
         <source>Todo: el efecto afecta a toda la imagen. Profundidad: solo a un rango del mapa, p. ej. solo el fondo.</source>
         <translation>All: the effect affects the whole image. Depth: only a range of the map, e.g. just the background.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="97"/>
+        <location filename="../../deepshot/ui/look_panel.py" line="77"/>
         <source>Profundidad desde la que actúa el efecto (0 = lo más cercano)</source>
         <translation>Depth from which the effect acts (0 = nearest)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="100"/>
+        <location filename="../../deepshot/ui/look_panel.py" line="80"/>
         <source>Profundidad hasta la que actúa el efecto (1 = lo más lejano)</source>
         <translation>Depth up to which the effect acts (1 = farthest)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="101"/>
+        <location filename="../../deepshot/ui/look_panel.py" line="81"/>
         <source>Suavidad</source>
         <translation>Softness</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="103"/>
+        <location filename="../../deepshot/ui/look_panel.py" line="83"/>
         <source>Cuánto se difumina el paso entre lo que se ajusta y lo que no</source>
         <translation>How much the transition between adjusted and unadjusted areas is softened</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="130"/>
+        <location filename="../../deepshot/ui/look_panel.py" line="110"/>
         <source>módulo no instalado</source>
         <translation>module not installed</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="140"/>
+        <location filename="../../deepshot/ui/look_panel.py" line="117"/>
         <source>solo en un rango de profundidad</source>
         <translation>only in a depth range</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="140"/>
+        <location filename="../../deepshot/ui/look_panel.py" line="117"/>
         <source>toda la imagen</source>
         <translation>the whole image</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="193"/>
+        <location filename="../../deepshot/ui/look_panel.py" line="170"/>
         <source>copia</source>
         <translation>copy</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="213"/>
+        <location filename="../../deepshot/ui/look_panel.py" line="190"/>
         <source>Abre el Gestor de modelos y módulos para instalar más efectos</source>
         <translation>Opens the Model and module manager to install more effects</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/look_panel.py" line="212"/>
+        <location filename="../../deepshot/ui/look_panel.py" line="189"/>
         <source>Más módulos…</source>
         <translation>More modules…</translation>
     </message>
@@ -3775,212 +3755,212 @@ Approve and load them?</translation>
 <context>
     <name>MixPanel</name>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="704"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="788"/>
         <source>Cómo se combina la foto con el resultado</source>
         <translation>How the photo is combined with the result</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="706"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="790"/>
         <source>Foto</source>
         <translation>Photo</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="708"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="792"/>
         <source>Cantidad de foto: 0 = solo el resultado</source>
         <translation>Amount of photo: 0 = only the result</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="709"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="793"/>
         <source>Foto en blanco y negro</source>
         <translation>Black and white photo</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="710"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="794"/>
         <source>Convierte la foto a blanco y negro antes de mezclarla</source>
         <translation>Converts the photo to black and white before blending it</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="716"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="800"/>
         <source>Dónde se aplica la foto: en todas partes, solo dentro de las áreas, en un rango de profundidad o donde la pintes con el pincel</source>
         <translation>Where the photo is applied: everywhere, only inside the areas, in a depth range, or where you paint it with the brush</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="719"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="803"/>
         <source>Invertir máscara</source>
         <translation>Invert mask</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="720"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="804"/>
         <source>Intercambia dónde se aplica y dónde no la foto</source>
         <translation>Swaps where the photo is applied and where it is not</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="722"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="806"/>
         <source>Desde</source>
         <translation>From</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="724"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="808"/>
         <source>Hasta</source>
         <translation>To</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="726"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="810"/>
         <source>Suavidad</source>
         <translation>Softness</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="728"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="812"/>
         <source>Profundidad desde la que se aplica la foto (0 = lo más cercano)</source>
         <translation>Depth from which the photo is applied (0 = closest)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="729"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="813"/>
         <source>Profundidad hasta la que se aplica la foto (1 = lo más lejano)</source>
         <translation>Depth up to which the photo is applied (1 = farthest)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="730"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="814"/>
         <source>Cuánto se difumina el paso entre lo que se aplica y lo que no</source>
         <translation>How much the transition between what is applied and what is not is blurred</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="732"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="816"/>
         <source>Suavizado</source>
         <translation>Smoothing</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="733"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="817"/>
         <source>Difumina el borde de la máscara (de la que sea). Con valores altos la foto se funde poco a poco en lugar de cortar en seco.</source>
         <translation>Blurs the mask&apos;s edge (whichever mask it is). With high values the photo fades in gradually instead of cutting abruptly.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="735"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="819"/>
         <source>Pegar a bordes</source>
         <translation>Snap to edges</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="736"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="820"/>
         <source>Ajusta el borde de la máscara a los bordes de la foto: no hace falta pintar con precisión, la máscara se pega al objeto. Tarda algo más en fotos grandes.</source>
         <translation>Fits the mask&apos;s edge to the photo&apos;s edges: you do not need to paint precisely, the mask sticks to the object. It takes a bit longer on large photos.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="753"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="837"/>
         <source>Modo</source>
         <translation>Mode</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="756"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="840"/>
         <source>Máscara</source>
         <translation>Mask</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="803"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="887"/>
         <source>Pincel</source>
         <translation>Brush</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="805"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="889"/>
         <source>Pinta la máscara con el ratón sobre la imagen: ahí se aplica la foto (B). [ y ] cambian el tamaño.</source>
         <translation>Paints the mask with the mouse over the image: the photo is applied there (B). [ and ] change the size.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="807"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="891"/>
         <source>Borrador</source>
         <translation>Eraser</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="809"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="893"/>
         <source>Borra la máscara con el ratón: ahí no se aplica la foto (E)</source>
         <translation>Erases the mask with the mouse: the photo is not applied there (E)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="821"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="905"/>
         <source>Tamaño</source>
         <translation>Size</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="822"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="906"/>
         <source>Diámetro del pincel en % del lado largo de la foto (también: [ y ])</source>
         <translation>Brush diameter as % of the photo&apos;s long side (also: [ and ])</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="823"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="907"/>
         <source>Dureza</source>
         <translation>Hardness</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="824"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="908"/>
         <source>0 = borde muy difuminado · 1 = borde nítido. Se ve como el anillo punteado del cursor</source>
         <translation>0 = very blurred edge · 1 = sharp edge. Shown as the dotted ring of the cursor</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="826"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="910"/>
         <source>Opacidad</source>
         <translation>Opacity</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="827"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="911"/>
         <source>Cuánto pinta cada pasada: con valores bajos se va acumulando</source>
         <translation>How much each pass paints: with low values it builds up</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="834"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="918"/>
         <source>Rellenar</source>
         <translation>Fill</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="834"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="918"/>
         <source>Todo blanco: la foto se aplica en toda la imagen</source>
         <translation>All white: the photo is applied over the whole image</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="835"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="919"/>
         <source>Vaciar</source>
         <translation>Clear</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="835"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="919"/>
         <source>Todo negro: la foto no se aplica en ninguna parte</source>
         <translation>All black: the photo is applied nowhere</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="836"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="920"/>
         <source>Invertir</source>
         <translation>Invert</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="836"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="920"/>
         <source>Cambia blanco por negro y al revés</source>
         <translation>Swaps white for black and vice versa</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="843"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="927"/>
         <source>Ver máscara sobre la imagen</source>
         <translation>Show mask over the image</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="845"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="929"/>
         <source>Tiñe de rojo lo que está pintado en la máscara</source>
         <translation>Tints red what is painted in the mask</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="848"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="932"/>
         <source>Cargar máscara desde PNG…</source>
         <translation>Load mask from PNG…</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="849"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="933"/>
         <source>Sustituye la máscara por un PNG en gris: blanco = se aplica, negro = no</source>
         <translation>Replaces the mask with a gray PNG: white = applied, black = not</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="883"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="967"/>
         <source>Máscara desde PNG</source>
         <translation>Mask from PNG</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="884"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="968"/>
         <source>Imágenes (*.png *.tif *.tiff)</source>
         <translation>Images (*.png *.tif *.tiff)</translation>
     </message>
@@ -5040,67 +5020,67 @@ Continue?</translation>
 <context>
     <name>Panels</name>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="684"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="768"/>
         <source>Normal</source>
         <translation>Normal</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="684"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="768"/>
         <source>Multiplicar</source>
         <translation>Multiply</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="685"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="769"/>
         <source>Trama</source>
         <translation>Screen</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="685"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="769"/>
         <source>Superponer</source>
         <translation>Overlay</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="686"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="770"/>
         <source>Luz suave</source>
         <translation>Soft light</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="686"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="770"/>
         <source>Sumar</source>
         <translation>Add</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="687"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="771"/>
         <source>Oscurecer</source>
         <translation>Darken</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="687"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="771"/>
         <source>Aclarar</source>
         <translation>Lighten</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="688"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="772"/>
         <source>Diferencia</source>
         <translation>Difference</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="689"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="773"/>
         <source>Sin máscara</source>
         <translation>No mask</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="689"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="773"/>
         <source>Áreas</source>
         <translation>Areas</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="689"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="773"/>
         <source>Rango de profundidad</source>
         <translation>Depth range</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="690"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="774"/>
         <source>Pintada con pincel</source>
         <translation>Painted with brush</translation>
     </message>
@@ -6617,40 +6597,50 @@ Add them anyway?</translation>
 <context>
     <name>_ListPanel</name>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="222"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="262"/>
         <source>Añade un elemento nuevo a la lista</source>
         <translation>Adds a new item to the list</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="224"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="264"/>
         <source>Duplicar</source>
         <translation>Duplicate</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="225"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="265"/>
         <source>Copia el elemento seleccionado</source>
         <translation>Copies the selected item</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="227"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="267"/>
         <source>Borrar</source>
         <translation>Delete</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="228"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="268"/>
         <source>Borra el elemento seleccionado (se puede deshacer con Ctrl+Z)</source>
         <translation>Deletes the selected item (can be undone with Ctrl+Z)</translation>
+    </message>
+    <message>
+        <location filename="../../deepshot/ui/editor_panels.py" line="279"/>
+        <source>Sube el elemento seleccionado en la lista (también se puede arrastrar la fila)</source>
+        <translation>Move the selected item up the list (you can also drag the row)</translation>
+    </message>
+    <message>
+        <location filename="../../deepshot/ui/editor_panels.py" line="283"/>
+        <source>Baja el elemento seleccionado en la lista (también se puede arrastrar la fila)</source>
+        <translation>Move the selected item down the list (you can also drag the row)</translation>
     </message>
 </context>
 <context>
     <name>view</name>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="198"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="238"/>
         <source>Aplicar: el elemento se aplica o se salta (bypass) con un clic</source>
         <translation>Apply: click to apply the item or bypass it</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/editor_panels.py" line="201"/>
+        <location filename="../../deepshot/ui/editor_panels.py" line="241"/>
         <source>Color (clic para cambiarlo)</source>
         <translation>Colour (click to change it)</translation>
     </message>

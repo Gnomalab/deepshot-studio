@@ -1925,6 +1925,50 @@ def test_the_row_eye_bypasses_the_element_and_rows_rename_in_place(win):
     assert len(editor.project.bands) == 1 and editor.project.bands[0].enabled is False
 
 
+def test_rows_double_click_on_the_eye_or_color_does_not_open_the_name_editor_and_rows_reorder(win):
+    from PySide6.QtCore import QEvent, QPointF
+    from PySide6.QtGui import QMouseEvent
+    from PySide6.QtWidgets import QStyleOptionViewItem
+
+    from deepshot.tonemap import Band
+
+    win.add_photos(win._photos[:1])
+    give_depth(win)
+    wait_for(win, lambda: win.editor.result is not None)
+    win.set_step(STEP_EDIT)
+    editor = win.editor
+    for name in "ABC":
+        editor.areas_panel.add_item(Area(name=name))
+    editor.project.bands.extend([Band(position=0.2, color=(1.0, 0.0, 0.0)), Band(position=0.8)])
+    editor.bands_panel.bind(editor.project)
+    panel, view = editor.areas_panel, editor.areas_panel.list
+    delegate = view.itemDelegate()
+    index = view.model().index(0, 0)
+    opt = QStyleOptionViewItem()
+    opt.rect = view.visualRect(index)
+    eye = delegate._eye_rect(opt.rect).center()
+    swatch = delegate._swatch_rect(opt.rect, index)
+    assert eye.x() < opt.rect.center().x() < swatch.center().x()            # ojo a la izquierda, color a la derecha
+    assert swatch.width() > 20                                              # con sitio de sobra
+    dbl = QMouseEvent(QEvent.MouseButtonDblClick, QPointF(eye), QPointF(eye), Qt.LeftButton, Qt.LeftButton, Qt.NoModifier)
+    assert delegate.editorEvent(dbl, view.model(), opt, index) is True      # lo consume el delegado: no abre el editor
+    # El color de la fila de una banda es el que se pinta de verdad: el de la rampa si así se pidió.
+    bands = editor.bands_panel
+    assert bands.list.model().index(0, 0).data(Qt.UserRole + 2).redF() == pytest.approx(1.0)
+    bands.select(0)
+    bands.color_ramp.setChecked(True)
+    ramp_color = bands.list.model().index(0, 0).data(Qt.UserRole + 2)
+    assert (ramp_color.redF(), ramp_color.greenF(), ramp_color.blueF()) != (1.0, 0.0, 0.0)
+    # Reordenar: con las flechas, en áreas y bandas (el orden también cambia en el proyecto).
+    panel.select(0)
+    assert not panel.up_button.isEnabled() and panel.down_button.isEnabled()
+    panel._move(1)
+    assert [a.name for a in editor.project.areas] == ["B", "A", "C"] and panel.list.currentRow() == 1
+    bands.select(0)
+    bands._move(1)
+    assert editor.project.bands[1].position == 0.2 and bands.list.currentRow() == 1
+
+
 
 def test_sections_start_folded_remember_their_state_and_ctrl_click_opens_only_one(tmp_path, monkeypatch):
     from PySide6.QtCore import QEvent, QPointF

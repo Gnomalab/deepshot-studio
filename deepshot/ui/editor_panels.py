@@ -10,8 +10,8 @@ from __future__ import annotations
 import copy
 from pathlib import Path
 
-from PySide6.QtCore import QCoreApplication, QEvent, QRect, QSize, Qt, QT_TRANSLATE_NOOP, Signal
-from PySide6.QtGui import QColor, QIcon, QPixmap
+from PySide6.QtCore import QCoreApplication, QEvent, QRect, QSize, Qt, QT_TRANSLATE_NOOP, QTimer, Signal
+from PySide6.QtGui import QColor, QIcon, QPainter, QPalette, QPen, QPixmap
 from PySide6.QtWidgets import QStyle, QStyleOptionViewItem
 from PySide6.QtWidgets import (
     QAbstractItemView,
@@ -39,7 +39,7 @@ from deepshot.ui.color_pick import pick_color
 from deepshot.ui.icons import icon, set_icon
 from deepshot.ui.preset_bar import PresetBar
 from deepshot.project import Project
-from deepshot.tonemap import Band
+from deepshot.tonemap import Band, band_color
 from deepshot.ui.value_slider import ValueSlider
 from deepshot.ui.widgets import CollapsibleSection, SegmentedControl
 
@@ -141,63 +141,103 @@ class ReliefPanel(_Panel):
 # ---------------------------------------------------------------------------
 # Lista genérica (bandas, áreas)
 # ---------------------------------------------------------------------------
-DETAIL_ROLE = Qt.UserRole + 1       # texto secundario de la fila (forma, valor…), pintado tenue a la derecha
+DETAIL_ROLE = Qt.UserRole + 1       # texto secundario de la fila (forma, valor…), pintado tenue junto al color
+COLOR_ROLE = Qt.UserRole + 2        # QColor del cuadro de color de la fila (sin dato, la fila no lleva cuadro)
 
 
 class _RowDelegate(QStyledItemDelegate):
-    """Fila al estilo Photoshop: cuadro de color (clic: elegir color), nombre (doble clic: renombrar), un detalle tenue y a
-    la derecha un ojo (lleno = el elemento se aplica, tenue = en bypass) cuyo clic atiende."""
+    """Fila al estilo Photoshop, de izquierda a derecha: ojo (bypass: lleno = se aplica, tenue = se salta), nombre (doble
+    clic o F2: renombrar), un detalle tenue y un cuadro de color ancho (clic: elegir color)."""
 
-    SIZE = 16
+    EYE = 16
     MARGIN = 6
+    SWATCH = (30, 14)                 # ancho y alto del cuadro de color
+    MIN_HEIGHT = 26
 
     def _eye_rect(self, rect: QRect) -> QRect:
-        return QRect(rect.right() - self.SIZE - self.MARGIN, rect.center().y() - self.SIZE // 2, self.SIZE, self.SIZE)
+        return QRect(rect.left() + self.MARGIN, rect.center().y() - self.EYE // 2, self.EYE, self.EYE)
 
-    def _swatch_rect(self, option, index) -> QRect:
-        opt = QStyleOptionViewItem(option)
-        self.initStyleOption(opt, index)
-        widget = opt.widget
-        return (widget.style() if widget else QApplication.style()).subElementRect(
-            QStyle.SE_ItemViewItemDecoration, opt, widget)
+    def _swatch_rect(self, rect: QRect, index) -> QRect | None:
+        if index.data(COLOR_ROLE) is None:
+            return None
+        w, h = self.SWATCH
+        return QRect(rect.right() - self.MARGIN - w, rect.center().y() - h // 2, w, h)
+
+    def _text_rect(self, rect: QRect, index) -> QRect:
+        left = self._eye_rect(rect).right() + self.MARGIN
+        swatch = self._swatch_rect(rect, index)
+        right = (swatch.left() if swatch else rect.right()) - self.MARGIN
+        return QRect(left, rect.top(), max(right - left, 10), rect.height())
+
+    def sizeHint(self, option, index):
+        hint = super().sizeHint(option, index)
+        return QSize(hint.width(), max(hint.height(), self.MIN_HEIGHT))
+
+    def updateEditorGeometry(self, editor, option, index) -> None:
+        editor.setGeometry(self._text_rect(option.rect, index).adjusted(-2, 2, 2, -2))      # el editor de nombre
 
     def paint(self, painter, option, index) -> None:
         panel = self.parent()
-        detail = index.data(DETAIL_ROLE) or ""
-        reserved = self.SIZE + 2 * self.MARGIN                          # el ojo
-        detail_w = option.fontMetrics.horizontalAdvance(detail) + self.MARGIN if detail else 0
-        narrowed = QStyleOptionViewItem(option)
-        narrowed.rect = option.rect.adjusted(0, 0, -(reserved + detail_w), 0)
+        opt = QStyleOptionViewItem(option)
+        self.initStyleOption(opt, index)
+        text = opt.text
+        opt.text = ""
+        opt.icon = QIcon()
+        opt.features &= ~QStyleOptionViewItem.HasDecoration
+        widget = opt.widget
+        (widget.style() if widget else QApplication.style()).drawControl(QStyle.CE_ItemViewItem, opt, painter, widget)
         enabled = panel.items()[index.row()].enabled
+        rect = option.rect
         painter.save()
-        painter.setOpacity(1.0 if enabled else 0.4)                     # en bypass, la fila entera se ve apagada
-        super().paint(painter, narrowed, index)                         # color y nombre (con «…» si no cabe)
-        painter.restore()
-        painter.save()
+        painter.setRenderHint(QPainter.Antialiasing, True)
+        painter.setOpacity(1.0 if enabled else 0.28)                    # el ojo, tenue en bypass
+        painter.drawPixmap(self._eye_rect(rect), icon("eye").pixmap(self.EYE, self.EYE))
+        painter.setOpacity(1.0 if enabled else 0.4)                     # y el resto de la fila apagado
+        text_rect = self._text_rect(rect, index)
+        detail = index.data(DETAIL_ROLE) or ""
+        detail_w = option.fontMetrics.horizontalAdvance(detail) if detail else 0
+        selected = bool(option.state & QStyle.State_Selected)
+        painter.setPen(option.palette.color(QPalette.HighlightedText if selected else QPalette.Text))
+        painter.drawText(text_rect.adjusted(0, 0, -(detail_w + self.MARGIN if detail else 0), 0),
+                         Qt.AlignVCenter | Qt.AlignLeft,
+                         option.fontMetrics.elidedText(text, Qt.ElideRight,
+                                                       text_rect.width() - (detail_w + self.MARGIN if detail else 0)))
         if detail:
             painter.setPen(theme.color("text_dim"))
-            painter.drawText(QRect(option.rect.right() - reserved - detail_w, option.rect.top(), detail_w,
-                                   option.rect.height()), Qt.AlignVCenter | Qt.AlignRight, detail)
-        painter.setOpacity(1.0 if enabled else 0.28)
-        painter.drawPixmap(self._eye_rect(option.rect), icon("eye").pixmap(self.SIZE, self.SIZE))
+            painter.drawText(text_rect, Qt.AlignVCenter | Qt.AlignRight, detail)
+        swatch = self._swatch_rect(rect, index)
+        if swatch is not None:
+            painter.setPen(QPen(theme.color("line"), 1.0))
+            painter.setBrush(index.data(COLOR_ROLE))
+            painter.drawRoundedRect(swatch, 3, 3)
         painter.restore()
 
+    def _hit(self, rect: QRect, index, pos) -> str:
+        if self._eye_rect(rect).adjusted(-3, -3, 3, 3).contains(pos):
+            return "eye"
+        swatch = self._swatch_rect(rect, index)
+        if swatch is not None and swatch.adjusted(-2, -2, 2, 2).contains(pos):
+            return "color"
+        return ""
+
     def editorEvent(self, event, model, option, index) -> bool:
-        if event.type() == QEvent.MouseButtonRelease and event.button() == Qt.LeftButton:
-            pos = event.position().toPoint()
-            if self._eye_rect(option.rect).adjusted(-3, -3, 3, 3).contains(pos):
-                self.parent().toggle_row_enabled(index.row())
-                return True
-            if not index.data(Qt.DecorationRole) is None and self._swatch_rect(option, index).adjusted(-2, -2, 2, 2).contains(pos):
-                self.parent().pick_row_color(index.row())
+        if event.type() in (QEvent.MouseButtonRelease, QEvent.MouseButtonDblClick) and event.button() == Qt.LeftButton:
+            hit = self._hit(option.rect, index, event.position().toPoint())
+            if hit:
+                if event.type() == QEvent.MouseButtonRelease:       # el doble clic en ojo o color no abre el editor de nombre
+                    if hit == "eye":
+                        self.parent().toggle_row_enabled(index.row())
+                    else:
+                        self.parent().pick_row_color(index.row())
                 return True
         return super().editorEvent(event, model, option, index)
 
     def helpEvent(self, event, view, option, index) -> bool:
-        if self._eye_rect(option.rect).contains(event.pos()):
+        hit = self._hit(option.rect, index, event.pos())
+        if hit == "eye":
             QToolTip.showText(event.globalPos(), view.tr("Aplicar: el elemento se aplica o se salta (bypass) con un clic"), view)
             return True
-        if index.data(Qt.DecorationRole) is not None and self._swatch_rect(option, index).contains(event.pos()):
+        if hit == "color":
             QToolTip.showText(event.globalPos(), view.tr("Color (clic para cambiarlo)"), view)
             return True
         return super().helpEvent(event, view, option, index)
@@ -232,7 +272,25 @@ class _ListPanel(_Panel):
         row.addWidget(add, 1)
         row.addWidget(dup)
         row.addWidget(remove)
-        self.buttons_row = row                       # los paneles pueden añadirle botones (p. ej. subir / bajar)
+        # Reordenar: con las flechas de la fila de botones o arrastrando una fila con el ratón (mano). El orden cuenta:
+        # en bandas y efectos cada elemento se aplica sobre el resultado del anterior.
+        self.up_button = QPushButton()
+        set_icon(self.up_button, "arrow_up")
+        self.up_button.setToolTip(self.tr("Sube el elemento seleccionado en la lista (también se puede arrastrar la fila)"))
+        self.up_button.clicked.connect(lambda: self._move(-1))
+        self.down_button = QPushButton()
+        set_icon(self.down_button, "arrow_down")
+        self.down_button.setToolTip(self.tr("Baja el elemento seleccionado en la lista (también se puede arrastrar la fila)"))
+        self.down_button.clicked.connect(lambda: self._move(1))
+        for button in (self.up_button, self.down_button):
+            button.setIconSize(QSize(16, 16))
+            button.setFixedWidth(30)
+            row.addWidget(button)
+        self.list.setDragDropMode(QAbstractItemView.InternalMove)
+        self.list.setDefaultDropAction(Qt.MoveAction)
+        self.list.model().rowsMoved.connect(self._on_rows_moved)
+        self.list.viewport().setCursor(Qt.OpenHandCursor)           # la mano: las filas se arrastran para recolocarlas
+        self._reordering = False
         self.props = QWidget()
         self.props_layout = QVBoxLayout(self.props)
         self.props_layout.setContentsMargins(0, 4, 0, 0)
@@ -248,7 +306,8 @@ class _ListPanel(_Panel):
     def new_item(self): ...
     def item_label(self, i: int, item) -> str: ...
     def show_props(self, item) -> None: ...
-    def item_icon(self, i: int, item) -> QIcon | None:
+    def item_color(self, i: int, item) -> tuple[float, float, float] | None:
+        """Color del cuadro de la fila (None = la fila no lleva cuadro de color)."""
         return None
 
     def item_detail(self, i: int, item) -> str:
@@ -279,7 +338,38 @@ class _ListPanel(_Panel):
         self.emit_both()
 
     def _sync_buttons(self) -> None:
-        """Gancho: los paneles con botones que dependen de la fila elegida los actualizan aquí."""
+        """Nunca queda un botón activo sin fila a la que mover."""
+        row = self.list.currentRow()
+        self.up_button.setEnabled(row > 0)
+        self.down_button.setEnabled(0 <= row < len(self.items()) - 1)
+
+    def _move(self, step: int) -> None:
+        row = self.list.currentRow()
+        items = self.items()
+        target = row + step
+        if 0 <= row < len(items) and 0 <= target < len(items):
+            items.insert(target, items.pop(row))
+            self.refresh_list(select=target)
+            self.emit_both()
+
+    def _on_rows_moved(self, _parent, start: int, end: int, _dest_parent, dest: int) -> None:
+        """Se arrastró una fila: el proyecto sigue el orden nuevo (la lista ya lo tiene)."""
+        items = self.items()
+        if self._reordering or self._loading or start != end or not 0 <= start < len(items):
+            return
+        target = dest - 1 if dest > start else dest
+        target = min(max(target, 0), len(items) - 1)
+        if target == start:
+            return
+        self._reordering = True
+        items.insert(target, items.pop(start))
+        # La lista se rehace fuera del arrastre (aún no ha terminado de soltarse).
+        QTimer.singleShot(0, lambda: self._after_drag(target))
+
+    def _after_drag(self, target: int) -> None:
+        self.refresh_list(select=target)
+        self._reordering = False
+        self.emit_both()
 
     def refresh_list(self, select: int | None = None) -> None:
         self._loading = True
@@ -289,8 +379,8 @@ class _ListPanel(_Panel):
             entry = QListWidgetItem(self.item_label(i, item))
             entry.setData(DETAIL_ROLE, self.item_detail(i, item))
             entry.setFlags(entry.flags() | Qt.ItemIsEditable)   # doble clic o F2: renombrar
-            if (ic := self.item_icon(i, item)) is not None:
-                entry.setIcon(ic)
+            if (color := self.item_color(i, item)) is not None:
+                entry.setData(COLOR_ROLE, QColor.fromRgbF(*color))
             self.list.addItem(entry)
         self._loading = False
         count = self.list.count()
@@ -306,8 +396,8 @@ class _ListPanel(_Panel):
             self._loading = True
             self.list.item(row).setText(self.item_label(row, items[row]))
             self.list.item(row).setData(DETAIL_ROLE, self.item_detail(row, items[row]))
-            if (ic := self.item_icon(row, items[row])) is not None:
-                self.list.item(row).setIcon(ic)
+            if (color := self.item_color(row, items[row])) is not None:
+                self.list.item(row).setData(COLOR_ROLE, QColor.fromRgbF(*color))
             self._loading = False
 
     def current(self):
@@ -437,8 +527,9 @@ class BandsPanel(_ListPanel):
     def item_detail(self, i: int, band: Band) -> str:
         return "{0:.2f}".format(band.position)
 
-    def item_icon(self, i: int, band: Band) -> QIcon:
-        return _color_icon(band.color)
+    def item_color(self, i: int, band: Band) -> tuple[float, float, float]:
+        """El color con que de verdad se pinta la banda: el suyo, o el de la rampa si se pidió así."""
+        return band_color(band, self.project.ramp) if self.project else tuple(band.color)
 
     def rename_item(self, i: int, band: Band, text: str) -> None:
         band.name = "" if text == self.tr("Banda {0}").format(i + 1) else text
@@ -486,13 +577,6 @@ class BandsPanel(_ListPanel):
 # ---------------------------------------------------------------------------
 # Áreas
 # ---------------------------------------------------------------------------
-def _color_icon(color: tuple[float, float, float]) -> QIcon:
-    """Cuadradito de color para la lista de áreas."""
-    pix = QPixmap(14, 14)
-    pix.fill(QColor.fromRgbF(*color))
-    return QIcon(pix)
-
-
 class AreasPanel(_ListPanel):
     """Áreas 3D. Se pueden crear y mover con las herramientas «Dibujar» y «Colocar», o arrastrando sobre
     la imagen (ver ui/canvas.py); aquí están además los valores exactos."""
@@ -631,8 +715,8 @@ class AreasPanel(_ListPanel):
     def rename_item(self, i: int, area: Area, text: str) -> None:
         area.name = text or self.tr("Área {0}").format(i + 1)
 
-    def item_icon(self, i: int, area: Area) -> QIcon:
-        return _color_icon(area.display_color(i))
+    def item_color(self, i: int, area: Area) -> tuple[float, float, float]:
+        return area.display_color(i)
 
     def show_props(self, area: Area) -> None:
         self.shape.set_current_index(self.SHAPES.index(area.shape))

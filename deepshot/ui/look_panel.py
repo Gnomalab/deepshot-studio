@@ -44,26 +44,6 @@ class LookPanel(_ListPanel):
         self.list.setMaximumHeight(150)
         self.list.setToolTip(self.tr("Efectos de arriba abajo; se aplican de abajo arriba, como en Photoshop. Arrastra "
                                      "para reordenar, doble clic o F2 para renombrar. El ojo aplica o salta el efecto."))
-        # Reordenar arrastrando: la lista mueve la fila y el proyecto sigue su nuevo orden.
-        self.list.setDragDropMode(QAbstractItemView.InternalMove)
-        self.list.setDefaultDropAction(Qt.MoveAction)
-        self.list.model().rowsMoved.connect(self._on_rows_moved)
-        self._reordering = False
-
-        # Subir y bajar, además de arrastrar: el orden de los efectos cambia el resultado.
-        self.up_button = QPushButton(self.tr("Subir"))
-        set_icon(self.up_button, "arrow_up")
-        self.up_button.setToolTip(self.tr("Sube el efecto: se aplica después de los de debajo (el orden cambia el "
-                                          "resultado)"))
-        self.up_button.clicked.connect(lambda: self._move(-1))
-        self.down_button = QPushButton(self.tr("Bajar"))
-        set_icon(self.down_button, "arrow_down")
-        self.down_button.setToolTip(self.tr("Baja el efecto: se aplica antes (el orden cambia el resultado)"))
-        self.down_button.clicked.connect(lambda: self._move(1))
-        for button in (self.up_button, self.down_button):                # solo el icono, en la fila de Añadir / Duplicar / Borrar
-            button.setText("")
-            button.setIconSize(QSize(16, 16))
-            self.buttons_row.addWidget(button)
         self.layout_.insertWidget(0, _one_line(self.tr("Se aplican de abajo arriba, como en Photoshop.")))
 
         cur = lambda: self.current()  # noqa: E731 (atajo legible para los setters)
@@ -128,9 +108,6 @@ class LookPanel(_ListPanel):
     def item_label(self, i: int, layer: LookLayer) -> str:
         name = layer.name.strip() or self.kind_title(layer)
         return "{0}  ({1})".format(name, self.tr("módulo no instalado")) if layer.missing else name
-
-    def item_icon(self, i: int, layer: LookLayer):
-        return None
 
     def item_detail(self, i: int, layer: LookLayer) -> str:
         """Con un nombre propio, el tipo de efecto queda a la derecha, tenue."""
@@ -216,39 +193,6 @@ class LookPanel(_ListPanel):
             self.modulesRequested.emit()
         elif chosen is not None:
             self.add_item(LookLayer.new(chosen.data()))
-
-    def _move(self, step: int) -> None:
-        row = self.list.currentRow()
-        items = self.items()
-        target = row + step
-        if 0 <= row < len(items) and 0 <= target < len(items):
-            items.insert(target, items.pop(row))
-            self.refresh_list(select=target)
-            self.emit_both()
-
-    def _on_rows_moved(self, _parent, start: int, end: int, _dest_parent, dest: int) -> None:
-        """Se arrastró una fila: el proyecto sigue el orden nuevo (la lista ya lo tiene)."""
-        items = self.items()
-        if self._reordering or self._loading or start != end or not 0 <= start < len(items):
-            return
-        target = dest - 1 if dest > start else dest
-        target = min(max(target, 0), len(items) - 1)
-        if target == start:
-            return
-        self._reordering = True
-        items.insert(target, items.pop(start))
-        # La lista se rehace fuera del arrastre (aún no ha terminado de soltarse).
-        QTimer.singleShot(0, lambda: self._after_drag(target))
-
-    def _after_drag(self, target: int) -> None:
-        self.refresh_list(select=target)
-        self._reordering = False
-        self.emit_both()
-
-    def _sync_buttons(self) -> None:
-        row = self.list.currentRow()
-        self.up_button.setEnabled(row > 0)
-        self.down_button.setEnabled(0 <= row < len(self.items()) - 1)
 
     # --- Ajustes del efecto elegido ------------------------------------------
     def _kind_box(self, key: str) -> tuple[QWidget, dict]:
