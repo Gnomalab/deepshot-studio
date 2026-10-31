@@ -132,7 +132,7 @@ def test_dialog_creates_the_requested_maps_for_every_photo_and_reports(tmp_path,
         QApplication.processEvents()
     assert [c[0] for c in calls] == ["a.png", "b.png"] and all(c[1] == 512 for c in calls)    # la resolución elegida
     names = sorted(p.name for p in (tmp_path / "salida").iterdir())
-    tag = "marigold-v1-0_high_512px"                                    # modelo, calidad y resolución elegida
+    tag = "marigold-v1-0_fast_512px"                                    # modelo, calidad (por defecto «fast») y resolución elegida
     assert names == [f"a_depth_{tag}.png", f"a_normal_{tag}.png", f"b_depth_{tag}.png", f"b_normal_{tag}.png"]
     assert "2 de 2" in dialog.status.text() and dialog.run_button.isEnabled()
     assert dialog.results.count() == 2 and "a.png" in dialog.results.item(0).text() and "Listo en" in dialog.results.item(0).text()
