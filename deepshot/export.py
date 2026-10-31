@@ -299,10 +299,10 @@ def export_depth(depth: np.ndarray, options: ExportOptions, progress: Progress =
 
 
 def _render_full(project: Project, depth: np.ndarray, photo_path: Path, painted_mask: np.ndarray | None,
-                 progress: Progress, with_look: bool) -> np.ndarray:
+                 progress: Progress, with_look: bool, crop: tuple | None = None) -> np.ndarray:
     """Carga la foto y procesa la imagen a la resolución del mapa de profundidad (con o sin la pila de Look)."""
     progress(QCoreApplication.translate("Export", "Cargando la fotografía…"), 0.05)
-    photo = load_photo(Path(photo_path))
+    photo = load_photo(Path(photo_path), crop)               # con el reencuadre previo, solo esa zona (como el mapa)
     mask = None
     if painted_mask is not None and project.composite.mask == "painted":
         h, w = depth.shape
@@ -315,7 +315,8 @@ def _render_full(project: Project, depth: np.ndarray, photo_path: Path, painted_
 
 
 def export_effect(project: Project, depth: np.ndarray, photo_path: Path, options: ExportOptions,
-                  painted_mask: np.ndarray | None = None, progress: Progress = _no_progress) -> list[Path]:
+                  painted_mask: np.ndarray | None = None, progress: Progress = _no_progress,
+                  crop: tuple | None = None) -> list[Path]:
     """Procesa el efecto a resolución completa y lo guarda (y los ajustes en JSON, si se pide).
 
     painted_mask: máscara pintada (uint8, 2D) en memoria; se reescala al tamaño del mapa.
@@ -324,7 +325,7 @@ def export_effect(project: Project, depth: np.ndarray, photo_path: Path, options
     options.validate()
     options.folder.mkdir(parents=True, exist_ok=True)
     final = options.content == "final"
-    image = _render_full(project, depth, photo_path, painted_mask, progress, with_look=final)
+    image = _render_full(project, depth, photo_path, painted_mask, progress, with_look=final, crop=crop)
     exif = _exif_bytes(Path(photo_path)) if final and options.keep_metadata else None
     if final:                                                                # tamaño elegido, con Lanczos
         h, w = image.shape[:2]

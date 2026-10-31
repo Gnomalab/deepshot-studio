@@ -10,8 +10,8 @@ from __future__ import annotations
 import copy
 from pathlib import Path
 
-from PySide6.QtCore import QCoreApplication, QEvent, QRect, QSize, Qt, QT_TRANSLATE_NOOP, QTimer, Signal
-from PySide6.QtGui import QColor, QIcon, QPainter, QPalette, QPen, QPixmap
+from PySide6.QtCore import QCoreApplication, QEvent, QRect, QRectF, QSize, Qt, QT_TRANSLATE_NOOP, QTimer, Signal
+from PySide6.QtGui import QColor, QFont, QIcon, QPainter, QPalette, QPen, QPixmap
 from PySide6.QtWidgets import QStyle, QStyleOptionViewItem
 from PySide6.QtWidgets import (
     QAbstractItemView,
@@ -146,8 +146,9 @@ COLOR_ROLE = Qt.UserRole + 2        # QColor del cuadro de color de la fila (sin
 
 
 class _RowDelegate(QStyledItemDelegate):
-    """Fila al estilo Photoshop, de izquierda a derecha: ojo (bypass: lleno = se aplica, tenue = se salta), nombre (doble
-    clic o F2: renombrar), un detalle tenue y un cuadro de color ancho (clic: elegir color)."""
+    """Fila al estilo Photoshop, de izquierda a derecha: ojo (bypass: lleno = se aplica, tenue = se salta), «S» de solo (en
+    la vista solo se ve este elemento), nombre (doble clic o F2: renombrar), un detalle tenue y un cuadro de color ancho
+    (clic: elegir color)."""
 
     EYE = 16
     MARGIN = 6
@@ -157,6 +158,10 @@ class _RowDelegate(QStyledItemDelegate):
     def _eye_rect(self, rect: QRect) -> QRect:
         return QRect(rect.left() + self.MARGIN, rect.center().y() - self.EYE // 2, self.EYE, self.EYE)
 
+    def _solo_rect(self, rect: QRect) -> QRect:
+        eye = self._eye_rect(rect)
+        return QRect(eye.right() + 5, eye.top(), self.EYE, self.EYE)
+
     def _swatch_rect(self, rect: QRect, index) -> QRect | None:
         if index.data(COLOR_ROLE) is None:
             return None
@@ -164,7 +169,7 @@ class _RowDelegate(QStyledItemDelegate):
         return QRect(rect.right() - self.MARGIN - w, rect.center().y() - h // 2, w, h)
 
     def _text_rect(self, rect: QRect, index) -> QRect:
-        left = self._eye_rect(rect).right() + self.MARGIN
+        left = self._solo_rect(rect).right() + self.MARGIN
         swatch = self._swatch_rect(rect, index)
         right = (swatch.left() if swatch else rect.right()) - self.MARGIN
         return QRect(left, rect.top(), max(right - left, 10), rect.height())
@@ -192,6 +197,20 @@ class _RowDelegate(QStyledItemDelegate):
         painter.setRenderHint(QPainter.Antialiasing, True)
         painter.setOpacity(1.0 if enabled else 0.28)                    # el ojo, tenue en bypass
         painter.drawPixmap(self._eye_rect(rect), icon("eye").pixmap(self.EYE, self.EYE))
+        solo = index.row() in panel.solo
+        solo_rect = QRectF(self._solo_rect(rect)).adjusted(0.5, 0.5, -0.5, -0.5)
+        painter.setOpacity(1.0 if solo else 0.55)                       # la «S»: llena y de acento si está en solo
+        painter.setPen(QPen(theme.color("on_accent" if solo else "text_dim"), 1.0))     # con borde claro: se ve también en la fila elegida
+        painter.setBrush(theme.color("accent") if solo else Qt.NoBrush)
+        painter.drawRoundedRect(solo_rect, 3, 3)
+        painter.setBrush(Qt.NoBrush)
+        font = QFont(option.font)
+        font.setBold(True)
+        font.setPointSizeF(max(option.font.pointSizeF() - 2, 6.5))
+        painter.setFont(font)
+        painter.setPen(theme.color("on_accent" if solo else "text_dim"))
+        painter.drawText(solo_rect, Qt.AlignCenter, "S")
+        painter.setFont(option.font)
         painter.setOpacity(1.0 if enabled else 0.4)                     # y el resto de la fila apagado
         text_rect = self._text_rect(rect, index)
         detail = index.data(DETAIL_ROLE) or ""
@@ -213,8 +232,10 @@ class _RowDelegate(QStyledItemDelegate):
         painter.restore()
 
     def _hit(self, rect: QRect, index, pos) -> str:
-        if self._eye_rect(rect).adjusted(-3, -3, 3, 3).contains(pos):
+        if self._eye_rect(rect).adjusted(-3, -3, 2, 3).contains(pos):
             return "eye"
+        if self._solo_rect(rect).adjusted(-2, -3, 3, 3).contains(pos):
+            return "solo"
         swatch = self._swatch_rect(rect, index)
         if swatch is not None and swatch.adjusted(-2, -2, 2, 2).contains(pos):
             return "color"
@@ -227,6 +248,8 @@ class _RowDelegate(QStyledItemDelegate):
                 if event.type() == QEvent.MouseButtonRelease:       # el doble clic en ojo o color no abre el editor de nombre
                     if hit == "eye":
                         self.parent().toggle_row_enabled(index.row())
+                    elif hit == "solo":
+                        self.parent().toggle_row_solo(index.row())
                     else:
                         self.parent().pick_row_color(index.row())
                 return True
@@ -236,6 +259,10 @@ class _RowDelegate(QStyledItemDelegate):
         hit = self._hit(option.rect, index, event.pos())
         if hit == "eye":
             QToolTip.showText(event.globalPos(), view.tr("Aplicar: el elemento se aplica o se salta (bypass) con un clic"), view)
+            return True
+        if hit == "solo":
+            QToolTip.showText(event.globalPos(), view.tr("Solo: en la vista previa solo se ve este elemento (clic para "
+                                                         "ponerlo o quitarlo). No cambia lo que se exporta."), view)
             return True
         if hit == "color":
             QToolTip.showText(event.globalPos(), view.tr("Color (clic para cambiarlo)"), view)
@@ -291,6 +318,9 @@ class _ListPanel(_Panel):
         self.list.model().rowsMoved.connect(self._on_rows_moved)
         self.list.viewport().setCursor(Qt.OpenHandCursor)           # la mano: las filas se arrastran para recolocarlas
         self._reordering = False
+        # «Solo», como en un programa de audio o de capas: la «S» de cada fila deja en la vista previa solo ese elemento
+        # (se pueden dejar varios). Es solo de vista: no se guarda ni se exporta.
+        self.solo: set[int] = set()
         self.props = QWidget()
         self.props_layout = QVBoxLayout(self.props)
         self.props_layout.setContentsMargins(0, 4, 0, 0)
@@ -322,10 +352,29 @@ class _ListPanel(_Panel):
 
     def bind(self, project: Project) -> None:
         self.project = project
+        self.solo.clear()                            # otra foto o un deshacer: el «solo» no se arrastra
         self.refresh_list(select=0)
 
     def _label(self, i: int, item) -> str:
         return self.item_label(i, item)
+
+    def _valid_solo(self) -> set[int]:
+        """Las filas en «solo» que existen (un índice de una fila ya borrada no esconde nada)."""
+        count = len(self.items())
+        return {r for r in self.solo if 0 <= r < count}
+
+    def hidden_by_solo(self, row: int) -> bool:
+        """True si hay elementos en «solo» y este no es uno de ellos (no se ve ni se dibuja en la vista previa)."""
+        solo = self._valid_solo()
+        return bool(solo) and row not in solo
+
+    def toggle_row_solo(self, row: int) -> None:
+        """La «S» de una fila: pone o quita el «solo» de esa fila."""
+        if not 0 <= row < len(self.items()):
+            return
+        self.solo.symmetric_difference_update({row})
+        self.list.viewport().update()
+        self.changed.emit()                          # se vuelve a pintar la vista previa y los manejadores (sin deshacer)
 
     def toggle_row_enabled(self, row: int) -> None:
         """El ojo de una fila: aplica o salta ese elemento (bypass). Cambia el proyecto: también se exporta así."""
@@ -338,7 +387,8 @@ class _ListPanel(_Panel):
         self.emit_both()
 
     def _sync_buttons(self) -> None:
-        """Nunca queda un botón activo sin fila a la que mover."""
+        """Nunca queda un botón activo sin fila a la que mover ni un «solo» de una fila que ya no existe."""
+        self.solo = self._valid_solo()
         row = self.list.currentRow()
         self.up_button.setEnabled(row > 0)
         self.down_button.setEnabled(0 <= row < len(self.items()) - 1)
@@ -349,6 +399,7 @@ class _ListPanel(_Panel):
         target = row + step
         if 0 <= row < len(items) and 0 <= target < len(items):
             items.insert(target, items.pop(row))
+            self.solo.clear()                        # las filas se corren: se quita el «solo»
             self.refresh_list(select=target)
             self.emit_both()
 
@@ -363,6 +414,7 @@ class _ListPanel(_Panel):
             return
         self._reordering = True
         items.insert(target, items.pop(start))
+        self.solo.clear()
         # La lista se rehace fuera del arrastre (aún no ha terminado de soltarse).
         QTimer.singleShot(0, lambda: self._after_drag(target))
 
@@ -437,6 +489,8 @@ class _ListPanel(_Panel):
         if self.project is None:
             return
         self.items().append(item)
+        if self.solo:                                # con un «solo» activo, lo nuevo también se ve
+            self.solo.add(len(self.items()) - 1)
         self.refresh_list(select=len(self.items()) - 1)
         if commit:
             self.emit_both()
@@ -462,6 +516,8 @@ class _ListPanel(_Panel):
             if hasattr(clone, "from_style"):
                 clone.from_style = ""                  # una copia es del usuario, aunque el original viniera de un estilo
             self.items().append(clone)
+            if self.solo:
+                self.solo.add(len(self.items()) - 1)
             self.refresh_list(select=len(self.items()) - 1)
             self.emit_both()
 
@@ -469,6 +525,7 @@ class _ListPanel(_Panel):
         row = self.list.currentRow()
         if 0 <= row < len(self.items()):
             del self.items()[row]
+            self.solo.clear()                        # las filas se corren: se quita el «solo»
             self.refresh_list(select=row - 1)
             self.emit_both()
 

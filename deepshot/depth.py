@@ -30,6 +30,7 @@ from pathlib import Path
 import numpy as np
 from PIL import Image, ImageOps
 
+from deepshot import framing
 from deepshot.models import DEFAULT_MODEL, ModelError, ModelManager, ProgressCallback, _no_progress
 from deepshot.paths import app_data_dir
 
@@ -49,10 +50,15 @@ class DepthSettings:
     processing_resolution: int | None = None  # V1.0: 768 px por defecto en el lado mayor
     seed: int = 2024                          # semilla fija: mismo resultado en cada cálculo
     refine: float = 0.0                       # refinado guiado por la foto: 0 = no, 1 = completo
+    crop: tuple[float, float, float, float] | None = None   # reencuadre previo (framing.py): solo se calcula esa región
 
     def key(self) -> str:
-        """Texto estable para la clave de caché (incluye el refinado)."""
-        return json.dumps(asdict(self), sort_keys=True)
+        """Texto estable para la clave de caché (incluye el refinado y el encuadre). Sin encuadre la clave es la de
+        siempre, así que las cachés de antes siguen valiendo."""
+        data = asdict(self)
+        if data["crop"] is None:
+            del data["crop"]
+        return json.dumps(data, sort_keys=True)
 
     def raw_key(self) -> str:
         """Clave de la salida del modelo sin refinar (el refinado se aplica después)."""
@@ -115,10 +121,11 @@ def normalize_depth(raw: np.ndarray, metric: bool) -> np.ndarray:
     return np.clip(1.0 - (inverse - lo) / (hi - lo), 0.0, 1.0).astype(np.float32)
 
 
-def load_photo(path: Path) -> Image.Image:
-    """Abre una foto en RGB aplicando la orientación EXIF (igual que el lienzo)."""
+def load_photo(path: Path, crop: tuple[float, float, float, float] | None = None) -> Image.Image:
+    """Abre una foto en RGB aplicando la orientación EXIF (igual que el lienzo). Con `crop` (framing.py) devuelve solo esa
+    región; el archivo no se toca."""
     with Image.open(path) as img:
-        return ImageOps.exif_transpose(img).convert("RGB")
+        return framing.apply(ImageOps.exif_transpose(img).convert("RGB"), crop)
 
 
 def file_hash(path: Path) -> str:
@@ -388,7 +395,7 @@ class DepthEstimator:
 
             progress(QCoreApplication.translate("Depth", "Refinando bordes con la foto…"), None)
             started = time.perf_counter()
-            depth = refine_depth(depth, np.asarray(load_photo(image_path)), strength=settings.refine)
+            depth = refine_depth(depth, np.asarray(load_photo(image_path, settings.crop)), strength=settings.refine)
             refine_s = time.perf_counter() - started
             save_depth_png16(depth, cached)
             write_timing(cached, {"infer_seconds": infer, "refine_seconds": refine_s})
@@ -411,7 +418,7 @@ class DepthEstimator:
             progress(QCoreApplication.translate("Depth", "Calculando profundidad ({0} pasadas)…").format(settings.ensemble_size), None)
         else:
             progress(QCoreApplication.translate("Depth", "Calculando profundidad…"), None)
-        image = load_photo(image_path)
+        image = load_photo(image_path, settings.crop)
         resolution, ensemble = settings.processing_resolution, settings.ensemble_size
         inferring = time.perf_counter()
         try:

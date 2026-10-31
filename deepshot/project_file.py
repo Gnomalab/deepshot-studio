@@ -49,6 +49,7 @@ class PhotoEntry:
     project: dict | None = None            # ajustes del efecto (Project.to_dict)
     depth: np.ndarray | None = None        # float32 0..1, 0 = cerca
     mask: bytes | None = None              # PNG de la máscara pintada
+    crop: list | None = None               # reencuadre previo (x0, y0, x1, y1 normalizados) o None = foto entera
 
 
 @dataclass
@@ -117,7 +118,8 @@ def save_project(path: Path, photos: list[PhotoEntry], current: int = 0, app_ver
         with zipfile.ZipFile(tmp, "w", zipfile.ZIP_DEFLATED) as z:
             for i, e in enumerate(photos):
                 item = {"path": e.path, "name": e.name or Path(e.path).name, "size": e.size, "sha256": e.sha256,
-                        "source": e.source, "project": e.project, "depth": None, "mask": None}
+                        "source": e.source, "project": e.project, "depth": None, "mask": None,
+                        "crop": list(e.crop) if e.crop else None}
                 if e.depth is not None:
                     item["depth"] = f"depth/{i}.png"
                     z.writestr(item["depth"], _depth_to_png(e.depth), compress_type=zipfile.ZIP_STORED)
@@ -137,7 +139,7 @@ def save_project(path: Path, photos: list[PhotoEntry], current: int = 0, app_ver
 
 
 def entry_for_photo(path: Path, project: dict | None, depth: np.ndarray | None, source: str,
-                    mask_file: Path | None) -> PhotoEntry:
+                    mask_file: Path | None, crop: tuple | None = None) -> PhotoEntry:
     """Reúne los datos de una foto de la biblioteca (calcula su huella si el archivo existe)."""
     path = Path(path)
     size, digest = 0, ""
@@ -151,7 +153,7 @@ def entry_for_photo(path: Path, project: dict | None, depth: np.ndarray | None, 
             mask = Path(mask_file).read_bytes() if Path(mask_file).is_file() else None
         except OSError:
             mask = None
-    return PhotoEntry(str(path), path.name, size, digest, source, project, depth, mask)
+    return PhotoEntry(str(path), path.name, size, digest, source, project, depth, mask, list(crop) if crop else None)
 
 
 # ---------------------------------------------------------------------------
@@ -175,7 +177,8 @@ def load_project(path: Path) -> LoadedProject:
             for item in manifest.get("photos", []):
                 entry = PhotoEntry(path=str(item["path"]), name=str(item.get("name", "")),
                                    size=int(item.get("size", 0)), sha256=str(item.get("sha256", "")),
-                                   source=str(item.get("source", "")), project=item.get("project"))
+                                   source=str(item.get("source", "")), project=item.get("project"),
+                                   crop=item.get("crop") if isinstance(item.get("crop"), list) else None)
                 if item.get("depth") in names:
                     entry.depth = _png_to_depth(z.read(item["depth"]))
                 if item.get("mask") in names:

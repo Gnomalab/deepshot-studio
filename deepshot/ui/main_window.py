@@ -6,6 +6,7 @@ import hashlib
 import json
 import logging
 import threading
+from dataclasses import replace
 from pathlib import Path
 
 from PySide6.QtCore import QByteArray, QCoreApplication, QEvent, QObject, QSettings, QSize, Qt, QT_TRANSLATE_NOOP, QTimer, QUrl, Signal
@@ -16,6 +17,7 @@ from PySide6.QtWidgets import (
     QButtonGroup,
     QCheckBox,
     QComboBox,
+    QDialog,
     QDockWidget,
     QFileDialog,
     QFrame,
@@ -39,7 +41,7 @@ from PIL import Image
 
 from deepshot import (APP_NAME, AUTHOR, ORG_NAME, RELEASE_DATE, WEBSITE, __version__, depth_runs, depth_view, memory,
                       presets, project_file, themes)
-from deepshot import area3d, modules
+from deepshot import area3d, framing, modules
 from deepshot.paint import mask_path_for
 from deepshot.project import Project
 from deepshot.dof import focus_map
@@ -60,7 +62,9 @@ from deepshot.ui.canvas import CanvasView, depth_to_qimage
 from deepshot.ui.depth_worker import DepthWorker
 from deepshot.models import DEFAULT_MODEL, ModelError, ModelManager, can_compute
 from deepshot.ui.editor import EditSession
+from deepshot.ui.crop_dialog import CropDialog
 from deepshot.ui.export_panel import ExportPanel
+from deepshot.ui.photo_panel import PhotoInfoPanel
 from deepshot.ui.help import GuideDialog, ShortcutsDialog
 from deepshot.ui import layouts, theme
 from deepshot.paths import resource
@@ -215,7 +219,9 @@ class MainWindow(QMainWindow):
         self._dirty_timer.setInterval(300)
         self._dirty_timer.timeout.connect(self._refresh_title)
         self.current_path: Path | None = None
-        self.current_photo: QImage | None = None
+        self.current_photo: QImage | None = None      # la foto con el reencuadre aplicado (lo que ven todos los pasos)
+        self.full_photo: QImage | None = None         # la foto entera (solo la usa el diálogo de reencuadre)
+        self.crops: dict[str, tuple] = {}             # ruta de la foto -> reencuadre previo (framing.py)
         self.project_path: Path | None = None        # archivo .deepshot abierto o guardado
         self.depth_maps: dict[str, np.ndarray] = {}  # ruta de la foto -> mapa (0 = cerca)
         self.depth_sources: dict[str, str] = {}      # ruta -> id del modelo o "external" (importado)
@@ -236,6 +242,7 @@ class MainWindow(QMainWindow):
 
         # Edición: un proyecto por foto, vista previa en vivo y deshacer (ui/editor.py).
         self.editor = EditSession(self.undo_stack, self)
+        self.editor.crops = self.crops                  # el editor lee el reencuadre de aquí (set_photo)
         self.editor.resultReady.connect(self._on_result)
         self.editor.overlaysChanged.connect(self._update_overlays)
         self.editor.editableChanged.connect(self._on_editable)
@@ -605,10 +612,13 @@ class MainWindow(QMainWindow):
             label.setWordWrap(True)
             return label
 
-        self.photo_info = hint(self.tr("Ninguna fotografía seleccionada."))
-        import_button = QPushButton(self.tr("Importar fotografía…"))
-        import_button.setToolTip(self.tr("Abre una o varias fotografías (también puedes arrastrarlas a la ventana)"))
-        import_button.clicked.connect(self.import_photos)
+        self.photo_panel = PhotoInfoPanel()
+        self.photo_panel.reframeRequested.connect(self.reframe_photo)
+        self.photo_panel.cropCleared.connect(lambda: self._set_crop(None))
+        # El botón de importar solo sale con la biblioteca vacía: con fotos, el «+» de la biblioteca ya lo hace.
+        self.import_button = QPushButton(self.tr("Importar fotografía…"))
+        self.import_button.setToolTip(self.tr("Abre una o varias fotografías (también puedes arrastrarlas a la ventana)"))
+        self.import_button.clicked.connect(self.import_photos)
 
         # --- Profundidad: calcular dentro de la app o importar un mapa hecho fuera ---
         self.model_combo = QComboBox()
@@ -735,7 +745,7 @@ class MainWindow(QMainWindow):
 
         # Qué secciones se ven en cada paso (índice de STEPS).
         self.sections_by_step: dict[int, list[CollapsibleSection]] = {
-            0: [section(self.tr("Fotografía"), self.photo_info, import_button, key="photo", open_=True)],
+            0: [section(self.tr("Fotografía"), self.import_button, self.photo_panel, key="photo", open_=True)],
             1: [
                 section(self.tr("Mapa de profundidad"), hint(self.tr("Modelo")), model_row, hint(self.tr("Calidad")),
                         self.quality_combo, self.quality_hint, self.resolution_combo, self.refine_check, self.depth_button,
@@ -1074,24 +1084,73 @@ class MainWindow(QMainWindow):
     def _on_library_selection(self, current: QListWidgetItem | None, _previous) -> None:
         if current is None:
             self.current_path = None
-            self.current_photo = None
+            self.current_photo = self.full_photo = None
             self.editor.set_photo(None, None)
             self.canvas.set_image(None)
-            self.photo_info.setText(self.tr("Ninguna fotografía seleccionada."))
+            self.photo_panel.show_photo(None)
+            self.import_button.setVisible(True)
             return
         self.current_path = Path(current.data(Qt.UserRole))
-        self.current_photo = load_image(self.current_path)
+        self.full_photo = load_image(self.current_path)
+        self.current_photo = self._framed(self.full_photo, self.crops.get(str(self.current_path)))
         self._load_cached_depth(self.current_path)
         self._discover_runs(self.current_path)
         self.depth_result_label.hide()
         self._clear_run_selection()
         self._refresh_runs_list()
-        self.photo_info.setText(
-            f"{self.current_path.name}\n{self.current_photo.width()} × {self.current_photo.height()} px")
+        self.import_button.setVisible(False)
+        self.photo_panel.show_photo(self.current_path)
+        self.photo_panel.set_crop(self.crops.get(str(self.current_path)), self._full_size())
         self.statusBar().showMessage(self.current_path.name)
         self.export_panel.refresh_for_photo()
         self._sync_editor()
         self._show_current(keep_view=False)
+
+    # =====================================================================
+    # Reencuadre previo (framing.py): se trabaja solo con una zona de la foto, sin tocar el archivo
+    # =====================================================================
+    def _full_size(self) -> tuple[int, int] | None:
+        return (self.full_photo.width(), self.full_photo.height()) if self.full_photo is not None else None
+
+    @staticmethod
+    def _framed(image: QImage, crop: tuple | None) -> QImage:
+        """La foto con el encuadre aplicado (la misma si no hay)."""
+        if crop is None:
+            return image
+        left, top, right, bottom = framing.to_box(crop, (image.width(), image.height()))
+        return image.copy(left, top, right - left, bottom - top)
+
+    def reframe_photo(self) -> None:
+        """Abre el diálogo de reencuadre de la foto elegida."""
+        if self.full_photo is None or self.current_path is None:
+            return
+        dialog = CropDialog(self.full_photo, self.crops.get(str(self.current_path)), self)
+        if dialog.exec() == QDialog.Accepted:
+            self._set_crop(dialog.crop())
+
+    def _set_crop(self, crop: tuple | None) -> None:
+        """Pone (o quita) el encuadre de la foto actual. El mapa de profundidad de antes era de otra zona: se busca el de esta
+        zona en la caché y, si no está, la foto queda sin mapa hasta calcularlo."""
+        if self.current_path is None or self.full_photo is None:
+            return
+        key = str(self.current_path)
+        crop = framing.normalize(crop)
+        if crop == self.crops.get(key):
+            return
+        if crop is None:
+            self.crops.pop(key, None)
+        else:
+            self.crops[key] = crop
+        self.depth_maps.pop(key, None)
+        self.depth_sources.pop(key, None)
+        self.current_photo = self._framed(self.full_photo, crop)
+        self._load_cached_depth(self.current_path)
+        self._refresh_runs_list()
+        self.photo_panel.set_crop(crop, self._full_size())
+        self._sync_editor()
+        self._show_current(keep_view=False)
+        if key not in self.depth_maps:
+            self.statusBar().showMessage(self.tr("Encuadre cambiado: calcula la profundidad de esta zona (paso 2)."), 6000)
 
     # =====================================================================
     # Vista del lienzo
@@ -1233,7 +1292,7 @@ class MainWindow(QMainWindow):
         if depth is None:
             return None
         return {"path": self.current_path, "depth": depth, "project": self.editor.project,
-                "mask": self.editor._mask_array()}
+                "mask": self.editor._mask_array(), "crop": self.crops.get(str(self.current_path))}
 
     def _on_exported(self, paths: list) -> None:
         names = ", ".join(Path(p).name for p in paths)
@@ -1316,7 +1375,7 @@ class MainWindow(QMainWindow):
         r = project.ramp
         out = []
         for i, b in enumerate(project.bands):
-            if b.enabled and b.strength > 0:
+            if b.enabled and b.strength > 0 and not self.editor.bands_panel.hidden_by_solo(i):
                 frame = area3d.BandFrame(b.position, b.width, b.pan, b.tilt, r.range_min, r.range_max,
                                          project.scene.relief, aspect)
                 out.append((view3d_math.band_plane(b.position, b.pan, b.tilt, r.range_min, r.range_max,
@@ -1729,7 +1788,7 @@ class MainWindow(QMainWindow):
             mask = settings["composite"].get("painted_mask") if settings else ""
             entries.append(project_file.entry_for_photo(
                 Path(path), settings, self.depth_maps.get(path), self.depth_sources.get(path, ""),
-                Path(mask) if mask else None))
+                Path(mask) if mask else None, self.crops.get(path)))
         return entries
 
     def save_project(self) -> bool:
@@ -1826,6 +1885,11 @@ class MainWindow(QMainWindow):
         Devuelve True si hubo que descartar su trabajo porque la foto ya no coincide con el mapa."""
         key = str(photo)
         size = project_file.photo_size(photo)
+        crop = framing.normalize(entry.crop)
+        if crop is not None:
+            self.crops[key] = crop
+            if size is not None:
+                size = framing.cropped_size(crop, size)          # el mapa guardado es el de la zona encuadrada
         if entry.depth is not None and size is not None and (entry.depth.shape[1], entry.depth.shape[0]) != size:
             log.warning("La foto %s no coincide con su mapa guardado: se descartan mapa y ajustes", photo.name)
             return True
@@ -2254,10 +2318,12 @@ class MainWindow(QMainWindow):
 
     def _depth_settings(self) -> DepthSettings:
         """Ajustes actuales del panel: modelo, calidad y refinado."""
-        return settings_for(model=self.model_combo.currentData() or DEFAULT_MODEL,
-                            quality=self.quality_combo.currentData() or DEFAULT_QUALITY,
-                            refine=1.0 if self.refine_check.isChecked() else 0.0,
-                            resolution=self.resolution_combo.currentData() or None)
+        settings = settings_for(model=self.model_combo.currentData() or DEFAULT_MODEL,
+                                quality=self.quality_combo.currentData() or DEFAULT_QUALITY,
+                                refine=1.0 if self.refine_check.isChecked() else 0.0,
+                                resolution=self.resolution_combo.currentData() or None)
+        crop = self.crops.get(str(self.current_path)) if self.current_path is not None else None
+        return replace(settings, crop=crop) if crop else settings          # el encuadre entra en la clave de la caché
 
     def _update_params_label(self) -> None:
         """Pie de ventana: modelo · calidad · refinado."""
@@ -2526,6 +2592,13 @@ class MainWindow(QMainWindow):
             log.warning("No se pudo abrir el mapa %s: %s", file, exc)
             QMessageBox.warning(self, "Cargar mapa", f"No se pudo abrir «{Path(file).name}».")
             return
+        crop = self.crops.get(str(self.current_path))
+        if crop is not None:                    # el mapa es de la foto entera: se encuadra igual que la foto
+            full = self._full_size()
+            if (depth.shape[1], depth.shape[0]) != full:
+                depth = np.clip(np.asarray(Image.fromarray(depth, mode="F").resize(full, Image.BICUBIC), dtype=np.float32), 0.0, 1.0)
+            left, top, right, bottom = framing.to_box(crop, full)
+            depth = np.ascontiguousarray(depth[top:bottom, left:right])
         # Si el mapa no tiene el tamaño de la foto, se reescala para que coincidan píxel a píxel.
         size = (self.current_photo.width(), self.current_photo.height())
         if (depth.shape[1], depth.shape[0]) != size:

@@ -475,6 +475,7 @@ class ExportPanel(QWidget):
         depth, path = ctx["depth"], Path(ctx["path"])
         project = Project.from_dict(ctx["project"].to_dict()) if ctx.get("project") is not None else None
         mask = ctx.get("mask")
+        crop = ctx.get("crop")                       # reencuadre previo de la foto (None = entera)
 
         if options.content == "depth" or project is None:
             def job(progress):
@@ -482,7 +483,8 @@ class ExportPanel(QWidget):
                 return [ex.export_depth(depth, options, progress, depth_control=control)]
         else:
             def job(progress):
-                return ex.export_effect(project, depth, path, options, painted_mask=mask, progress=progress)
+                return ex.export_effect(project, depth, path, options, painted_mask=mask, progress=progress,
+                                        crop=crop)
 
         if not self._worker.start(job):
             self.status.setText(self.tr("Ya hay una exportación en marcha."))

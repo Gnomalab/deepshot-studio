@@ -152,11 +152,17 @@ class LookPanel(_ListPanel):
         if changed:
             self.emit_both()
 
+    def _shift_solo(self, row: int) -> None:
+        """Se mete una fila nueva en `row`: los «solo» de las de debajo bajan un puesto y la nueva se ve también."""
+        if self.solo:
+            self.solo = {r + 1 if r >= row else r for r in self.solo} | {row}
+
     def add_item(self, item, commit: bool = True) -> None:
         """Un efecto nuevo entra arriba de la pila (como una capa nueva en Photoshop)."""
         if self.project is None:
             return
         self.items().insert(0, item)
+        self._shift_solo(0)
         self.refresh_list(select=0)
         if commit:
             self.emit_both()
@@ -169,6 +175,7 @@ class LookPanel(_ListPanel):
         if clone.name:
             clone.name += " " + self.tr("copia")
         self.items().insert(row, clone)                                  # justo encima del original
+        self._shift_solo(row)
         self.refresh_list(select=row)
         self.emit_both()
 

@@ -1902,7 +1902,7 @@ def test_the_row_eye_bypasses_the_element_and_rows_rename_in_place(win):
     editor, panel = win.editor, win.editor.areas_panel
     for name, x in (("A", -0.6), ("B", 0.0), ("C", 0.6)):
         panel.add_item(Area(name=name, center=(x, 0.0, 0.5), scale=(0.25, 0.25, 0.25)))
-    assert not hasattr(panel, "solo") and not hasattr(panel, "solo_button")   # el ojo es bypass; ya no hay solo ni casilla
+    assert not hasattr(panel, "solo_button")                                # el ojo es bypass; el «solo» es la «S» de cada fila
     assert panel.list.item(0).data(Qt.CheckStateRole) is None               # sin casilla en la fila
     assert [o["index"] for o in editor.overlays()] == [0, 1, 2]
     panel.toggle_row_enabled(1)                                             # el ojo de una fila: se salta esa área
@@ -1923,6 +1923,41 @@ def test_the_row_eye_bypasses_the_element_and_rows_rename_in_place(win):
     editor.bands_panel.select(0)
     editor.bands_panel._remove()                                            # borrar: queda la banda que estaba en bypass
     assert len(editor.project.bands) == 1 and editor.project.bands[0].enabled is False
+
+
+def test_the_row_solo_shows_only_that_element_in_the_preview_without_touching_the_project(win):
+    from deepshot.tonemap import Band
+
+    win.add_photos(win._photos[:1])
+    give_depth(win)
+    wait_for(win, lambda: win.editor.result is not None)
+    win.set_step(STEP_EDIT)
+    editor, panel = win.editor, win.editor.areas_panel
+    for name, x in (("A", -0.6), ("B", 0.0), ("C", 0.6)):
+        panel.add_item(Area(name=name, center=(x, 0.0, 0.5), scale=(0.25, 0.25, 0.25)))
+    assert editor._preview_project() is editor.project                      # sin solo, el proyecto tal cual
+    panel.toggle_row_solo(1)                                                # la «S» de una fila
+    assert panel.solo == {1}
+    assert [a.enabled for a in editor._preview_project().areas] == [False, True, False]
+    assert all(a.enabled for a in editor.project.areas)                     # el proyecto real no cambia (ni se exporta distinto)
+    assert [o["index"] for o in editor.overlays()] == [1]                   # en 2D solo sus contornos
+    panel.toggle_row_solo(2)                                                # se pueden dejar varias
+    assert [a.enabled for a in editor._preview_project().areas] == [False, True, True]
+    panel.toggle_row_solo(1)
+    panel.toggle_row_solo(2)
+    assert editor._preview_project() is editor.project
+    panel.toggle_row_enabled(0)                                             # un elemento en bypass con «solo» sí se ve
+    panel.toggle_row_solo(0)
+    assert [a.enabled for a in editor._preview_project().areas] == [True, False, False]
+    assert editor.project.areas[0].enabled is False
+    panel.add_item(Area(name="D"))                                          # lo nuevo también se ve con un «solo» activo
+    assert panel.solo == {0, 3}
+    panel._remove()                                                         # al borrar, las filas se corren y el «solo» se quita
+    assert panel.solo == set() and editor._preview_project() is editor.project
+    editor.project.bands.extend([Band(position=0.3), Band(position=0.6)])
+    editor.bands_panel.bind(editor.project)
+    editor.bands_panel.toggle_row_solo(1)
+    assert [b.enabled for b in editor._preview_project().bands] == [False, True]
 
 
 def test_rows_double_click_on_the_eye_or_color_does_not_open_the_name_editor_and_rows_reorder(win):
@@ -1996,3 +2031,29 @@ def test_sections_start_folded_remember_their_state_and_ctrl_click_opens_only_on
         s.set_expanded(True, silent=True)                                   # y el ancho del panel se mide con todo abierto
     w._probe.wait()
     w.close()
+
+
+def test_reframing_works_on_a_region_and_leaves_the_file_alone(win, tmp_path):
+    win.add_photos(win._photos[:1])
+    path = str(win._photos[0])
+    assert win.photo_panel.reframe_button.isEnabled() and not win.photo_panel.clear_button.isEnabled()
+    assert not win.import_button.isVisibleTo(win)                           # con fotos, el botón de importar no se repite
+    full = (win.current_photo.width(), win.current_photo.height())
+    assert full == (W, H) and win._depth_settings().crop is None
+    plain_key = win._depth_settings().key()
+    win._set_crop((0.25, 0.25, 0.75, 0.75))                                 # el diálogo llama a esto al aceptar
+    assert (win.current_photo.width(), win.current_photo.height()) == (W // 2, H // 2)
+    assert win._depth_settings().crop == (0.25, 0.25, 0.75, 0.75) and win._depth_settings().key() != plain_key
+    assert win.editor.crops[path] == (0.25, 0.25, 0.75, 0.75)               # el editor y la exportación leen el mismo encuadre
+    assert win._export_context() is None                                    # sin mapa de esa zona: aún no hay nada que exportar
+    assert win.photo_panel.clear_button.isEnabled()
+    assert Image.open(win._photos[0]).size == (W, H)                        # el archivo original no cambia
+    depth = np.zeros((H // 2, W // 2), np.float32)
+    win.depth_maps[path] = depth
+    win._sync_editor()
+    assert win._export_context()["crop"] == (0.25, 0.25, 0.75, 0.75)
+    entries = win._project_entries()
+    assert entries[0].crop == [0.25, 0.25, 0.75, 0.75] or entries[0].crop == (0.25, 0.25, 0.75, 0.75)
+    win._set_crop(None)                                                     # «Foto entera»
+    assert (win.current_photo.width(), win.current_photo.height()) == (W, H) and path not in win.crops
+    assert win._depth_settings().key() == plain_key                         # la clave vuelve a ser la de siempre

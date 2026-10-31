@@ -101,6 +101,7 @@ class EditSession(QObject):
         super().__init__(parent)
         self.undo_stack = undo_stack
         self.projects: dict[str, Project] = {}
+        self.crops: dict[str, tuple] = {}              # reencuadre previo por foto (framing.py); lo comparte la ventana principal
         self.path: str | None = None
         self.depth: np.ndarray | None = None
         self._focus_before: tuple[float, bool] | None = None     # foco previo mientras actúa el cuentagotas
@@ -205,7 +206,7 @@ class EditSession(QObject):
             self.render.set_source(None, None)
             self.overlaysChanged.emit()
             return
-        photo = load_photo(Path(path))
+        photo = load_photo(Path(path), self.crops.get(self.path))
         self.photo_size = photo.size
         if self.path not in self.projects:
             self.projects[self.path] = self.new_project(depth)
@@ -270,11 +271,28 @@ class EditSession(QObject):
     def _request_render(self) -> None:
         """Pide una vista previa con los ajustes actuales y, si hace falta, la máscara pintada."""
         if self.project is not None:
-            self.render.request(self.project, self._mask_array())
+            self.render.request(self._preview_project(), self._mask_array())
+
+    def _preview_project(self) -> Project:
+        """El proyecto tal cual, o —con algo en «solo»— una copia donde lo que no está en solo queda desactivado y lo que
+        sí lo está se aplica aunque su ojo esté apagado. Solo vale para la vista previa: lo que se guarda y se exporta es
+        siempre el proyecto entero."""
+        project = self.project
+        solos = {"areas": self.areas_panel.solo, "bands": self.bands_panel.solo, "look": self.look_panel.solo}
+        if not any(solos.values()):
+            return project
+        clone = Project.from_dict(project.to_dict())
+        for group, items in (("areas", clone.areas), ("bands", clone.bands), ("look", clone.look)):
+            solo = solos[group]
+            for i, item in enumerate(items):
+                if solo:
+                    item.enabled = i in solo
+        return clone
 
     def visible_areas(self) -> list[Area]:
-        """Las áreas del proyecto (las desactivadas por su ojo no se dibujan ni llevan manejadores)."""
-        return self.project.areas
+        """Las áreas del proyecto; las que quedan fuera por un «solo» salen desactivadas (para no dibujar sus manejadores)."""
+        return [replace(a, enabled=False) if self.areas_panel.hidden_by_solo(i) else a
+                for i, a in enumerate(self.project.areas)]
 
 
     def project_dict(self, path: str) -> dict | None:
@@ -576,7 +594,7 @@ class EditSession(QObject):
             return []
         result = []
         for i, a in enumerate(self.project.areas):
-            if not a.enabled:
+            if not a.enabled or self.areas_panel.hidden_by_solo(i):
                 continue
             result.append({**area_edit.outline(a, geo), "index": i, "selected": i == self.selected_area,
                            "strength": a.strength, "soft": a.edge_softness, "name": a.name,
