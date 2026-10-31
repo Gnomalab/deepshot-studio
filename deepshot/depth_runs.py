@@ -12,7 +12,7 @@ from __future__ import annotations
 
 from PySide6.QtCore import QCoreApplication
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 
 import numpy as np
@@ -105,15 +105,18 @@ class RunList:
         self.entries = [e for e in self.entries if e.key == key]
 
 
-def discover(photo: Path, model_ids: list[str]) -> list[RunEntry]:
+def discover(photo: Path, model_ids: list[str], crop: tuple | None = None) -> list[RunEntry]:
     """Cálculos de esta foto que ya están en la caché de disco, con sus tiempos, para todos los modelos, calidades y
-    con o sin refinado. Solo mira si existen los archivos; no lee los mapas."""
+    con o sin refinado, para el encuadre `crop` (framing.py; None = foto entera). Solo mira si existen los archivos; no lee
+    los mapas."""
     digest = file_hash(photo)
     found = []
     for model in model_ids:
         for quality in QUALITY_PRESETS:
             for refine in (0.0, 1.0):
                 settings = settings_for(model=model, quality=quality, refine=refine)
+                if crop:
+                    settings = replace(settings, crop=crop)
                 png = cache_path(photo, settings, photo_hash=digest)
                 if png.is_file():
                     t = read_timing(png)

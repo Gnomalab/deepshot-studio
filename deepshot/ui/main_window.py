@@ -1144,7 +1144,9 @@ class MainWindow(QMainWindow):
         self.depth_maps.pop(key, None)
         self.depth_sources.pop(key, None)
         self.current_photo = self._framed(self.full_photo, crop)
+        self.depth_runs.pop(key, None)                    # los cálculos de la lista eran de otra zona: se vuelve a mirar la caché
         self._load_cached_depth(self.current_path)
+        self._discover_runs(self.current_path)
         self._refresh_runs_list()
         self.photo_panel.set_crop(crop, self._full_size())
         self._sync_editor()
@@ -2031,7 +2033,8 @@ class MainWindow(QMainWindow):
         """Recupera de la caché de disco los cálculos anteriores de esta foto (con sus tiempos), sin leer los mapas."""
         runs = self._runs_for(str(path))
         try:
-            found = depth_runs.discover(path, [m.id for m in self.models.all(include_hidden=True)])
+            found = depth_runs.discover(path, [m.id for m in self.models.all(include_hidden=True)],
+                                        self.crops.get(str(path)))
         except OSError as exc:
             log.warning("No se pudo mirar la caché de profundidad: %s", exc)
             return

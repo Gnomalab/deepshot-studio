@@ -87,3 +87,21 @@ def test_crop_dialog_applies_proportions_and_resets():
     assert dialog.crop() is None
     dialog.deleteLater()
     app.processEvents()
+
+
+def test_discovered_runs_follow_the_crop(tmp_path, monkeypatch):
+    from deepshot import depth_runs
+
+    monkeypatch.setenv("DEEPSHOT_DATA_DIR", str(tmp_path / "data"))
+    photo = tmp_path / "f.png"
+    Image.new("RGB", (40, 30)).save(photo)
+    crop = (0.1, 0.1, 0.6, 0.6)
+    plain = depth.settings_for(model="marigold-v1-0", quality="fast")
+    depth.cache_path(photo, plain).write_bytes(b"x")                         # un mapa de la foto entera en la caché
+    assert len(depth_runs.discover(photo, ["marigold-v1-0"])) == 1
+    assert depth_runs.discover(photo, ["marigold-v1-0"], crop) == []          # con encuadre no se ofrece el mapa de la foto entera
+    from dataclasses import replace
+
+    depth.cache_path(photo, replace(plain, crop=crop)).write_bytes(b"x")
+    found = depth_runs.discover(photo, ["marigold-v1-0"], crop)
+    assert len(found) == 1 and found[0].settings.crop == crop
