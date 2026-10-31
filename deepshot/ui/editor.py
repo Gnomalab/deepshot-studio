@@ -155,6 +155,7 @@ class EditSession(QObject):
         self.areas_panel.changed.connect(lambda: self.set_edit_context("areas"))
         self.areas_panel.toolChanged.connect(lambda tool: self.set_edit_context("areas") if tool else None)
         self.bands_panel.selectionChanged.connect(lambda _row: self.set_edit_context("bands"))
+        self.bands_panel.selectionChanged.connect(lambda _row: self.overlaysChanged.emit())   # el tirador 3D sigue a la fila
         self.bands_panel.changed.connect(lambda: self.set_edit_context("bands"))
         # Y tocar cualquier control de uno de los dos paneles (aunque no cambie nada, p. ej. pulsar la fila ya elegida).
         self._context_watcher = _ContextWatcher(self)
@@ -269,31 +270,11 @@ class EditSession(QObject):
     def _request_render(self) -> None:
         """Pide una vista previa con los ajustes actuales y, si hace falta, la máscara pintada."""
         if self.project is not None:
-            self.render.request(self._preview_project(), self._mask_array())
-
-    def _preview_project(self) -> Project:
-        """El proyecto tal cual, o —con algo en «solo»— una copia donde lo que no está en solo queda desactivado. Solo
-        vale para la vista previa: lo que se guarda y se exporta es siempre el proyecto entero."""
-        project = self.project
-        areas_solo, bands_solo, look_solo = self.areas_panel.solo, self.bands_panel.solo, self.look_panel.solo
-        if not (areas_solo or bands_solo or look_solo):
-            return project
-        clone = Project.from_dict(project.to_dict())
-        for i, area in enumerate(clone.areas):
-            if areas_solo and i not in areas_solo:
-                area.enabled = False
-        for i, band in enumerate(clone.bands):
-            if bands_solo and i not in bands_solo:
-                band.enabled = False
-        for i, layer in enumerate(clone.look):
-            if look_solo and i not in look_solo:
-                layer.enabled = False
-        return clone
+            self.render.request(self.project, self._mask_array())
 
     def visible_areas(self) -> list[Area]:
-        """Las áreas del proyecto; las que quedan fuera por un «solo» salen desactivadas (para no dibujar sus manejadores)."""
-        return [replace(a, enabled=False) if self.areas_panel.hidden_by_solo(i) else a
-                for i, a in enumerate(self.project.areas)]
+        """Las áreas del proyecto (las desactivadas por su ojo no se dibujan ni llevan manejadores)."""
+        return self.project.areas
 
 
     def project_dict(self, path: str) -> dict | None:
@@ -595,7 +576,7 @@ class EditSession(QObject):
             return []
         result = []
         for i, a in enumerate(self.project.areas):
-            if not a.enabled or self.areas_panel.hidden_by_solo(i):
+            if not a.enabled:
                 continue
             result.append({**area_edit.outline(a, geo), "index": i, "selected": i == self.selected_area,
                            "strength": a.strength, "soft": a.edge_softness, "name": a.name,
@@ -715,6 +696,36 @@ class EditSession(QObject):
             self._finish_gesture((0.0, 0.0), None)
         elif phase == "cancel":
             self._cancel_gesture()
+
+    def band_gesture3d(self, g: dict) -> None:
+        """Gesto sobre los tiradores de una banda en la vista 3D (viene de `View3D.bandGesture`). Mismo ciclo que en las
+        áreas: press recuerda la banda, move le pone los valores nuevos, release apila un único paso de deshacer y
+        cancel la deja como estaba."""
+        if self.project is None or not 0 <= g["index"] < len(self.project.bands):
+            return
+        band, phase = self.project.bands[g["index"]], g["phase"]
+        if phase == "press":
+            self.bands_panel.select(g["index"])
+            self._gesture = {"kind": "band3d", "index": g["index"], "band0": copy.deepcopy(band), "moved": False}
+            return
+        st = self._gesture
+        if st is None or st["kind"] != "band3d":
+            return
+        if phase == "move":
+            band.position, band.width, band.pan, band.tilt = g["position"], g["width"], g["pan"], g["tilt"]
+            st["moved"] = True
+            self.bands_panel.sync_current()
+            self._on_changed()
+        elif phase == "release":
+            self._gesture = None
+            if st["moved"]:
+                self._on_committed()
+        elif phase == "cancel":
+            self._gesture = None
+            b0 = st["band0"]
+            band.position, band.width, band.pan, band.tilt = b0.position, b0.width, b0.pan, b0.tilt
+            self.bands_panel.sync_current()
+            self._on_changed()
 
     def _begin_gesture(self, kind: str, index: int, pos: tuple[float, float]) -> None:
         panel, areas = self.areas_panel, self.project.areas

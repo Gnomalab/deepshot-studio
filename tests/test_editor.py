@@ -139,15 +139,10 @@ def test_look_panel_estilo_photoshop_orden_arrastrar_renombrar_apagar_y_solo(tmp
     assert p.look[0].name == "Color de la piel" and panel.list.item(0).text() == "Color de la piel"
     panel.list.item(0).setText("")                               # un nombre vacío vuelve al del efecto
     assert p.look[0].name == "" and panel.list.item(0).text() == "Saturación"
-    panel.list.item(0).setCheckState(Qt.Unchecked)               # apagado
+    panel.toggle_row_enabled(0)                                  # el ojo de la fila: bypass (también se exporta así)
     assert p.look[0].enabled is False
-    panel.list.item(0).setCheckState(Qt.Checked)
-
-    panel.toggle_row_solo(1)                                     # solo (ojo): la vista previa deja solo los niveles
-    preview = session._preview_project()
-    assert [l.enabled for l in preview.look] == [False, True] and [l.enabled for l in p.look] == [True, True]
-    panel.toggle_row_solo(1)
-    assert session._preview_project() is p                       # sin solo, el proyecto tal cual
+    panel.toggle_row_enabled(0)
+    assert p.look[0].enabled is True
 
     panel.list.setCurrentRow(0)
     panel.param_sliders["amount"].setValue(-1.0, emit=True)      # el deslizador escribe en los ajustes del efecto

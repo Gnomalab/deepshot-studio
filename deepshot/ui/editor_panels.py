@@ -12,7 +12,10 @@ from pathlib import Path
 
 from PySide6.QtCore import QCoreApplication, QEvent, QRect, QSize, Qt, QT_TRANSLATE_NOOP, Signal
 from PySide6.QtGui import QColor, QIcon, QPixmap
+from PySide6.QtWidgets import QStyle, QStyleOptionViewItem
 from PySide6.QtWidgets import (
+    QAbstractItemView,
+    QApplication,
     QCheckBox,
     QComboBox,
     QFileDialog,
@@ -138,8 +141,12 @@ class ReliefPanel(_Panel):
 # ---------------------------------------------------------------------------
 # Lista genérica (bandas, áreas)
 # ---------------------------------------------------------------------------
-class _SoloDelegate(QStyledItemDelegate):
-    """Pinta un ojo a la derecha de cada fila (lleno = «solo» de esa fila, tenue = sin solo) y atiende su clic."""
+DETAIL_ROLE = Qt.UserRole + 1       # texto secundario de la fila (forma, valor…), pintado tenue a la derecha
+
+
+class _RowDelegate(QStyledItemDelegate):
+    """Fila al estilo Photoshop: cuadro de color (clic: elegir color), nombre (doble clic: renombrar), un detalle tenue y a
+    la derecha un ojo (lleno = el elemento se aplica, tenue = en bypass) cuyo clic atiende."""
 
     SIZE = 16
     MARGIN = 6
@@ -147,31 +154,57 @@ class _SoloDelegate(QStyledItemDelegate):
     def _eye_rect(self, rect: QRect) -> QRect:
         return QRect(rect.right() - self.SIZE - self.MARGIN, rect.center().y() - self.SIZE // 2, self.SIZE, self.SIZE)
 
+    def _swatch_rect(self, option, index) -> QRect:
+        opt = QStyleOptionViewItem(option)
+        self.initStyleOption(opt, index)
+        widget = opt.widget
+        return (widget.style() if widget else QApplication.style()).subElementRect(
+            QStyle.SE_ItemViewItemDecoration, opt, widget)
+
     def paint(self, painter, option, index) -> None:
-        super().paint(painter, option, index)
         panel = self.parent()
-        active = index.row() in panel.solo
+        detail = index.data(DETAIL_ROLE) or ""
+        reserved = self.SIZE + 2 * self.MARGIN                          # el ojo
+        detail_w = option.fontMetrics.horizontalAdvance(detail) + self.MARGIN if detail else 0
+        narrowed = QStyleOptionViewItem(option)
+        narrowed.rect = option.rect.adjusted(0, 0, -(reserved + detail_w), 0)
+        enabled = panel.items()[index.row()].enabled
         painter.save()
-        painter.setOpacity(1.0 if active else 0.28)
+        painter.setOpacity(1.0 if enabled else 0.4)                     # en bypass, la fila entera se ve apagada
+        super().paint(painter, narrowed, index)                         # color y nombre (con «…» si no cabe)
+        painter.restore()
+        painter.save()
+        if detail:
+            painter.setPen(theme.color("text_dim"))
+            painter.drawText(QRect(option.rect.right() - reserved - detail_w, option.rect.top(), detail_w,
+                                   option.rect.height()), Qt.AlignVCenter | Qt.AlignRight, detail)
+        painter.setOpacity(1.0 if enabled else 0.28)
         painter.drawPixmap(self._eye_rect(option.rect), icon("eye").pixmap(self.SIZE, self.SIZE))
         painter.restore()
 
     def editorEvent(self, event, model, option, index) -> bool:
-        if event.type() == QEvent.MouseButtonRelease and event.button() == Qt.LeftButton \
-                and self._eye_rect(option.rect).adjusted(-3, -3, 3, 3).contains(event.position().toPoint()):
-            self.parent().toggle_row_solo(index.row())
-            return True
+        if event.type() == QEvent.MouseButtonRelease and event.button() == Qt.LeftButton:
+            pos = event.position().toPoint()
+            if self._eye_rect(option.rect).adjusted(-3, -3, 3, 3).contains(pos):
+                self.parent().toggle_row_enabled(index.row())
+                return True
+            if not index.data(Qt.DecorationRole) is None and self._swatch_rect(option, index).adjusted(-2, -2, 2, 2).contains(pos):
+                self.parent().pick_row_color(index.row())
+                return True
         return super().editorEvent(event, model, option, index)
 
     def helpEvent(self, event, view, option, index) -> bool:
         if self._eye_rect(option.rect).contains(event.pos()):
-            QToolTip.showText(event.globalPos(), view.tr("Solo: ve solo este elemento (clic para ponerlo o quitarlo)"), view)
+            QToolTip.showText(event.globalPos(), view.tr("Aplicar: el elemento se aplica o se salta (bypass) con un clic"), view)
+            return True
+        if index.data(Qt.DecorationRole) is not None and self._swatch_rect(option, index).contains(event.pos()):
+            QToolTip.showText(event.globalPos(), view.tr("Color (clic para cambiarlo)"), view)
             return True
         return super().helpEvent(event, view, option, index)
 
 
 class _ListPanel(_Panel):
-    """Lista con casilla de activación, botones añadir / duplicar / borrar y propiedades."""
+    """Lista con ojo de bypass en cada fila, botones añadir / duplicar / borrar y propiedades."""
 
     selectionChanged = Signal(int)
 
@@ -181,8 +214,10 @@ class _ListPanel(_Panel):
         self.list.setMaximumHeight(96)
         self.list.currentRowChanged.connect(self._on_row)
         self.list.itemChanged.connect(self._on_item_changed)
-        self.list.setItemDelegate(_SoloDelegate(self))              # el ojo de «solo» a la derecha de cada fila
+        self.list.setItemDelegate(_RowDelegate(self))               # color, nombre y el ojo de bypass de cada fila
         self.list.setMouseTracking(True)
+        # Renombrar solo con doble clic o F2: un clic en una fila ya elegida (p. ej. en su ojo) no abre el editor.
+        self.list.setEditTriggers(QAbstractItemView.DoubleClicked | QAbstractItemView.EditKeyPressed)
         add = QPushButton(add_text)
         add.setToolTip(add_tip or self.tr("Añade un elemento nuevo a la lista"))
         add.clicked.connect(self._add)
@@ -197,29 +232,13 @@ class _ListPanel(_Panel):
         row.addWidget(add, 1)
         row.addWidget(dup)
         row.addWidget(remove)
-        # Solo, como en un programa de audio o de capas: con el modo activado, solo se ve el elemento elegido en la lista y
-        # al elegir otro, el «solo» se va con él. Además, el ojo de cada fila pone o quita el «solo» de esa fila.
-        self.solo: set[int] = set()                  # filas en «solo» (solo de vista: no se guarda ni se exporta)
-        self.solo_mode = False                       # el «solo» sigue a la fila elegida
-        self.solo_button = QPushButton(self.tr("Solo"))
-        set_icon(self.solo_button, "eye")
-        self.solo_button.setIconSize(QSize(16, 16))
-        self.solo_button.setCheckable(True)
-        self.solo_button.setToolTip(self.tr(
-            "Solo: ve únicamente el elemento elegido en la lista; al elegir otro, ves solo ese. Los demás se ocultan en "
-            "la vista previa y sus manejadores. Solo es de vista: no cambia lo que se exporta. Para silenciar uno, "
-            "desmarca su casilla."))
-        self.solo_button.toggled.connect(self._solo_toggled)
-        solo_row = QHBoxLayout()
-        solo_row.setSpacing(4)
-        solo_row.addWidget(self.solo_button, 1)
+        self.buttons_row = row                       # los paneles pueden añadirle botones (p. ej. subir / bajar)
         self.props = QWidget()
         self.props_layout = QVBoxLayout(self.props)
         self.props_layout.setContentsMargins(0, 4, 0, 0)
         self.props_layout.setSpacing(4)
         self.layout_.addLayout(row)
         self.layout_.addWidget(self.list)
-        self.layout_.addLayout(solo_row)
         self.layout_.addWidget(self.props)
         # Al terminar cada gesto, el texto de la lista refleja los valores nuevos.
         self.committed.connect(self.refresh_current_label)
@@ -232,66 +251,35 @@ class _ListPanel(_Panel):
     def item_icon(self, i: int, item) -> QIcon | None:
         return None
 
+    def item_detail(self, i: int, item) -> str:
+        """Texto secundario de la fila (tenue, a la derecha del nombre)."""
+        return ""
+
+    def rename_item(self, i: int, item, text: str) -> None:
+        """El usuario escribió `text` como nombre de la fila (doble clic o F2). Por defecto no se puede renombrar."""
+
+    def pick_row_color(self, row: int) -> None:
+        """Clic en el cuadro de color de una fila. Por defecto no hay color que elegir."""
+
     def bind(self, project: Project) -> None:
         self.project = project
-        self.solo.clear()                            # otra foto o un deshacer: el «solo» no se arrastra
-        self.solo_mode = False
-        self._loading = True
-        self.solo_button.setChecked(False)
-        self._loading = False
         self.refresh_list(select=0)
-
-    def _valid_solo(self) -> set[int]:
-        """Las filas en «solo» que existen (un índice de una fila ya borrada no esconde nada)."""
-        count = len(self.items())
-        return {r for r in self.solo if 0 <= r < count}
-
-    def hidden_by_solo(self, row: int) -> bool:
-        """True si hay elementos en «solo» y este no es uno de ellos (no se ve ni se dibuja)."""
-        solo = self._valid_solo()
-        return bool(solo) and row not in solo
-
-    def _show_solo_state(self) -> None:
-        """El botón Solo está marcado siempre que haya algo en «solo» (aunque sea por el ojo de una fila): así se ve que
-        hay elementos escondidos y un clic los devuelve."""
-        self._loading = True
-        self.solo_button.setChecked(bool(self._valid_solo()))
-        self._loading = False
 
     def _label(self, i: int, item) -> str:
         return self.item_label(i, item)
 
-    def _solo_changed(self) -> None:
-        self.list.viewport().update()                # los ojos de la lista
-        self.changed.emit()                          # se vuelve a pintar la vista previa y los manejadores (sin deshacer)
-
-    def _solo_toggled(self, on: bool) -> None:
-        """El botón Solo: activa o desactiva el modo que sigue a la fila elegida."""
-        if self._loading:
+    def toggle_row_enabled(self, row: int) -> None:
+        """El ojo de una fila: aplica o salta ese elemento (bypass). Cambia el proyecto: también se exporta así."""
+        items = self.items()
+        if not 0 <= row < len(items):
             return
-        self.solo_mode = on                          # activado: sigue a la fila elegida · desactivado: todo vuelve
-        row = self.list.currentRow()
-        self.solo = {row} if on and 0 <= row < len(self.items()) else set()
-        self._solo_changed()
+        items[row].enabled = not items[row].enabled
+        self.list.viewport().update()
+        self._sync_buttons()
+        self.emit_both()
 
-    def toggle_row_solo(self, row: int) -> None:
-        """El ojo de una fila: pone o quita el «solo» de esa fila (se pueden dejar varias)."""
-        if not 0 <= row < len(self.items()):
-            return
-        self.solo.symmetric_difference_update({row})
-        self.solo_mode = False                       # a mano: ya no sigue a la selección
-        self._show_solo_state()
-        self._solo_changed()
-
-    def _sync_solo_buttons(self) -> None:
-        """Con el modo «solo» activado, el solo se va a la fila elegida."""
-        row = self.list.currentRow()
-        if self.solo_mode and 0 <= row < len(self.items()) and self.solo != {row}:
-            self.solo = {row}
-            self.list.viewport().update()
-        self.solo = self._valid_solo()               # nunca queda un «solo» de una fila que ya no existe
-        self._show_solo_state()
-        self.solo_button.setEnabled(self.current() is not None)
+    def _sync_buttons(self) -> None:
+        """Gancho: los paneles con botones que dependen de la fila elegida los actualizan aquí."""
 
     def refresh_list(self, select: int | None = None) -> None:
         self._loading = True
@@ -299,10 +287,10 @@ class _ListPanel(_Panel):
         self.list.clear()
         for i, item in enumerate(self.items()):
             entry = QListWidgetItem(self.item_label(i, item))
-            entry.setFlags(entry.flags() | Qt.ItemIsUserCheckable)
+            entry.setData(DETAIL_ROLE, self.item_detail(i, item))
+            entry.setFlags(entry.flags() | Qt.ItemIsEditable)   # doble clic o F2: renombrar
             if (ic := self.item_icon(i, item)) is not None:
                 entry.setIcon(ic)
-            entry.setCheckState(Qt.Checked if item.enabled else Qt.Unchecked)
             self.list.addItem(entry)
         self._loading = False
         count = self.list.count()
@@ -317,6 +305,7 @@ class _ListPanel(_Panel):
         if 0 <= row < len(items) and self.list.item(row) is not None:
             self._loading = True
             self.list.item(row).setText(self.item_label(row, items[row]))
+            self.list.item(row).setData(DETAIL_ROLE, self.item_detail(row, items[row]))
             if (ic := self.item_icon(row, items[row])) is not None:
                 self.list.item(row).setIcon(ic)
             self._loading = False
@@ -332,16 +321,21 @@ class _ListPanel(_Panel):
             self._loading = True
             self.show_props(item)
             self._loading = False
-        self._sync_solo_buttons()
+        self._sync_buttons()
         self.selectionChanged.emit(row)
 
     def _on_item_changed(self, entry: QListWidgetItem) -> None:
         if self._loading or self.project is None:
             return
         row = self.list.row(entry)
-        self.items()[row].enabled = entry.checkState() == Qt.Checked
-        self._sync_solo_buttons()
-        self.emit_both()
+        item = self.items()[row]
+        text = entry.text().strip()
+        if text != self.item_label(row, item):                          # lo escribió el usuario
+            self.rename_item(row, item, text)
+            self._loading = True
+            entry.setText(self.item_label(row, item))                   # un nombre vacío vuelve al de por defecto
+            self._loading = False
+            self.emit_both()
 
     def _add(self) -> None:
         if self.project is not None:
@@ -353,8 +347,6 @@ class _ListPanel(_Panel):
         if self.project is None:
             return
         self.items().append(item)
-        if self.solo:                                # con un «solo» activo, lo nuevo también se ve
-            self.solo.add(len(self.items()) - 1)
         self.refresh_list(select=len(self.items()) - 1)
         if commit:
             self.emit_both()
@@ -380,8 +372,6 @@ class _ListPanel(_Panel):
             if hasattr(clone, "from_style"):
                 clone.from_style = ""                  # una copia es del usuario, aunque el original viniera de un estilo
             self.items().append(clone)
-            if self.solo:
-                self.solo.add(len(self.items()) - 1)
             self.refresh_list(select=len(self.items()) - 1)
             self.emit_both()
 
@@ -389,7 +379,6 @@ class _ListPanel(_Panel):
         row = self.list.currentRow()
         if 0 <= row < len(self.items()):
             del self.items()[row]
-            self.solo.clear()                        # las filas se corren: se quita el «solo»
             self.refresh_list(select=row - 1)
             self.emit_both()
 
@@ -422,17 +411,11 @@ class BandsPanel(_ListPanel):
                                 maximum=80, decimals=0, step=1, suffix="°")
         self.tilt.setToolTip(self.tr("Gira la banda sobre el eje horizontal: la franja se aleja hacia arriba (+) "
                                      "o se acerca (−). El centro de la imagen no cambia."))
-        self.color = QPushButton()
-        self.color.setToolTip(self.tr("Color de la banda"))
-        self.color.clicked.connect(self._pick_color)
-        self.color_ramp = QCheckBox(self.tr("De la rampa"))
+        self.list.setToolTip(self.tr("Bandas. Cuadro: color · doble clic: renombrar · ojo: aplicar o saltar la banda"))
+        self.color_ramp = QCheckBox(self.tr("Color de la rampa"))
         self.color_ramp.setToolTip(self.tr("La banda toma el color de la rampa artística en su posición, así siempre "
-                                           "casa con el resto. Si está marcado, el color de al lado no se usa."))
+                                           "casa con el resto. Si está marcado, el color del cuadro de la lista no se usa."))
         self.color_ramp.toggled.connect(self._on_color_ramp)
-        color_row = QHBoxLayout()
-        color_row.addWidget(QLabel(self.tr("Color")))
-        color_row.addWidget(self.color, 1)
-        color_row.addWidget(self.color_ramp)
         # Controles de dos en dos: ocupan la mitad de líneas (como los campos X Y Z de Blender).
         for pair in ((self.position, self.width_), (self.softness, self.strength), (self.pan, self.tilt)):
             row = QHBoxLayout()
@@ -440,7 +423,7 @@ class BandsPanel(_ListPanel):
             for w in pair:
                 row.addWidget(w, 1)
             self.props_layout.addLayout(row)
-        self.props_layout.addLayout(color_row)
+        self.props_layout.addWidget(self.color_ramp)
 
     def items(self) -> list[Band]:
         return self.project.bands if self.project else []
@@ -449,7 +432,16 @@ class BandsPanel(_ListPanel):
         return Band(position=0.3, width=0.08, softness=0.05)
 
     def item_label(self, i: int, band: Band) -> str:
-        return self.tr("Banda {0}  ·  {1:.2f}").format(i + 1, band.position)
+        return band.name.strip() or self.tr("Banda {0}").format(i + 1)
+
+    def item_detail(self, i: int, band: Band) -> str:
+        return "{0:.2f}".format(band.position)
+
+    def item_icon(self, i: int, band: Band) -> QIcon:
+        return _color_icon(band.color)
+
+    def rename_item(self, i: int, band: Band, text: str) -> None:
+        band.name = "" if text == self.tr("Banda {0}").format(i + 1) else text
 
     def show_props(self, band: Band) -> None:
         self.position.setValue(band.position)
@@ -459,29 +451,36 @@ class BandsPanel(_ListPanel):
         self.pan.setValue(band.pan)
         self.tilt.setValue(band.tilt)
         self.color_ramp.setChecked(band.color_from_ramp)
-        self.color.setEnabled(not band.color_from_ramp)
-        _swatch(self.color, band.color)
 
     def _on_color_ramp(self, on: bool) -> None:
         band = self.current()
         if band is None or self._loading:
             return
         band.color_from_ramp = on
-        self.color.setEnabled(not on)
         self.emit_both()
 
-    def _pick_color(self) -> None:
+    def pick_row_color(self, row: int) -> None:
+        """Clic en el cuadro de color de la fila. Elegir un color es querer ese color: deja de tomarlo de la rampa."""
+        self.select(row)
         band = self.current()
         if band is None:
             return
+        original, from_ramp = band.color, band.color_from_ramp
 
         def live(color) -> None:      # vista previa en vivo mientras se elige
-            band.color = color
-            _swatch(self.color, color)
+            band.color, band.color_from_ramp = color, False
+            self.refresh_current_label()
             self.changed.emit()
 
         if pick_color(self, band.color, self.tr("Color de la banda"), live) is not None:
+            self._loading = True
+            self.color_ramp.setChecked(False)
+            self._loading = False
             self.committed.emit()
+        else:
+            band.color, band.color_from_ramp = original, from_ramp
+            self.refresh_current_label()
+            self.changed.emit()
 
 
 # ---------------------------------------------------------------------------
@@ -528,21 +527,8 @@ class AreasPanel(_ListPanel):
         tools.addWidget(self.draw_button, 1)
         tools.addWidget(self.place_button, 1)
 
-        self.name = QLineEdit()
-        self.name.setPlaceholderText(self.tr("Nombre del área"))
-        self.name.setToolTip(self.tr("Nombre del área (doble clic en la lista para editarlo)"))
-        self.name.editingFinished.connect(self._on_name)
-        self.color_button = QPushButton()
-        self.color_button.setFixedWidth(34)
-        self.color_button.setToolTip(self.tr("Color con el que se dibuja esta área sobre la imagen "
-                                             "(no afecta al resultado)"))
-        self.color_button.clicked.connect(self._pick_area_color)
-        name_row = QHBoxLayout()
-        name_row.setSpacing(4)
-        name_row.addWidget(self.name, 1)
-        name_row.addWidget(self.color_button)
-        self.list.itemDoubleClicked.connect(lambda _item: (self.name.setFocus(), self.name.selectAll()))
-        self.list.setToolTip(self.tr("Áreas. Casilla: activar o desactivar · clic: seleccionar"))
+        self.list.setToolTip(self.tr("Áreas. Cuadro: color en la imagen · doble clic: renombrar · "
+                                     "ojo: aplicar o saltar el área"))
 
         self.shape = SegmentedControl([self.tr("Elipsoide"), self.tr("Caja")])
         self.shape.set_tooltips([self.tr("Zona ovalada con el borde que se desvanece"),
@@ -587,7 +573,6 @@ class AreasPanel(_ListPanel):
         self.falloff = self.slider(self.tr("Caída"), lambda v: setattr(cur(), "falloff", v), value=0.5)
         self.falloff.setToolTip(self.tr("0 = intensidad uniforme; 1 = se apaga del centro hacia el borde"))
 
-        self.props_layout.addLayout(name_row)
         self.props_layout.addWidget(self.shape)
         for w in (self.strength, self.softness, self.falloff):
             self.props_layout.addWidget(w)
@@ -637,8 +622,14 @@ class AreasPanel(_ListPanel):
                     scale=(0.4, 0.4, 0.2))
 
     def item_label(self, i: int, area: Area) -> str:
+        return area.name
+
+    def item_detail(self, i: int, area: Area) -> str:
         shape = self.tr("elipsoide") if area.shape == "ellipsoid" else self.tr("caja")
-        return f"{area.name}  ·  {shape}  ·  {area.strength:+.2f}"
+        return f"{shape}  ·  {area.strength:+.2f}"
+
+    def rename_item(self, i: int, area: Area, text: str) -> None:
+        area.name = text or self.tr("Área {0}").format(i + 1)
 
     def item_icon(self, i: int, area: Area) -> QIcon:
         return _color_icon(area.display_color(i))
@@ -652,22 +643,10 @@ class AreasPanel(_ListPanel):
         self.strength.setValue(area.strength)
         self.softness.setValue(area.edge_softness)
         self.falloff.setValue(area.falloff)
-        if not self.name.hasFocus():
-            self.name.setText(area.name)
-        _swatch(self.color_button, area.display_color(self.list.currentRow()))
 
-    def _on_name(self) -> None:
-        area = self.current()
-        if area is None or self._loading:
-            return
-        text = self.name.text().strip() or self.tr("Área {0}").format(self.list.currentRow() + 1)
-        if text != area.name:
-            area.name = text
-            self.refresh_current_label()
-            self.emit_both()
-        self.name.setText(text)
-
-    def _pick_area_color(self) -> None:
+    def pick_row_color(self, row: int) -> None:
+        """Clic en el cuadro de color de la fila: el color con el que se dibuja el área sobre la imagen."""
+        self.select(row)
         area = self.current()
         if area is None:
             return
@@ -676,7 +655,6 @@ class AreasPanel(_ListPanel):
 
         def live(color) -> None:
             area.ui_color = color
-            _swatch(self.color_button, color)
             self.refresh_current_label()
             self.changed.emit()       # redibuja los contornos (no cambia la imagen)
 
@@ -684,7 +662,6 @@ class AreasPanel(_ListPanel):
             self.committed.emit()
         else:
             area.ui_color = original
-            _swatch(self.color_button, area.display_color(row))
             self.refresh_current_label()
             self.changed.emit()
 

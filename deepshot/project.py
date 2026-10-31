@@ -7,7 +7,8 @@ Orden del procesado (`render`):
   3. Áreas: elipsoides o cajas 3D que aclaran u oscurecen.
   4. Mezcla con la foto: modo de fusión, opacidad y máscara opcional.
   5. Desenfoque de lente por profundidad (opcional): sobre el resultado final o solo sobre la foto antes de mezclarla.
-  6. Look: pila de capas de ajuste (niveles, contraste, saturación…) en orden (deepshot/look.py).
+  6. Look: pila de capas de ajuste (niveles, contraste, saturación…) en orden (deepshot/look.py). Hay dos pilas: Pre FX
+     (`pre`, sobre la foto antes de mezclarla) y Post FX (`look`, sobre el resultado); ambas pueden limitarse a un mapa.
 
 Nota de diseño: el add-on de referencia tiene un ajuste "added on" para bandas y otro
 para áreas. Aquí hay una sola base para toda la pila: es más predecible y equivale al
@@ -66,7 +67,8 @@ class Project:
     composite: Composite = field(default_factory=Composite)
     lens: LensBlur = field(default_factory=LensBlur)
     depth_control: DepthControl = field(default_factory=DepthControl)
-    look: list[LookLayer] = field(default_factory=list)   # pila de capas de ajuste, la primera va primero (deepshot/look.py)
+    pre: list[LookLayer] = field(default_factory=list)    # Pre FX: pila sobre la foto, antes de mezclarla con el efecto
+    look: list[LookLayer] = field(default_factory=list)   # Post FX: pila de capas de ajuste, la primera va primero (deepshot/look.py)
     version: int = PROJECT_VERSION
 
     # --- JSON -----------------------------------------------------------------
@@ -92,6 +94,7 @@ class Project:
             composite=Composite(**_known(Composite, data.get("composite", {}))),
             lens=LensBlur(**_known(LensBlur, data.get("lens", {}))),
             depth_control=DepthControl.from_dict(data.get("depth_control")),
+            pre=layers_from_list(data.get("pre")),
             look=layers_from_list(data.get("look")),
             version=data.get("version", PROJECT_VERSION),
         )
@@ -112,7 +115,7 @@ class Project:
         if self.composite.mask not in MASK_SOURCES:
             raise ValueError(f"Máscara desconocida: {self.composite.mask}")
         self.lens.validate()
-        for layer in self.look:
+        for layer in (*self.pre, *self.look):
             layer.validate()
 
 
@@ -140,7 +143,8 @@ def photo_to_float(photo: np.ndarray | Image.Image, size: tuple[int, int]) -> np
 
 def render(project: Project, depth: np.ndarray, photo: np.ndarray | Image.Image | None = None,
            mask_base_dir: Path | None = None, points: np.ndarray | None = None,
-           painted_mask: np.ndarray | None = None, with_look: bool = True) -> np.ndarray:
+           painted_mask: np.ndarray | None = None, with_look: bool = True,
+           masks: dict[str, np.ndarray] | None = None) -> np.ndarray:
     """Procesa la imagen completa. Devuelve float32 (alto, ancho, 3) en 0..1.
 
     photo:  PIL o array uint8/float del mismo tamaño que `depth` (si no, se reescala).
@@ -148,6 +152,7 @@ def render(project: Project, depth: np.ndarray, photo: np.ndarray | Image.Image 
             y `project.scene` (la vista previa la guarda en caché para no recalcularla en cada cambio).
     painted_mask: máscara pintada ya cargada (float32 0..1 del tamaño de `depth`); si no se da,
             se lee el PNG de `project.composite.painted_mask`.
+    masks:  mapas auxiliares por id (p. ej. «subject») para las capas Pre y Post FX limitadas a un mapa.
     with_look: aplicar la pila de Look al final (la exportación «Efecto» la deja fuera; «Imagen final» la lleva).
     """
     project.validate()
@@ -170,6 +175,8 @@ def render(project: Project, depth: np.ndarray, photo: np.ndarray | Image.Image 
             top = photo  # ya preparada (vista previa)
         else:
             top = photo_to_float(photo, (w, h))
+        if project.pre:                                          # Pre FX: la foto se retoca antes de mezclarla
+            top = apply_look(top, project.pre, depth, masks)
         if project.lens.enabled and project.lens.target == "photo":
             top = lens_blur(top, depth, project.lens)            # solo la foto se desenfoca, antes de mezclarla
         guide = top                                              # la foto en color: guía del ajuste de la máscara a los bordes
@@ -201,7 +208,7 @@ def render(project: Project, depth: np.ndarray, photo: np.ndarray | Image.Image 
         image = lens_blur(image, depth, project.lens)
 
     if with_look and project.look:                   # Look: capas de ajuste al final, en el orden de la pila
-        image = apply_look(image, project.look, depth)
+        image = apply_look(image, project.look, depth, masks)
 
     return np.clip(image, 0.0, 1.0).astype(np.float32)
 

@@ -130,6 +130,7 @@ class Band:
     enabled: bool = True
     pan: float = 0.0
     tilt: float = 0.0
+    name: str = ""                      # nombre elegido por el usuario ("" = «Banda N»)
     color_from_ramp: bool = False       # el color de la banda es el de la rampa en su posición (en vez de `color`)
 
     def mask(self, t: np.ndarray) -> np.ndarray:

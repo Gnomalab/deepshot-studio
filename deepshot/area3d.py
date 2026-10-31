@@ -197,3 +197,107 @@ def rotate_about_axis(area0: Area, axis: str, ray0: Ray, ray1: Ray, snap: bool =
         step = math.radians(15.0)
         angle = round(angle / step) * step
     return replace(area0, rotation=euler_from_matrix(axis_rotation(axis, angle) @ matrix(area0)))
+
+
+# ---------------------------------------------------------------------------
+# Bandas: tiradores del plano de una banda y gestos de ratón a valores
+# ---------------------------------------------------------------------------
+BAND_MAX_ANGLE = 80.0              # pan y tilt, igual que en el panel
+BAND_MIN_SPAN = 0.05               # el ratón tiene que estar al menos así de lejos del centro para fijar un ángulo
+
+
+@dataclass(frozen=True)
+class BandFrame:
+    """Una banda y la escena donde vive, lo justo para sus tiradores. El plano es z = z0 + x·tan(pan) + y·tan(tilt) (ver
+    `view3d.band_plane`) y la parte plena de la franja es un grueso de ±`width`/2 en la escala de la rampa."""
+
+    position: float
+    width: float
+    pan: float
+    tilt: float
+    ramp_min: float
+    ramp_max: float
+    relief: float
+    aspect: float
+
+    @property
+    def z_span(self) -> float:
+        """Cuánto mide la rampa entera en profundidad de la escena."""
+        return max((self.ramp_max - self.ramp_min) * self.relief, 1e-6)
+
+    @property
+    def z0(self) -> float:
+        return (self.ramp_min + self.position * (self.ramp_max - self.ramp_min)) * self.relief
+
+    @property
+    def half_z(self) -> float:
+        return 0.5 * self.width * self.z_span
+
+    def z_at(self, x: float, y: float) -> float:
+        return self.z0 + x * math.tan(math.radians(self.pan)) + y * math.tan(math.radians(self.tilt))
+
+    def position_of(self, z0: float) -> float:
+        return float(np.clip((z0 / max(self.relief, 1e-6) - self.ramp_min) / max(self.ramp_max - self.ramp_min, 1e-6),
+                             0.0, 1.0))
+
+
+def band_handles(f: BandFrame) -> dict[str, np.ndarray]:
+    """Puntos de los tiradores: «move» (centro, flecha en profundidad), «pan» (borde derecho), «tilt» (borde de arriba)
+    y «width» (borde izquierdo, en la cara lejana del grueso)."""
+    return {"move": np.array([0.0, 0.0, f.z0]),
+            "pan": np.array([f.aspect, 0.0, f.z_at(f.aspect, 0.0)]),
+            "tilt": np.array([0.0, 1.0, f.z_at(0.0, 1.0)]),
+            "width": np.array([-f.aspect, 0.0, f.z_at(-f.aspect, 0.0) + f.half_z])}
+
+
+def band_slab_corners(f: BandFrame, sign: int) -> np.ndarray:
+    """Esquinas (4, 3) del plano a un lado (sign = -1) o al otro (+1) del grueso de la banda."""
+    xs = np.array([-f.aspect, f.aspect, f.aspect, -f.aspect])
+    ys = np.array([1.0, 1.0, -1.0, -1.0])
+    return np.stack([xs, ys, np.array([f.z_at(x, y) for x, y in zip(xs, ys)]) + sign * f.half_z], axis=-1)
+
+
+def band_move(f0: BandFrame, ray0: Ray, ray1: Ray) -> BandFrame:
+    """Flecha del centro: mueve la banda en profundidad (cambia su posición en la rampa)."""
+    origin = np.array([0.0, 0.0, f0.z0])
+    s0, s1 = param_on_axis(ray0, origin, AXES["z"]), param_on_axis(ray1, origin, AXES["z"])
+    if s0 is None or s1 is None:
+        return f0
+    return replace(f0, position=f0.position_of(f0.z0 + (s1 - s0)))
+
+
+def band_pan(f0: BandFrame, ray1: Ray) -> BandFrame:
+    """Tirador del borde derecho: el plano gira sobre el eje vertical para pasar por donde está el ratón."""
+    hit = hit_plane(ray1, np.array([0.0, 0.0, f0.z0]), AXES["y"])
+    if hit is None or abs(hit[0]) < BAND_MIN_SPAN:
+        return f0
+    angle = math.degrees(math.atan2(hit[2] - f0.z0, hit[0]))
+    if hit[0] < 0:                                   # al otro lado del centro: el mismo plano visto desde el otro extremo
+        angle = math.degrees(math.atan2(-(hit[2] - f0.z0), -hit[0]))
+    return replace(f0, pan=float(np.clip(angle, -BAND_MAX_ANGLE, BAND_MAX_ANGLE)))
+
+
+def band_tilt(f0: BandFrame, ray1: Ray) -> BandFrame:
+    """Tirador del borde de arriba: el plano gira sobre el eje horizontal para pasar por donde está el ratón."""
+    hit = hit_plane(ray1, np.array([0.0, 0.0, f0.z0]), AXES["x"])
+    if hit is None or abs(hit[1]) < BAND_MIN_SPAN:
+        return f0
+    dz, dy = hit[2] - f0.z0, hit[1]
+    angle = math.degrees(math.atan2(dz if dy > 0 else -dz, abs(dy)))
+    return replace(f0, tilt=float(np.clip(angle, -BAND_MAX_ANGLE, BAND_MAX_ANGLE)))
+
+
+def band_width(f0: BandFrame, ray0: Ray, ray1: Ray) -> BandFrame:
+    """Tirador del grueso: arrastrado en profundidad cambia la anchura de la franja (0..1 de la rampa)."""
+    origin = band_handles(f0)["width"]
+    s0, s1 = param_on_axis(ray0, origin, AXES["z"]), param_on_axis(ray1, origin, AXES["z"])
+    if s0 is None or s1 is None:
+        return f0
+    half = max(f0.half_z + (s1 - s0), 0.0)
+    return replace(f0, width=float(np.clip(2.0 * half / f0.z_span, 0.0, 1.0)))
+
+
+BAND_GESTURES = {"move": lambda f0, r0, r1: band_move(f0, r0, r1),
+                 "pan": lambda f0, r0, r1: band_pan(f0, r1),
+                 "tilt": lambda f0, r0, r1: band_tilt(f0, r1),
+                 "width": lambda f0, r0, r1: band_width(f0, r0, r1)}

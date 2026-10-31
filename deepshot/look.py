@@ -5,7 +5,8 @@ Como en Photoshop, la pila se lee de arriba abajo pero se APLICA de abajo arriba
 importa: niveles y luego saturación no da lo mismo que saturación y luego niveles. Cada capa tiene nombre propio
 (opcional), ojo (enabled), opacidad, modo de fusión y un límite opcional por rango de profundidad («solo en el fondo»).
 
-De serie hay seis efectos: niveles, contraste, saturación, grano, nitidez y viñeta. El registro `KINDS` admite más: los
+De serie hay once efectos: niveles, contraste, saturación, grano, nitidez, viñeta, claridad, resplandor, aberración
+cromática, niebla por profundidad y temperatura. El registro `KINDS` admite más: los
 módulos descargables (deepshot/modules.py), para cosas más complejas que necesitan modelos o librerías (relighting,
 embellecer…), añaden los suyos. Cada tipo da un nombre, la lista de sus ajustes (`ParamSpec`, con rango y valor inicial:
 la interfaz dibuja los controles a partir de ella) y la función que los aplica.
@@ -24,7 +25,7 @@ from deepshot.compose import BLEND_MODES, blend, depth_range_mask
 
 log = logging.getLogger(__name__)
 
-LIMITS = ("all", "depth")                       # a qué parte de la imagen afecta una capa
+LIMITS = ("all", "depth", "mask")               # a qué parte de la imagen afecta una capa (todo, un rango de profundidad o un mapa)
 LUMA = np.array([0.2126, 0.7152, 0.0722], dtype=np.float32)
 
 
@@ -102,6 +103,67 @@ def vignette(image: np.ndarray, amount: float = 0.0, size: float = 0.6, softness
     return np.clip(out, 0.0, 1.0).astype(np.float32)
 
 
+def clarity(image: np.ndarray, amount: float = 0.0, radius: float = 2.0) -> np.ndarray:
+    """Claridad: contraste local de los medios tonos (una máscara de enfoque de radio grande sobre la luminancia).
+    No toca los negros ni los blancos puros. El radio va en % del lado largo de la imagen."""
+    from scipy.ndimage import gaussian_filter
+
+    sigma = max(float(radius) / 100.0 * max(image.shape[:2]), 1.0)
+    luma = image @ LUMA
+    detail = luma - gaussian_filter(luma, sigma)
+    weight = 4.0 * luma * (1.0 - luma)                          # medios tonos
+    return np.clip(image + (detail * weight * amount)[..., None], 0.0, 1.0).astype(np.float32)
+
+
+def glow(image: np.ndarray, amount: float = 0.0, threshold: float = 0.7, radius: float = 2.0,
+         warmth: float = 0.0) -> np.ndarray:
+    """Resplandor (bloom): las altas luces se desenfocan y se suman en pantalla («screen»). Con `warmth` > 0 el resplandor
+    tira a rojo, como la halación de la película. El radio va en % del lado largo de la imagen."""
+    from scipy.ndimage import gaussian_filter
+
+    sigma = max(float(radius) / 100.0 * max(image.shape[:2]), 0.5)
+    luma = image @ LUMA
+    bright = np.clip((luma - threshold) / max(1.0 - threshold, 1e-3), 0.0, 1.0)[..., None] * image
+    halo = np.stack([gaussian_filter(bright[..., c], sigma) for c in range(3)], axis=-1)
+    halo *= np.array([1.0, 1.0 - 0.6 * warmth, 1.0 - 0.9 * warmth], dtype=np.float32)
+    return np.clip(1.0 - (1.0 - image) * (1.0 - np.clip(halo * amount, 0.0, 1.0)), 0.0, 1.0).astype(np.float32)
+
+
+def chromatic_aberration(image: np.ndarray, amount: float = 0.0) -> np.ndarray:
+    """Aberración cromática: el rojo y el azul se escalan en sentidos opuestos desde el centro, así los bordes del
+    encuadre sacan franjas de color como en un objetivo barato. `amount` en % del tamaño de la imagen."""
+    from scipy.ndimage import map_coordinates
+
+    if abs(amount) < 1e-6:
+        return image
+    h, w = image.shape[:2]
+    yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
+    cy, cx = (h - 1) / 2.0, (w - 1) / 2.0
+    out = image.copy()
+    for channel, sign in ((0, 1.0), (2, -1.0)):
+        k = 1.0 + sign * float(amount) / 100.0
+        coords = np.stack([cy + (yy - cy) / k, cx + (xx - cx) / k])
+        out[..., channel] = map_coordinates(image[..., channel], coords, order=1, mode="nearest")
+    return np.clip(out, 0.0, 1.0).astype(np.float32)
+
+
+def depth_haze(image: np.ndarray, depth: np.ndarray | None, amount: float = 0.0, start: float = 0.3,
+               tone: float = 0.8) -> np.ndarray:
+    """Niebla por profundidad: lo lejano se funde con un gris (`tone`: 0 = negro, 1 = blanco). Sin mapa de profundidad no
+    hace nada. La profundidad es 0 = cerca, 1 = lejos."""
+    if depth is None or amount <= 0:
+        return image
+    t = np.clip((depth - start) / max(1.0 - start, 1e-3), 0.0, 1.0)
+    t = (t * t * (3.0 - 2.0 * t) * amount)[..., None]           # smoothstep
+    return np.clip(image * (1.0 - t) + tone * t, 0.0, 1.0).astype(np.float32)
+
+
+def temperature(image: np.ndarray, temp: float = 0.0, tint: float = 0.0) -> np.ndarray:
+    """Temperatura y tinte: temp > 0 calienta (más rojo, menos azul), < 0 enfría; tint > 0 tira a magenta, < 0 a verde."""
+    gains = np.array([1.0 + 0.25 * temp + 0.08 * tint, 1.0 - 0.15 * tint, 1.0 - 0.25 * temp + 0.08 * tint], dtype=np.float32)
+    return np.clip(image * gains, 0.0, 1.0).astype(np.float32)
+
+
 @dataclass(frozen=True)
 class ParamSpec:
     """Un ajuste de una capa: nombre, rango y valor inicial. `label` y `tooltip` se traducen con el contexto «Look»
@@ -172,7 +234,40 @@ KINDS: dict[str, LayerKind] = {k.key: k for k in (
                   QT_TRANSLATE_NOOP("Look", "Hasta dónde llega la zona limpia del centro: más alto = la viñeta queda más cerca de las esquinas")),
         ParamSpec("softness", QT_TRANSLATE_NOOP("Look", "Suavidad"), 0.5, 0.05, 1.0, 2, 0.01,
                   QT_TRANSLATE_NOOP("Look", "Lo gradual que es el paso del centro al borde")),
-    ), lambda img, _depth, p: vignette(img, p["amount"], p["size"], p["softness"])),
+    ), lambda img, _depth, p: vignette(img, p["amount"], p["size"], p["softness"])),    LayerKind("clarity", QT_TRANSLATE_NOOP("Look", "Claridad"), (
+        ParamSpec("amount", QT_TRANSLATE_NOOP("Look", "Cantidad"), 0.0, -1.0, 2.0, 2, 0.05,
+                  QT_TRANSLATE_NOOP("Look", "Contraste local de los medios tonos: más = textura marcada, menos = aspecto suave")),
+        ParamSpec("radius", QT_TRANSLATE_NOOP("Look", "Radio"), 2.0, 0.3, 10.0, 1, 0.1,
+                  QT_TRANSLATE_NOOP("Look", "Tamaño de la zona del contraste local, en % del lado largo de la imagen")),
+    ), lambda img, _depth, p: clarity(img, p["amount"], p["radius"])),
+    LayerKind("glow", QT_TRANSLATE_NOOP("Look", "Resplandor"), (
+        ParamSpec("amount", QT_TRANSLATE_NOOP("Look", "Cantidad"), 0.0, 0.0, 2.0, 2, 0.05,
+                  QT_TRANSLATE_NOOP("Look", "Cuánto brillo se añade alrededor de las altas luces")),
+        ParamSpec("threshold", QT_TRANSLATE_NOOP("Look", "Umbral"), 0.7, 0.0, 0.99, 2, 0.01,
+                  QT_TRANSLATE_NOOP("Look", "Desde qué luminosidad una zona resplandece: más alto = solo las luces más fuertes")),
+        ParamSpec("radius", QT_TRANSLATE_NOOP("Look", "Radio"), 2.0, 0.2, 10.0, 1, 0.1,
+                  QT_TRANSLATE_NOOP("Look", "Alcance del resplandor, en % del lado largo de la imagen")),
+        ParamSpec("warmth", QT_TRANSLATE_NOOP("Look", "Halación"), 0.0, 0.0, 1.0, 2, 0.01,
+                  QT_TRANSLATE_NOOP("Look", "Tiñe el resplandor de rojo, como el halo de la película")),
+    ), lambda img, _depth, p: glow(img, p["amount"], p["threshold"], p["radius"], p["warmth"])),
+    LayerKind("chromatic", QT_TRANSLATE_NOOP("Look", "Aberración cromática"), (
+        ParamSpec("amount", QT_TRANSLATE_NOOP("Look", "Cantidad"), 0.0, -2.0, 2.0, 2, 0.02,
+                  QT_TRANSLATE_NOOP("Look", "Separación del rojo y el azul hacia los bordes, en % del tamaño de la imagen")),
+    ), lambda img, _depth, p: chromatic_aberration(img, p["amount"])),
+    LayerKind("haze", QT_TRANSLATE_NOOP("Look", "Niebla por profundidad"), (
+        ParamSpec("amount", QT_TRANSLATE_NOOP("Look", "Cantidad"), 0.0, 0.0, 1.0, 2, 0.01,
+                  QT_TRANSLATE_NOOP("Look", "Cuánto se funde lo lejano con el color de la niebla")),
+        ParamSpec("start", QT_TRANSLATE_NOOP("Look", "Inicio"), 0.3, 0.0, 0.95, 2, 0.01,
+                  QT_TRANSLATE_NOOP("Look", "Profundidad desde la que empieza la niebla (0 = cerca, 1 = lejos)")),
+        ParamSpec("tone", QT_TRANSLATE_NOOP("Look", "Tono"), 0.8, 0.0, 1.0, 2, 0.01,
+                  QT_TRANSLATE_NOOP("Look", "Color de la niebla: 0 = negro, 1 = blanco")),
+    ), lambda img, depth, p: depth_haze(img, depth, p["amount"], p["start"], p["tone"])),
+    LayerKind("temperature", QT_TRANSLATE_NOOP("Look", "Temperatura y tinte"), (
+        ParamSpec("temp", QT_TRANSLATE_NOOP("Look", "Temperatura"), 0.0, -1.0, 1.0, 2, 0.01,
+                  QT_TRANSLATE_NOOP("Look", "Positivo calienta (naranja), negativo enfría (azul)")),
+        ParamSpec("tint", QT_TRANSLATE_NOOP("Look", "Tinte"), 0.0, -1.0, 1.0, 2, 0.01,
+                  QT_TRANSLATE_NOOP("Look", "Positivo tira a magenta, negativo a verde")),
+    ), lambda img, _depth, p: temperature(img, p["temp"], p["tint"])),
 )}
 
 # Nombres antiguos: estos tres efectos fueron módulos descargables durante un día. Las capas de los proyectos guardados
@@ -201,10 +296,12 @@ class LookLayer:
     enabled: bool = True
     opacity: float = 1.0
     blend: str = "normal"                   # ver compose.BLEND_MODES
-    limit: str = "all"                      # "all" | "depth"
+    limit: str = "all"                      # "all" | "depth" | "mask"
     depth_near: float = 0.0                 # para limit = "depth": rango de profundidad al que afecta
     depth_far: float = 1.0
     depth_softness: float = 0.1
+    mask_id: str = ""                       # para limit = "mask": el mapa al que afecta (p. ej. «subject»; ver deepshot/maps.py)
+    mask_invert: bool = False               # True: afecta a todo menos a ese mapa (p. ej. solo el fondo)
     params: dict[str, float] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
@@ -252,9 +349,12 @@ def layers_from_list(data: list | None) -> list[LookLayer]:
     return out
 
 
-def apply_look(image: np.ndarray, layers: list[LookLayer], depth: np.ndarray | None = None) -> np.ndarray:
+def apply_look(image: np.ndarray, layers: list[LookLayer], depth: np.ndarray | None = None,
+               masks: dict[str, np.ndarray] | None = None) -> np.ndarray:
     """Aplica la pila de abajo arriba, como Photoshop: la última de la lista recibe primero la imagen y la primera (la de
-    arriba) va la última. `depth` = profundidad ya movida por el control."""
+    arriba) va la última. `depth` = profundidad ya movida por el control. `masks` = mapas auxiliares por id (float32 0..1
+    del tamaño de la imagen, p. ej. el sujeto aislado) para las capas con límite «mask»; una capa que pide un mapa que no
+    está calculado no se aplica en vez de afectar a toda la imagen."""
     for layer in reversed(layers):
         if layer.is_identity():
             continue
@@ -269,5 +369,10 @@ def apply_look(image: np.ndarray, layers: list[LookLayer], depth: np.ndarray | N
         mask = None
         if layer.limit == "depth" and depth is not None:
             mask = depth_range_mask(depth, layer.depth_near, layer.depth_far, layer.depth_softness)
+        elif layer.limit == "mask":
+            mask = (masks or {}).get(layer.mask_id)
+            if mask is None or mask.shape != image.shape[:2]:
+                continue                            # el mapa aún no existe (o es de otro tamaño): la capa no actúa
+            mask = 1.0 - mask if layer.mask_invert else mask
         image = blend(image, adjusted, layer.blend, layer.opacity, mask)
     return image

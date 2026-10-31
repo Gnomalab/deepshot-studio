@@ -61,6 +61,9 @@ class View3D(QWidget):
     cameraChanged = Signal()
     # Gesto sobre un área: {"phase": press|move|release|cancel, "kind", "index", "center", "scale", "rotation"}
     areaGesture = Signal(dict)
+    # Gesto sobre los tiradores de una banda: {"phase": press|move|release|cancel, "kind": move|pan|tilt|width, "index",
+    # "position", "width", "pan", "tilt"} (los valores nuevos ya calculados a partir de la banda al pulsar)
+    bandGesture = Signal(dict)
     # Cuentagotas del foco: {"phase": press|move|release|cancel, "x", "y"} con x, y en píxeles de la foto
     pickGesture = Signal(dict)
     # Dibujar / Colocar sobre el relieve: {"kind": "draw"|"place", "phase": press|move|release|cancel, "x", "y", "mods",
@@ -94,7 +97,10 @@ class View3D(QWidget):
         self._axis_hover = ""                         # bola del gizmo de orientación bajo el ratón
         self._gz: dict | None = None                  # gesto de área en curso
         self._modal: dict | None = None               # G / S / R con el teclado en curso (ver `_start_modal`)
-        self._bands: list[tuple[np.ndarray, tuple[float, float, float]]] = []   # planos de las bandas: (esquinas, color)
+        # Bandas: (esquinas del plano, color, `area3d.BandFrame`, índice en el proyecto)
+        self._bands: list[tuple[np.ndarray, tuple[float, float, float], area3d.BandFrame, int]] = []
+        self._selected_band = -1                      # la banda elegida en la lista: la que lleva tiradores
+        self._bg: dict | None = None                  # gesto de banda en curso
         self._focus: np.ndarray | None = None         # nitidez 0..255 de la capa verde «Ver zona en foco»
         self._focus_serial = 0
         self._tool = ""                               # "pick_focus" | "draw" | "place" con esa herramienta activa, "" sin ella
@@ -127,9 +133,11 @@ class View3D(QWidget):
         self._selected = selected if 0 <= selected < len(self._areas) else -1
         self.update()
 
-    def set_bands(self, planes: list[tuple[np.ndarray, tuple[float, float, float]]]) -> None:
-        """Planos de las bandas a dibujar: [(esquinas (4, 3), color rgb 0..1)]."""
+    def set_bands(self, planes: list[tuple], selected: int = -1) -> None:
+        """Planos de las bandas a dibujar: [(esquinas (4, 3), color rgb 0..1, BandFrame, índice)] y cuál está elegida
+        (la que lleva tiradores)."""
         self._bands = list(planes)
+        self._selected_band = selected
         self.update()
 
     def set_focus_overlay(self, sharpness: np.ndarray | None) -> None:
@@ -333,7 +341,7 @@ class View3D(QWidget):
 
     def _draw_bands(self, p: QPainter) -> None:
         """Plano de cada banda (inclinado si tiene pan o tilt): relleno suave y borde en el color de la banda."""
-        for corners, (r, g, b) in self._bands:
+        for corners, (r, g, b), _frame, _index in self._bands:
             sx, sy = self._screen(corners)
             if not (np.isfinite(sx).all() and np.isfinite(sy).all()):
                 continue
@@ -350,6 +358,95 @@ class View3D(QWidget):
             p.setBrush(fill)
             p.drawPolygon(poly)
         p.setBrush(Qt.NoBrush)
+        self._draw_band_handles(p)
+
+    def _selected_band_frame(self) -> area3d.BandFrame | None:
+        for _corners, _color, frame, index in self._bands:
+            if index == self._selected_band:
+                return frame
+        return None
+
+    def _draw_band_handles(self, p: QPainter) -> None:
+        """Tiradores de la banda elegida: el grueso de la franja (dos planos tenues), la flecha en profundidad, los
+        círculos de pan (derecha) y tilt (arriba) y el cuadrado del grueso (izquierda)."""
+        frame = self._selected_band_frame()
+        if frame is None:
+            return
+        p.setPen(QPen(QColor(255, 255, 255, 90), 1.0, Qt.DotLine))
+        for sign in (-1, 1):
+            sx, sy = self._screen(area3d.band_slab_corners(frame, sign))
+            if np.isfinite(sx).all() and np.isfinite(sy).all():
+                p.drawPolygon(self._polyline(sx, sy))
+        points = area3d.band_handles(frame)
+        length = area3d.gizmo_length(self.camera)
+        csx, csy = self._screen(points["move"][None, :])
+        tsx, tsy = self._screen((points["move"] + area3d.AXES["z"] * length)[None, :])
+        if np.isfinite([csx[0], csy[0], tsx[0], tsy[0]]).all():          # flecha en profundidad
+            hot = self._hover == "band_move"
+            color = QColor(AXIS_COLORS["Z"])
+            origin, tip = QPointF(float(csx[0]), float(csy[0])), QPointF(float(tsx[0]), float(tsy[0]))
+            p.setPen(QPen(color, 3.2 if hot else 2.2))
+            p.drawLine(origin, tip)
+            d = tip - origin
+            n = (d.x() ** 2 + d.y() ** 2) ** 0.5
+            if n > 1e-6:
+                ux, uy = d.x() / n, d.y() / n
+                p.setBrush(color)
+                p.drawPolygon(QPolygonF([tip + QPointF(ux * 9, uy * 9), tip + QPointF(-uy * 4.5, ux * 4.5),
+                                         tip + QPointF(uy * 4.5, -ux * 4.5)]))
+                p.setBrush(Qt.NoBrush)
+        for name, axis in (("pan", "Y"), ("tilt", "X"), ("width", "Z")):
+            sx, sy = self._screen(points[name][None, :])
+            if not (np.isfinite(sx[0]) and np.isfinite(sy[0])):
+                continue
+            half = 6.0 if self._hover == f"band_{name}" else 4.5
+            p.setPen(QPen(QColor("#ffffff"), 1.2))
+            p.setBrush(QColor(AXIS_COLORS[axis]).lighter(135))
+            if name == "width":
+                p.drawRect(QRectF(sx[0] - half, sy[0] - half, 2 * half, 2 * half))
+            else:
+                p.drawEllipse(QPointF(float(sx[0]), float(sy[0])), half + 1, half + 1)
+        p.setBrush(Qt.NoBrush)
+
+    def band_hit(self, pos: QPointF) -> str:
+        """Tirador de la banda elegida bajo el puntero («move», «pan», «tilt», «width») o «»."""
+        frame = self._selected_band_frame()
+        if frame is None:
+            return ""
+        px, py = pos.x(), pos.y()
+        points = area3d.band_handles(frame)
+        for name in ("pan", "tilt", "width"):                              # los círculos y el cuadrado, antes que la flecha
+            sx, sy = self._screen(points[name][None, :])
+            if np.hypot(px - sx[0], py - sy[0]) <= HIT_POINT:
+                return name
+        length = area3d.gizmo_length(self.camera)
+        sx, sy = self._screen(np.stack([points["move"], points["move"] + area3d.AXES["z"] * length]))
+        if _dist_to_polyline(px, py, sx, sy) <= HIT_LINE:
+            return "move"
+        return ""
+
+    def _start_band_gesture(self, kind: str, pos: QPointF) -> None:
+        self._bg = {"kind": kind, "index": self._selected_band, "frame0": self._selected_band_frame(),
+                    "ray0": self._ray(pos), "moved": False, "press": pos}
+        self._drag = "band"
+        self.bandGesture.emit({"phase": "press", "kind": kind, "index": self._selected_band})
+
+    def _band_update(self, pos: QPointF) -> None:
+        bg = self._bg
+        dx, dy = pos.x() - bg["press"].x(), pos.y() - bg["press"].y()
+        bg["moved"] = bg["moved"] or dx * dx + dy * dy > DEAD_ZONE ** 2
+        if not bg["moved"]:
+            return
+        new = area3d.BAND_GESTURES[bg["kind"]](bg["frame0"], bg["ray0"], self._ray(pos))
+        self.bandGesture.emit({"phase": "move", "kind": bg["kind"], "index": bg["index"], "position": new.position,
+                               "width": new.width, "pan": new.pan, "tilt": new.tilt})
+
+    def _end_band_gesture(self, cancel: bool = False) -> None:
+        bg, self._bg = self._bg, None
+        self._drag = ""
+        if bg is not None:
+            self.bandGesture.emit({"phase": "cancel" if cancel else "release", "kind": bg["kind"], "index": bg["index"]})
+        self.update()
 
     @staticmethod
     def _polyline(sx: np.ndarray, sy: np.ndarray) -> QPolygonF:
@@ -662,6 +759,11 @@ class View3D(QWidget):
             if self._emit_tool("press", event.position(), event.modifiers()):
                 self._drag = "tool"
             return
+        if event.button() == Qt.LeftButton and not event.modifiers() & Qt.ShiftModifier:
+            handle = self.band_hit(event.position())
+            if handle:                                # un tirador de la banda elegida
+                self._start_band_gesture(handle, event.position())
+                return
         pan = event.button() == Qt.MiddleButton or (event.button() == Qt.LeftButton
                                                     and event.modifiers() & Qt.ShiftModifier
                                                     and not (self._areas and self.hit_test(event.position())[0]))
@@ -690,6 +792,9 @@ class View3D(QWidget):
         if self._drag == "tool":
             self._emit_tool("move", pos, event.modifiers())
             return
+        if self._drag == "band" and self._bg is not None:
+            self._band_update(pos)
+            return
         if self._drag == "area" and self._gz is not None:
             gz = self._gz
             dx, dy = pos.x() - gz["press"].x(), pos.y() - gz["press"].y()
@@ -704,6 +809,8 @@ class View3D(QWidget):
         if not self._drag:
             axis = self.gizmo_hit(pos) if self._depth is not None else ""
             hover, _ = self.hit_test(pos) if self._areas and not axis else ("", -1)
+            if not hover and not axis and self._bands and (handle := self.band_hit(pos)):
+                hover = f"band_{handle}"
             if axis != self._axis_hover or hover != self._hover:
                 self._axis_hover, self._hover = axis, hover
                 self.setCursor(Qt.PointingHandCursor if hover or axis
@@ -727,6 +834,8 @@ class View3D(QWidget):
             self._emit_pick("release", event.position())
         if self._drag == "area":
             self._end_area_gesture()
+        if self._drag == "band":
+            self._end_band_gesture()
         self._drag = ""
         self.setCursor(Qt.CrossCursor) if self._tool else self.unsetCursor()
 

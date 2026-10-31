@@ -2,8 +2,8 @@
 deepshot/look.py.
 
 Como en Photoshop: la pila se lee de arriba abajo y se aplica de abajo arriba (la de arriba va la última), los efectos nuevos
-entran arriba, se reordenan arrastrándolos (o con Subir / Bajar), se renombran con doble clic o F2, cada uno tiene su casilla
-(apagado), su ojo de «solo» y su opacidad y modo de fusión. Los ajustes de cada tipo se dibujan a partir de su lista de
+entran arriba, se reordenan arrastrándolos (o con Subir / Bajar), se renombran con doble clic o F2, cada uno tiene su ojo
+(bypass: se aplica o se salta) y su opacidad y modo de fusión. Los ajustes de cada tipo se dibujan a partir de su lista de
 `ParamSpec`, así que valen igual los efectos de serie y los de los módulos descargables.
 """
 
@@ -11,11 +11,11 @@ from __future__ import annotations
 
 import copy
 
-from PySide6.QtCore import QCoreApplication, Qt, QTimer, Signal
+from PySide6.QtCore import QCoreApplication, QSize, Qt, QTimer, Signal
 from PySide6.QtWidgets import QAbstractItemView, QComboBox, QHBoxLayout, QLabel, QMenu, QPushButton, QVBoxLayout, QWidget
 
 from deepshot.look import KINDS, LookLayer
-from deepshot.ui.editor_panels import MixPanel, _ListPanel
+from deepshot.ui.editor_panels import DETAIL_ROLE, MixPanel, _ListPanel
 from deepshot.ui.icons import set_icon
 from deepshot.ui.widgets import SegmentedControl
 
@@ -43,8 +43,7 @@ class LookPanel(_ListPanel):
                                                              "saturación, grano…). Entra arriba."), parent)
         self.list.setMaximumHeight(150)
         self.list.setToolTip(self.tr("Efectos de arriba abajo; se aplican de abajo arriba, como en Photoshop. Arrastra "
-                                     "para reordenar, doble clic o F2 para renombrar. La casilla apaga el efecto y el "
-                                     "ojo lo deja solo."))
+                                     "para reordenar, doble clic o F2 para renombrar. El ojo aplica o salta el efecto."))
         # Reordenar arrastrando: la lista mueve la fila y el proyecto sigue su nuevo orden.
         self.list.setDragDropMode(QAbstractItemView.InternalMove)
         self.list.setDefaultDropAction(Qt.MoveAction)
@@ -61,11 +60,10 @@ class LookPanel(_ListPanel):
         set_icon(self.down_button, "arrow_down")
         self.down_button.setToolTip(self.tr("Baja el efecto: se aplica antes (el orden cambia el resultado)"))
         self.down_button.clicked.connect(lambda: self._move(1))
-        move_row = QHBoxLayout()
-        move_row.setSpacing(4)
-        move_row.addWidget(self.up_button, 1)
-        move_row.addWidget(self.down_button, 1)
-        self.layout_.insertLayout(2, move_row)
+        for button in (self.up_button, self.down_button):                # solo el icono, en la fila de Añadir / Duplicar / Borrar
+            button.setText("")
+            button.setIconSize(QSize(16, 16))
+            self.buttons_row.addWidget(button)
         self.layout_.insertWidget(0, _one_line(self.tr("Se aplican de abajo arriba, como en Photoshop.")))
 
         cur = lambda: self.current()  # noqa: E731 (atajo legible para los setters)
@@ -134,6 +132,10 @@ class LookPanel(_ListPanel):
     def item_icon(self, i: int, layer: LookLayer):
         return None
 
+    def item_detail(self, i: int, layer: LookLayer) -> str:
+        """Con un nombre propio, el tipo de efecto queda a la derecha, tenue."""
+        return self.kind_title(layer) if layer.name.strip() else ""
+
     def _row_tip(self, layer: LookLayer) -> str:
         where = self.tr("solo en un rango de profundidad") if layer.limit == "depth" else self.tr("toda la imagen")
         return "{0} · {1}".format(self.kind_title(layer), where)
@@ -162,31 +164,22 @@ class LookPanel(_ListPanel):
         row = self.list.row(entry)
         layer = self.items()[row]
         changed = False
-        enabled = entry.checkState() == Qt.Checked
-        if enabled != layer.enabled:
-            layer.enabled, changed = enabled, True
         text = entry.text().strip()
         if text != self.item_label(row, layer):                          # lo escribió el usuario
             layer.name = "" if (not text or text == self.kind_title(layer)) else text
             changed = True
             self._loading = True
             entry.setText(self.item_label(row, layer))                   # el nombre vacío vuelve al del efecto
+            entry.setData(DETAIL_ROLE, self.item_detail(row, layer))
             self._loading = False
         if changed:
-            self._sync_solo_buttons()
             self.emit_both()
-
-    def _shift_solo(self, row: int) -> None:
-        """Se mete una fila nueva en `row`: los «solo» de las de debajo bajan un puesto y la nueva se ve también."""
-        if self.solo:
-            self.solo = {r + 1 if r >= row else r for r in self.solo} | {row}
 
     def add_item(self, item, commit: bool = True) -> None:
         """Un efecto nuevo entra arriba de la pila (como una capa nueva en Photoshop)."""
         if self.project is None:
             return
         self.items().insert(0, item)
-        self._shift_solo(0)
         self.refresh_list(select=0)
         if commit:
             self.emit_both()
@@ -199,7 +192,6 @@ class LookPanel(_ListPanel):
         if clone.name:
             clone.name += " " + self.tr("copia")
         self.items().insert(row, clone)                                  # justo encima del original
-        self._shift_solo(row)
         self.refresh_list(select=row)
         self.emit_both()
 
@@ -231,7 +223,6 @@ class LookPanel(_ListPanel):
         target = row + step
         if 0 <= row < len(items) and 0 <= target < len(items):
             items.insert(target, items.pop(row))
-            self.solo.clear()                                            # las filas se corren: se quita el «solo»
             self.refresh_list(select=target)
             self.emit_both()
 
@@ -246,7 +237,6 @@ class LookPanel(_ListPanel):
             return
         self._reordering = True
         items.insert(target, items.pop(start))
-        self.solo.clear()
         # La lista se rehace fuera del arrastre (aún no ha terminado de soltarse).
         QTimer.singleShot(0, lambda: self._after_drag(target))
 
@@ -255,8 +245,7 @@ class LookPanel(_ListPanel):
         self._reordering = False
         self.emit_both()
 
-    def _sync_solo_buttons(self) -> None:
-        super()._sync_solo_buttons()
+    def _sync_buttons(self) -> None:
         row = self.list.currentRow()
         self.up_button.setEnabled(row > 0)
         self.down_button.setEnabled(0 <= row < len(self.items()) - 1)

@@ -39,7 +39,7 @@ from PIL import Image
 
 from deepshot import (APP_NAME, AUTHOR, ORG_NAME, RELEASE_DATE, WEBSITE, __version__, depth_runs, depth_view, memory,
                       presets, project_file, themes)
-from deepshot import modules
+from deepshot import area3d, modules
 from deepshot.paint import mask_path_for
 from deepshot.project import Project
 from deepshot.dof import focus_map
@@ -524,6 +524,7 @@ class MainWindow(QMainWindow):
         self.view3d = View3D()
         self.view3d.set_quality(self.quality3d_combo.currentData())     # la guardada en los ajustes
         self.view3d.areaGesture.connect(self.editor.gesture3d)
+        self.view3d.bandGesture.connect(self.editor.band_gesture3d)
         self.view3d.toolGesture.connect(self.editor.gesture)       # Dibujar y Colocar sobre el relieve: el mismo gesto que en 2D
         self.view3d.pickGesture.connect(lambda g: self.editor.pick_focus_gesture({**g, "kind": "pick_focus"}))
         self.editor.lens_panel.toolChanged.connect(self._on_lens_tool_changed)
@@ -1300,21 +1301,27 @@ class MainWindow(QMainWindow):
                   and self.editor.project is not None)
         self.view3d.set_areas(self.editor.visible_areas() if show3d and context == "areas" else [],
                               self.editor.selected_area)
-        self.view3d.set_bands(self._band_planes() if show3d and context == "bands" else [])   # o los planos de las bandas
+        self.view3d.set_bands(self._band_planes() if show3d and context == "bands" else [],   # o los planos de las bandas
+                              self.editor.bands_panel.list.currentRow())
         self.canvas.set_brush(self.editor.brush(self.canvas.tool()))
         self._refresh_mask_overlay()
         self._refresh_focus_overlay()
 
     def _band_planes(self) -> list[tuple]:
-        """Plano de cada banda activa en la escena 3D: [(esquinas (4, 3), color)]."""
+        """Plano de cada banda activa en la escena 3D: [(esquinas (4, 3), color, BandFrame, índice)]."""
         project, size = self.editor.project, self.editor.photo_size
         if project is None or size is None:
             return []
         aspect = size[0] / size[1]
-        return [(view3d_math.band_plane(b.position, b.pan, b.tilt, project.ramp.range_min, project.ramp.range_max,
-                                        project.scene.relief, aspect), tuple(b.color))
-                for i, b in enumerate(project.bands)
-                if b.enabled and b.strength > 0 and not self.editor.bands_panel.hidden_by_solo(i)]
+        r = project.ramp
+        out = []
+        for i, b in enumerate(project.bands):
+            if b.enabled and b.strength > 0:
+                frame = area3d.BandFrame(b.position, b.width, b.pan, b.tilt, r.range_min, r.range_max,
+                                         project.scene.relief, aspect)
+                out.append((view3d_math.band_plane(b.position, b.pan, b.tilt, r.range_min, r.range_max,
+                                                   project.scene.relief, aspect), tuple(b.color), frame, i))
+        return out
 
     def _ensure_effect_view(self, allow_3d: bool = False) -> bool:
         """Las herramientas del lienzo trabajan sobre el efecto: pasa a ese paso y vista si hace falta.

@@ -490,6 +490,70 @@ def test_areas_are_edited_in_3d_with_one_undo_step_per_gesture(win):
     assert len(view._areas) == 2
 
 
+def test_bands_are_edited_in_3d_with_handles_one_undo_step_per_gesture(win):
+    from PySide6.QtCore import QPoint, QPointF
+
+    from deepshot import area3d
+    from deepshot.tonemap import Band
+
+    win.add_photos(win._photos[:1])
+    give_depth(win)
+    wait_for(win, lambda: win.editor.result is not None)
+    win.set_step(STEP_EDIT)
+    win.editor.project.bands.extend([Band(position=0.3, width=0.1), Band(position=0.7, width=0.1)])
+    win.editor.bands_panel.bind(win.editor.project)
+    win.editor._on_committed()                                              # las bandas ya son el punto de partida del deshacer
+    win.editor.bands_panel.select(0)
+    go_3d(win)
+    view = win.view3d
+    win.resize(1500, 900)                                                   # visor ancho: el tirador de tilt lejos del gizmo de ejes
+    win._app.processEvents()
+    view.camera.set_view(-35, 20)
+    win._app.processEvents()
+    assert view._selected_band == 0 and view._selected_band_frame() is not None
+
+    def px(world):
+        sx, sy = view._screen(np.asarray(world, dtype=np.float64)[None, :])
+        return QPoint(int(round(sx[0])), int(round(sy[0])))
+
+    def drag(start, delta):
+        undo = win.undo_stack.index()
+        QTest.mousePress(view, Qt.LeftButton, Qt.NoModifier, start)
+        for f in (0.3, 0.6, 1.0):
+            QTest.mouseMove(view, start + QPoint(int(delta.x() * f), int(delta.y() * f)))
+        QTest.mouseRelease(view, Qt.LeftButton, Qt.NoModifier, start + delta)
+        return win.undo_stack.index() - undo
+
+    def undo():                                    # deshacer rehace los paneles: se vuelve a tocar la banda
+        win.undo_stack.undo()
+        win.editor.set_edit_context("bands")
+        win._update_overlays()
+
+    handles = area3d.band_handles(view._selected_band_frame())
+    assert view.band_hit(QPointF(px(handles["pan"]))) == "pan" and view.band_hit(QPointF(px(handles["tilt"]))) == "tilt"
+    assert view.band_hit(QPointF(px(handles["width"]))) == "width"
+    band = win.editor.project.bands[0]
+    assert band.pan == 0.0
+    assert drag(px(handles["pan"]), QPoint(0, 40)) == 1 and band.pan != 0.0           # un solo paso de deshacer
+    undo()
+    assert win.editor.project.bands[0].pan == 0.0
+    assert drag(px(handles["tilt"]), QPoint(30, 0)) == 1 and win.editor.project.bands[0].tilt != 0.0
+    undo()
+    old = win.editor.project.bands[0].position
+    arrow = handles["move"] + area3d.AXES["z"] * area3d.gizmo_length(view.camera) * 0.9
+    assert drag(px(arrow), QPoint(50, 0)) == 1 and win.editor.project.bands[0].position != old
+    undo()
+    assert win.editor.project.bands[0].position == old
+    assert drag(px(handles["width"]), QPoint(40, 0)) == 1 and win.editor.project.bands[0].width != 0.1
+    undo()
+    # Un clic suelto en un tirador no cambia nada ni apila deshacer.
+    assert drag(px(handles["pan"]), QPoint(0, 0)) == 0 and win.editor.project.bands[0].pan == 0.0
+    # La banda elegida es la que lleva los tiradores.
+    win.editor.bands_panel.select(1)
+    win._app.processEvents()
+    assert view._selected_band == 1
+
+
 def test_lens_panel_turns_on_with_any_control_changes_the_result_and_undoes(win):
     win.add_photos(win._photos[:1])
     give_depth(win)
@@ -1828,7 +1892,7 @@ def test_disabled_areas_disappear_from_the_3d_view_completely(win):
     assert view.hit_test(contour_point_of_b())[0] == ""                    # desactivada: ya no hay nada ahí
 
 
-def test_solo_mode_follows_the_selection_and_the_row_eye_toggles_solo_without_touching_the_project(win):
+def test_the_row_eye_bypasses_the_element_and_rows_rename_in_place(win):
     from deepshot.tonemap import Band
 
     win.add_photos(win._photos[:1])
@@ -1838,37 +1902,27 @@ def test_solo_mode_follows_the_selection_and_the_row_eye_toggles_solo_without_to
     editor, panel = win.editor, win.editor.areas_panel
     for name, x in (("A", -0.6), ("B", 0.0), ("C", 0.6)):
         panel.add_item(Area(name=name, center=(x, 0.0, 0.5), scale=(0.25, 0.25, 0.25)))
-    assert editor._preview_project() is editor.project                      # sin solo, el proyecto tal cual
-    assert not hasattr(panel, "mute_button")                                # silenciar es la casilla de cada fila
-    panel.select(1)
-    panel.solo_button.click()                                               # modo solo: solo B
-    assert panel.solo == {1} and panel.solo_mode
-    assert [a.enabled for a in editor._preview_project().areas] == [False, True, False]
-    assert all(a.enabled for a in editor.project.areas)                     # el proyecto real no cambia (ni se exporta distinto)
-    panel.select(2)                                                         # elegir otra: el solo se va con ella
-    assert panel.solo == {2} and [a.enabled for a in editor._preview_project().areas] == [False, False, True]
-    assert [o["index"] for o in editor.overlays()] == [2]                   # en 2D solo sus contornos
-    panel.add_item(Area(name="D"))                                          # lo nuevo queda elegido: el solo se va a ello
-    assert panel.solo == {3}
-    panel.solo_button.click()                                               # apagar el modo: todo vuelve
-    assert panel.solo == set() and editor._preview_project() is editor.project
-    panel.toggle_row_solo(0)                                                # el ojo de una fila
-    panel.toggle_row_solo(2)                                                # se pueden dejar varias
-    assert panel.solo == {0, 2} and not panel.solo_mode
-    assert [a.enabled for a in editor._preview_project().areas] == [True, False, True, False]
-    panel.toggle_row_solo(0)
-    panel.toggle_row_solo(2)
-    assert editor._preview_project() is editor.project
-    panel.select(0)
-    panel.list.item(0).setCheckState(Qt.Unchecked)                          # silenciar = la casilla (sí cambia el proyecto)
-    assert editor.project.areas[0].enabled is False
+    assert not hasattr(panel, "solo") and not hasattr(panel, "solo_button")   # el ojo es bypass; ya no hay solo ni casilla
+    assert panel.list.item(0).data(Qt.CheckStateRole) is None               # sin casilla en la fila
+    assert [o["index"] for o in editor.overlays()] == [0, 1, 2]
+    panel.toggle_row_enabled(1)                                             # el ojo de una fila: se salta esa área
+    assert [a.enabled for a in editor.project.areas] == [True, False, True]
+    assert [o["index"] for o in editor.overlays()] == [0, 2]                # y no tiene manejadores
+    panel.toggle_row_enabled(1)
+    assert all(a.enabled for a in editor.project.areas)
+    panel.list.item(2).setText("Fondo")                                     # renombrar en la fila
+    assert editor.project.areas[2].name == "Fondo"
+    panel.list.item(2).setText("  ")                                        # vacío: vuelve al nombre por defecto
+    assert editor.project.areas[2].name.endswith("3")
     editor.project.bands.extend([Band(position=0.3), Band(position=0.6)])
     editor.bands_panel.bind(editor.project)
-    editor.bands_panel.select(1)
-    editor.bands_panel.solo_button.click()
-    assert [b.enabled for b in editor._preview_project().bands] == [False, True]
-    editor.bands_panel._remove()                                            # al borrar, el modo solo sigue a la fila que queda elegida
-    assert editor.bands_panel.solo == {0} and len(editor.project.bands) == 1
+    editor.bands_panel.list.item(1).setText("Luz")
+    assert editor.project.bands[1].name == "Luz" and editor.project.bands[0].name == ""
+    editor.bands_panel.toggle_row_enabled(1)
+    assert [b.enabled for b in editor.project.bands] == [True, False]
+    editor.bands_panel.select(0)
+    editor.bands_panel._remove()                                            # borrar: queda la banda que estaba en bypass
+    assert len(editor.project.bands) == 1 and editor.project.bands[0].enabled is False
 
 
 
@@ -1898,21 +1952,3 @@ def test_sections_start_folded_remember_their_state_and_ctrl_click_opens_only_on
         s.set_expanded(True, silent=True)                                   # y el ancho del panel se mide con todo abierto
     w._probe.wait()
     w.close()
-
-
-def test_a_stale_solo_index_never_hides_everything_and_the_solo_button_shows_when_something_is_in_solo(win):
-    win.add_photos(win._photos[:1])
-    give_depth(win)
-    wait_for(win, lambda: win.editor.result is not None)
-    win.set_step(STEP_EDIT)
-    panel = win.editor.areas_panel
-    for n in "AB":
-        panel.add_item(Area(name=n))
-    panel.solo = {5}                                                        # una fila que ya no existe
-    assert not panel.hidden_by_solo(0) and not panel.hidden_by_solo(1)      # no esconde nada
-    panel.select(0)
-    assert panel.solo == set()                                              # y se limpia sola al elegir fila
-    panel.toggle_row_solo(1)                                                # por el ojo de una fila…
-    assert panel.solo_button.isChecked() and panel.hidden_by_solo(0)        # …el botón Solo lo muestra marcado
-    panel.solo_button.click()                                               # un clic: todo vuelve
-    assert panel.solo == set() and not panel.hidden_by_solo(0)

@@ -488,7 +488,10 @@ def test_widget_draws_band_planes_and_tints_the_focus_zone_green(app):
     assert pix.green() > pix.red() and pix.green() > pix.blue()
     w.set_focus_overlay(None)
     assert w._render_frame() == base                                                  # al quitarla vuelve el color de antes
-    w.set_bands([(band_plane(0.5, 20.0, 0.0, 0.0, 1.0, 1.0, 1.5), (1.0, 1.0, 1.0))])
+    from deepshot.area3d import BandFrame
+
+    frame = BandFrame(0.5, 0.1, 20.0, 0.0, 0.0, 1.0, 1.0, 1.5)
+    w.set_bands([(band_plane(0.5, 20.0, 0.0, 0.0, 1.0, 1.0, 1.5), (1.0, 1.0, 1.0), frame, 0)], selected=0)
     w.grab()                                                                          # dibujar los planos no falla
     w.close()
     w.deleteLater()

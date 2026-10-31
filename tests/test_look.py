@@ -174,3 +174,76 @@ def test_el_nombre_propio_de_la_capa_se_guarda(tmp_path):
     assert Project.load(tmp_path / "p.json").look[0].name == "Contraste de la piel"
     assert Project.from_dict({"look": [{"kind": "levels"}]}).look[0].name == ""      # proyecto sin nombres
 
+
+
+def test_new_builtin_effects_are_neutral_by_default_and_act_when_raised():
+    import numpy as np
+
+    from deepshot import look
+
+    rng = np.random.default_rng(3)
+    img = rng.random((60, 80, 3)).astype(np.float32)
+    depth = np.tile(np.linspace(0, 1, 80, dtype=np.float32), (60, 1))
+    for key, param, value in (("clarity", "amount", 1.0), ("glow", "amount", 1.0), ("chromatic", "amount", 1.0),
+                              ("haze", "amount", 0.8), ("temperature", "temp", 0.8)):
+        kind = look.KINDS[key]
+        neutral = kind.apply(img, depth, kind.defaults)
+        assert np.allclose(neutral, img, atol=1e-6), key                    # con los valores de partida no cambia nada
+        raised = kind.apply(img, depth, {**kind.defaults, param: value})
+        assert raised.shape == img.shape and np.isfinite(raised).all()
+        assert float(np.abs(raised - img).mean()) > 1e-3, key
+
+
+def test_haze_only_touches_the_far_zones_and_needs_a_depth_map():
+    import numpy as np
+
+    from deepshot import look
+
+    img = np.zeros((10, 10, 3), np.float32)
+    depth = np.zeros((10, 10), np.float32)
+    depth[:, 5:] = 1.0                                                      # mitad cerca, mitad lejos
+    out = look.depth_haze(img, depth, amount=1.0, start=0.3, tone=1.0)
+    assert out[:, :5].max() == 0.0 and out[:, 5:].min() == 1.0
+    assert look.depth_haze(img, None, amount=1.0) is img                    # sin profundidad: no hace nada
+
+
+def test_a_layer_limited_to_a_map_only_acts_there_and_waits_for_the_map():
+    import numpy as np
+
+    from deepshot import look
+
+    img = np.full((8, 8, 3), 0.2, np.float32)
+    layer = look.LookLayer.new("temperature")
+    layer.params["temp"] = 1.0
+    layer.limit, layer.mask_id = "mask", "subject"
+    mask = np.zeros((8, 8), np.float32)
+    mask[:, :4] = 1.0
+    out = look.apply_look(img, [layer], None, {"subject": mask})
+    assert not np.allclose(out[:, :4], img[:, :4]) and np.allclose(out[:, 4:], img[:, 4:])      # solo el sujeto
+    layer.mask_invert = True
+    out = look.apply_look(img, [layer], None, {"subject": mask})
+    assert np.allclose(out[:, :4], img[:, :4]) and not np.allclose(out[:, 4:], img[:, 4:])      # solo el fondo
+    assert np.allclose(look.apply_look(img, [layer], None, None), img)                          # sin mapa: no actúa
+
+
+def test_pre_fx_retouch_only_the_photo_before_it_is_blended_and_survive_json():
+    import numpy as np
+
+    from deepshot import look
+    from deepshot.project import Project, render
+
+    depth = np.tile(np.linspace(0, 1, 16, dtype=np.float32), (12, 1))
+    photo = np.full((12, 16, 3), 0.3, np.float32)
+    project = Project()
+    project.composite.opacity = 1.0                                         # solo se ve la foto
+    plain = render(project, depth, photo)
+    layer = look.LookLayer.new("temperature")
+    layer.params["temp"] = 1.0
+    project.pre = [layer]
+    warm = render(project, depth, photo)
+    assert warm[..., 0].mean() > plain[..., 0].mean()                       # el Pre FX cambia la foto mezclada
+    again = Project.from_dict(project.to_dict())
+    assert again.pre[0].kind == "temperature" and again.pre[0].params["temp"] == 1.0
+    assert np.allclose(render(again, depth, photo), warm)
+    project.composite.opacity = 0.0                                         # sin foto en la mezcla, el Pre FX no pinta nada
+    assert np.allclose(render(project, depth, photo), render(Project(), depth, photo))

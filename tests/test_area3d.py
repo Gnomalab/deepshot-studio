@@ -235,3 +235,34 @@ def test_tilted_area_gets_its_real_silhouette_in_2d_and_a_flat_one_keeps_the_ell
     assert len(out["poly"]) >= 8 and (max(xs) - min(xs)) / 2.0 < out["rx"] * 0.75
     box = Area(shape="box", scale=(0.4, 0.4, 0.4), rotation=(30.0, 30.0, 0.0))
     assert len(area_edit.silhouette(box, geo)) >= 4
+
+
+# ---------------------------------------------------------------------------
+# Tiradores de las bandas
+# ---------------------------------------------------------------------------
+def ray_from(origin, target):
+    d = np.asarray(target, dtype=np.float64) - np.asarray(origin, dtype=np.float64)
+    return a3.Ray(np.asarray(origin, dtype=np.float64), d / np.linalg.norm(d))
+
+
+def test_band_handles_sit_on_the_plane_and_the_gestures_give_back_the_values_the_mouse_points_at():
+    import math
+
+    f = a3.BandFrame(position=0.5, width=0.2, pan=0.0, tilt=0.0, ramp_min=0.0, ramp_max=1.0, relief=2.0, aspect=1.5)
+    h = a3.band_handles(f)
+    assert f.z0 == pytest.approx(1.0) and f.half_z == pytest.approx(0.2)
+    assert h["move"][2] == pytest.approx(1.0) and h["pan"][0] == pytest.approx(1.5) and h["tilt"][1] == pytest.approx(1.0)
+    assert h["width"][2] == pytest.approx(1.0 + 0.2)                       # en la cara lejana del grueso
+    eye = [3.0, 0.0, -4.0]
+    # La flecha: medio metro más lejos = un cuarto de rampa (relieve 2).
+    moved = a3.band_move(f, ray_from(eye, [0, 0, 1.0]), ray_from(eye, [0, 0, 1.5]))
+    assert moved.position == pytest.approx(0.75)
+    assert a3.band_move(f, ray_from(eye, [0, 0, 1.0]), ray_from(eye, [0, 0, 9.0])).position == 1.0    # no se sale de la rampa
+    # Pan y tilt: el plano pasa por donde apunta el ratón.
+    assert a3.band_pan(f, ray_from([0, 5, -3], [1.5, 0, 1.0 + 1.5 * math.tan(math.radians(30))])).pan == pytest.approx(30)
+    assert a3.band_tilt(f, ray_from([4, 0, -3], [0, 1.0, 1.0 - math.tan(math.radians(20))])).tilt == pytest.approx(-20)
+    assert a3.band_pan(f, ray_from([0, 5, -3], [0.0, 0.0, 1.0])).pan == 0.0       # justo en el centro: no hay ángulo
+    # Grueso: arrastrar la cara lejana 0,4 hacia el fondo = +0,4 de medio grueso → anchura 0,6.
+    w = a3.band_width(f, ray_from(eye, h["width"]), ray_from(eye, h["width"] + np.array([0, 0, 0.4])))
+    assert w.width == pytest.approx(0.6)
+    assert a3.band_slab_corners(f, 1)[0][2] == pytest.approx(1.2) and a3.band_slab_corners(f, -1)[0][2] == pytest.approx(0.8)

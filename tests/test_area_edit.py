@@ -264,10 +264,9 @@ def test_rename_and_color_survive_json_and_undo(tmp_path, monkeypatch):
     s, stack = make_session(tmp_path, monkeypatch)
     s.areas_panel.add_item(Area(name="A"))
     s.areas_panel.add_item(Area(name="B"))
-    s.areas_panel.name.setText("Cara")
-    s.areas_panel.name.editingFinished.emit()
+    s.areas_panel.list.item(1).setText("Cara")                              # renombrar en la fila (doble clic o F2)
     assert s.project.areas[1].name == "Cara"
-    assert s.areas_panel.list.item(1).text().startswith("Cara")
+    assert s.areas_panel.list.item(1).text() == "Cara"
     s.project.areas[1].ui_color = (0.1, 0.2, 0.3)
     s.save_settings(tmp_path / "x.json")
     s.project.areas.clear()
