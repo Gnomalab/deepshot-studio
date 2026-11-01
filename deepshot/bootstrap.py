@@ -25,7 +25,9 @@ def _migrate_settings() -> None:
     new = QSettings()
     if new.allKeys():
         return                      # ya hay ajustes con el nombre nuevo
-    old = QSettings(ORG_NAME, LEGACY_APP_NAME)
+    # En el mismo formato que los ajustes nuevos (en uso normal, el del sistema; en las pruebas, el .ini temporal): así una
+    # prueba no copia los ajustes antiguos reales del equipo en el que se ejecuta.
+    old = QSettings(QSettings.defaultFormat(), QSettings.UserScope, ORG_NAME, LEGACY_APP_NAME)
     for key in old.allKeys():
         new.setValue(key, old.value(key))
     new.sync()
