@@ -5,8 +5,12 @@ Es un ZIP con:
   depth/<n>.png   mapa de profundidad de cada foto (PNG de 16 bits)
   mask/<n>.png    máscara pintada con pincel (si la hay)
 
-Las fotos NO se copian dentro (pueden pesar mucho): se guarda su ruta, su nombre, su tamaño en bytes y su
-huella SHA-256. Al abrir, se buscan en la ruta original y junto al proyecto; si el contenido cambió se avisa.
+  photo/<n>_<nombre>  la foto misma (solo si se guardó con «Incluir las fotos»)
+
+Por defecto las fotos NO se copian dentro (pueden pesar mucho): se guarda su ruta, su nombre, su tamaño en bytes y su
+huella SHA-256. Al abrir, se buscan en la ruta original y junto al proyecto; si el contenido cambió se avisa. Con
+«Incluir las fotos» el proyecto lleva también una copia de cada foto: si al abrir no está la original (o ha cambiado),
+se usa la copia, que se saca a `<datos>/embedded/<huella>/` (un solo miembro, por su nombre, nunca el ZIP entero).
 El ZIP nunca se extrae a disco: solo se leen sus miembros por nombre (no hay riesgo de rutas maliciosas).
 """
 
@@ -50,6 +54,7 @@ class PhotoEntry:
     depth: np.ndarray | None = None        # float32 0..1, 0 = cerca
     mask: bytes | None = None              # PNG de la máscara pintada
     crop: list | None = None               # reencuadre previo (x0, y0, x1, y1 normalizados) o None = foto entera
+    embedded: str = ""                     # nombre del miembro del ZIP con la copia de la foto ("" = no la lleva)
 
 
 @dataclass
@@ -106,9 +111,10 @@ def photo_size(path: Path) -> tuple[int, int] | None:
 # ---------------------------------------------------------------------------
 # Guardar
 # ---------------------------------------------------------------------------
-def save_project(path: Path, photos: list[PhotoEntry], current: int = 0, app_version: str = "") -> None:
+def save_project(path: Path, photos: list[PhotoEntry], current: int = 0, app_version: str = "",
+                 embed_photos: bool = False) -> None:
     """Escribe el proyecto. Se escribe a un archivo temporal y se renombra: un fallo a medias no destruye
-    el proyecto anterior."""
+    el proyecto anterior. Con `embed_photos` copia dentro también cada foto (las que existan en disco)."""
     path = Path(path)
     manifest = {"deepshot_project": PROJECT_VERSION, "app_version": app_version,
                 "saved": datetime.now().isoformat(timespec="seconds"),
@@ -119,7 +125,10 @@ def save_project(path: Path, photos: list[PhotoEntry], current: int = 0, app_ver
             for i, e in enumerate(photos):
                 item = {"path": e.path, "name": e.name or Path(e.path).name, "size": e.size, "sha256": e.sha256,
                         "source": e.source, "project": e.project, "depth": None, "mask": None,
-                        "crop": list(e.crop) if e.crop else None}
+                        "crop": list(e.crop) if e.crop else None, "photo": None}
+                if embed_photos and Path(e.path).is_file():
+                    item["photo"] = f"photo/{i}_{Path(e.path).name}"
+                    z.write(e.path, item["photo"], compress_type=zipfile.ZIP_STORED)      # un JPG ya va comprimido
                 if e.depth is not None:
                     item["depth"] = f"depth/{i}.png"
                     z.writestr(item["depth"], _depth_to_png(e.depth), compress_type=zipfile.ZIP_STORED)
@@ -179,6 +188,8 @@ def load_project(path: Path) -> LoadedProject:
                                    size=int(item.get("size", 0)), sha256=str(item.get("sha256", "")),
                                    source=str(item.get("source", "")), project=item.get("project"),
                                    crop=item.get("crop") if isinstance(item.get("crop"), list) else None)
+                if item.get("photo") in names:
+                    entry.embedded = str(item["photo"])
                 if item.get("depth") in names:
                     entry.depth = _png_to_depth(z.read(item["depth"]))
                 if item.get("mask") in names:
@@ -190,6 +201,35 @@ def load_project(path: Path) -> LoadedProject:
         raise ProjectFileError(QCoreApplication.translate("ProjectFile", "No se pudo leer el proyecto: {0}").format(exc)) from exc
     out.current = max(0, min(out.current, max(len(out.photos) - 1, 0)))
     return out
+
+
+def extract_embedded(project_file: Path, entry: PhotoEntry) -> Path | None:
+    """Saca de un proyecto la copia de una foto a `<datos>/embedded/<huella>/<nombre>` y devuelve su ruta (None si el
+    proyecto no la lleva, no se puede leer o no coincide con su huella). Si ya estaba sacada, se reutiliza."""
+    if not entry.embedded:
+        return None
+    from deepshot.paths import data_subdir
+
+    name = Path(entry.name or Path(entry.path).name).name            # solo el nombre: nunca una ruta del ZIP
+    folder = data_subdir("embedded") / (entry.sha256[:16] or "sin-huella")
+    target = folder / name
+    try:
+        if target.is_file() and (not entry.sha256 or sha256_of(target) == entry.sha256):
+            return target
+        with zipfile.ZipFile(project_file) as z:
+            if entry.embedded not in z.namelist():
+                return None
+            folder.mkdir(parents=True, exist_ok=True)
+            with z.open(entry.embedded) as src, open(target, "wb") as dst:
+                while chunk := src.read(1 << 20):
+                    dst.write(chunk)
+        if entry.sha256 and sha256_of(target) != entry.sha256:
+            target.unlink(missing_ok=True)
+            return None
+        return target
+    except (OSError, zipfile.BadZipFile, KeyError):
+        log.warning("No se pudo sacar la foto incluida en el proyecto: %s", entry.embedded)
+        return None
 
 
 def locate_photo(entry: PhotoEntry, project_file: Path) -> tuple[Path | None, bool]:

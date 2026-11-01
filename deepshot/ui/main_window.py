@@ -264,6 +264,7 @@ class MainWindow(QMainWindow):
         self.canvas.hint.connect(self._on_canvas_hint)
         self.export_panel = ExportPanel(self._export_context)
         self.export_panel.exported.connect(self._on_exported)
+        self.export_panel.previewChanged.connect(self._on_export_preview_changed)
         self.export_panel.failed.connect(self._on_export_failed)
         self._build_header()
         self._build_central()
@@ -856,6 +857,14 @@ class MainWindow(QMainWindow):
                                                    self.save_project_as)
         for action in (self.action_open_project, self.action_save_project, self.action_save_project_as):
             file_menu.addAction(action)
+        self.action_embed_photos = QAction(self.tr("Incluir las fotos en el proyecto"), self)
+        self.action_embed_photos.setCheckable(True)
+        self.action_embed_photos.setChecked(self.settings.value("project/embed_photos", False, type=bool))
+        self.action_embed_photos.setStatusTip(self.tr("Incluir las fotos en el proyecto"))
+        self.action_embed_photos.setToolTip(self.tr("Al guardar, copia dentro del proyecto las fotos (el archivo pesa "
+                                                    "más, pero se puede abrir en otro equipo sin llevar las fotos)."))
+        self.action_embed_photos.toggled.connect(lambda on: self.settings.setValue("project/embed_photos", bool(on)))
+        file_menu.addAction(self.action_embed_photos)
         self.action_start_screen = self._action(self.tr("Pantalla de inicio…"), None,
                                                 lambda: self.show_start_dialog(show_checkbox=True))
         file_menu.addAction(self.action_start_screen)
@@ -1017,6 +1026,7 @@ class MainWindow(QMainWindow):
         if not hasattr(self, "editor"):
             return
         self.editor.set_look_active(index == STEP_LOOK)
+        self.editor.set_export_content(self.export_panel.content_key() if index == STEP_EXPORT else "")
         if index != STEP_EDIT:
             # Dibujar, colocar y pincel solo tienen sentido sobre el efecto del paso 3: se sueltan al salir.
             self.editor.areas_panel.set_tool("")
@@ -1193,6 +1203,9 @@ class MainWindow(QMainWindow):
             self.canvas.set_image(self.current_photo, keep_view=keep_view)
         elif mode == VIEW_DEPTH:
             self.canvas.set_image(self._depth_view_image(depth), keep_view=keep_view)
+        elif mode == VIEW_RESULT and self.step_group.checkedId() == STEP_EXPORT \
+                and self.export_panel.content_key() == "depth":
+            self.canvas.set_image(self._export_depth_image(depth), keep_view=keep_view)     # el mapa tal como se guardará
         elif mode == VIEW_RESULT and result is not None:
             self.canvas.set_image(result, keep_view=keep_view, scene_size=size)
         elif mode == VIEW_COMPARE:
@@ -1230,6 +1243,25 @@ class MainWindow(QMainWindow):
             return depth_to_qimage(depth)
         rgb = np.ascontiguousarray(rgb)
         return QImage(rgb.data, rgb.shape[1], rgb.shape[0], 3 * rgb.shape[1], QImage.Format_RGB888).copy()
+
+    def _export_depth_image(self, depth: np.ndarray) -> QImage:
+        """El mapa de profundidad como saldrá del paso Exportar: original o con zonas movidas, en gris (cerca claro o
+        oscuro) o en color. Solo la vista previa; no cambia el mapa."""
+        options = self.export_panel.options()
+        project = self.editor.project
+        if options.depth_zones and project is not None:
+            depth = project.depth_control.apply(depth)
+        if options.depth_palette:
+            rgb = np.ascontiguousarray(depth_view.colorize(depth, options.depth_palette))
+            return QImage(rgb.data, rgb.shape[1], rgb.shape[0], 3 * rgb.shape[1], QImage.Format_RGB888).copy()
+        clipped = np.clip(depth.astype(np.float32), 0.0, 1.0)
+        return depth_to_qimage(clipped if options.near_bright else 1.0 - clipped)     # «cerca = claro» como el archivo
+
+    def _on_export_preview_changed(self) -> None:
+        """Cambió lo que se exporta (tipo, mapa en color…): la vista previa lo enseña en el momento."""
+        if self.step_group.checkedId() == STEP_EXPORT:
+            self.editor.set_export_content(self.export_panel.content_key())
+            self._show_current()
 
     def _on_depth_style_changed(self, _index: int) -> None:
         self.settings.setValue("depthview/style", self.depth_style_combo.currentData())
@@ -1361,6 +1393,10 @@ class MainWindow(QMainWindow):
         """Contornos de las áreas: solo en el paso de edición y sobre el efecto (o al comparar). También el aviso Pre / Post FX."""
         fx = self.editor.fx_context() if self.step_group.checkedId() == STEP_LOOK else ""
         badge = {"pre": self.tr("Pre FX · la foto con sus efectos"), "post": self.tr("Post FX · el resultado")}.get(fx, "")
+        if self.step_group.checkedId() == STEP_EXPORT:      # se enseña lo mismo que saldrá en el archivo
+            badge = {"effect": self.tr("Se exporta: Efecto (sin el paso Look)"),
+                     "depth": self.tr("Se exporta: Mapa de profundidad"),
+                     "final": self.tr("Se exporta: Imagen final (con el paso Look)")}.get(self.export_panel.content_key(), "")
         self.canvas.set_badge(badge if self.view_switch.current_index() == VIEW_RESULT else "")
         context = self.editor.visible_context()          # áreas o bandas: solo se ven los tiradores de lo que se toca
         show = (self.step_group.checkedId() == STEP_EDIT and self.areas_button.isChecked() and context == "areas"
@@ -1834,7 +1870,8 @@ class MainWindow(QMainWindow):
         QApplication.setOverrideCursor(Qt.WaitCursor)       # calcular las huellas de fotos grandes tarda un poco
         try:
             current = self.library.currentRow()
-            project_file.save_project(path, self._project_entries(), max(current, 0), __version__)
+            project_file.save_project(path, self._project_entries(), max(current, 0), __version__,
+                                      embed_photos=self.action_embed_photos.isChecked())
         except OSError as exc:
             log.warning("No se pudo guardar el proyecto %s: %s", path, exc)
             QApplication.restoreOverrideCursor()
@@ -1871,6 +1908,10 @@ class MainWindow(QMainWindow):
         found, missing, changed = [], [], []
         for entry in loaded.photos:
             photo, was_changed = project_file.locate_photo(entry, path)
+            if (photo is None or was_changed) and entry.embedded:        # la copia que lleva el proyecto es la buena
+                copy = project_file.extract_embedded(path, entry)
+                if copy is not None:
+                    photo, was_changed = copy, False
             if photo is None:       # movida o borrada: se le pide al usuario que la localice
                 photo = self._ask_photo_location(entry)
             if photo is None:

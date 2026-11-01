@@ -351,3 +351,18 @@ def test_focus_picker_announces_press_and_release_so_the_zone_shows_while_presse
     assert events == [True] and session.project.lens.enabled
     session.pick_focus_gesture({"phase": "release", "kind": "pick_focus", "x": 20.0, "y": 40.0})
     assert events == [True, False]
+
+
+def test_export_effect_preview_leaves_out_post_fx_like_the_file(tmp_path):
+    from deepshot.look import LookLayer
+
+    app, session, *_ = _setup(tmp_path)
+    p = session.project
+    session.look_panel.add_item(LookLayer.new("levels"))
+    assert session._preview_project() is p
+    session.set_export_content("final")
+    assert session._preview_project() is p                                   # la imagen final lleva el paso Look
+    session.set_export_content("effect")
+    assert session._preview_project().look == [] and len(p.look) == 1       # el efecto, sin él; el proyecto intacto
+    session.set_export_content("")
+    assert session._preview_project() is p

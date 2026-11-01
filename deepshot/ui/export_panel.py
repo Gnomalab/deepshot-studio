@@ -31,6 +31,8 @@ from PySide6.QtWidgets import (
 from deepshot import export as ex
 from deepshot.project import Project
 from deepshot.ui.icons import icon, set_icon
+from deepshot import presets
+from deepshot.ui.preset_bar import PresetBar
 from deepshot.ui.quick_viewer import IMAGE_SUFFIXES, QuickViewer
 from deepshot.ui.task_timer import TaskTimer, with_time
 from deepshot.ui.value_slider import ValueSlider
@@ -103,6 +105,9 @@ class ExportPanel(QWidget):
 
     exported = Signal(list)              # rutas escritas
     failed = Signal(str, str)            # mensaje, detalle técnico
+    previewChanged = Signal()            # cambió lo que se exporta: la vista previa debe enseñarlo
+
+    PRESET_FIELDS = tuple(presets.EXPORT_DEFAULTS)
 
     def __init__(self, context: Callable[[], dict | None], parent: QWidget | None = None) -> None:
         super().__init__(parent)
@@ -122,6 +127,11 @@ class ExportPanel(QWidget):
             return label
 
         self.info = hint("")
+        # Presets de exportación: de fábrica por tipo y los propios (misma barra que rampas y estilos).
+        self.preset_bar = PresetBar("export", self.tr("Cargar preset de exportación…"), self.current_preset)
+        self.preset_bar.combo.setToolTip(self.tr("Ajustes de exportación listos: elige uno y se rellenan el tipo, el "
+                                                 "formato, el tamaño y la calidad (no cambian el nombre ni la carpeta)."))
+        self.preset_bar.chosen.connect(self.apply_preset)
         self.content = SegmentedControl([self.tr("Efecto"), self.tr("Mapa de profundidad"), self.tr("Imagen final")])
         self.content.set_tooltips([
             self.tr("La imagen con la rampa, las bandas, las áreas y la mezcla aplicadas (sin el paso Look)"),
@@ -265,6 +275,7 @@ class ExportPanel(QWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(4)
         layout.addWidget(self.info)
+        layout.addWidget(self.preset_bar)
         layout.addWidget(QLabel(self.tr("Qué exportar")))
         layout.addWidget(self.content)
         self.depth_source_label = QLabel(self.tr("Mapa de profundidad"))
@@ -299,6 +310,7 @@ class ExportPanel(QWidget):
         self.quality.valueChanged.connect(lambda _v: self._on_format_changed(0))
         self.dpi.valueChanged.connect(self._on_format_changed)
         self.keep_metadata.toggled.connect(self._on_format_changed)
+        self.near_bright.toggled.connect(self._on_content_changed)
         self._refresh()
 
     # --- Estado guardado --------------------------------------------------------------------------
@@ -339,6 +351,42 @@ class ExportPanel(QWidget):
         if self._last_dir is not None:
             s.setValue("export/dir", str(self._last_dir))
 
+    # --- Presets -------------------------------------------------------------------------------------------
+    def current_preset(self) -> dict:
+        """Los ajustes de exportación actuales tal como los guarda un preset (sin nombre ni carpeta)."""
+        return {"export": {
+            "content": CONTENT_KEYS[self.content.current_index()], "format": FORMAT_KEYS[self.format.current_index()],
+            "final_format": str(self.final_format.currentData()), "quality": int(self.quality.value()),
+            "size_mode": str(self.size_mode.currentData()), "size_value": int(self.size_value.value()),
+            "dpi": int(self.dpi.value()), "keep_metadata": self.keep_metadata.isChecked(),
+            "near_bright": self.near_bright.isChecked(), "depth_color": str(self.depth_color.currentData() or ""),
+            "depth_source": DEPTH_SOURCE_KEYS[self.depth_source.current_index()],
+            "save_settings": self.save_settings.isChecked()}}
+
+    def apply_preset(self, data: dict) -> None:
+        """Rellena los controles con un preset (lo que falte toma el valor por defecto)."""
+        d = {**presets.EXPORT_DEFAULTS, **{k: v for k, v in data.get("export", {}).items() if k in self.PRESET_FIELDS}}
+        self.content.set_current_index(CONTENT_KEYS.index(d["content"]) if d["content"] in CONTENT_KEYS else 0)
+        self.format.set_current_index(FORMAT_KEYS.index(d["format"]) if d["format"] in FORMAT_KEYS else 1)
+        self.final_format.setCurrentIndex(max(0, self.final_format.findData(str(d["final_format"]))))
+        self.quality.setValue(int(d["quality"]))
+        self.size_mode.blockSignals(True)           # al cambiar el modo a mano el valor se reinicia: aquí lo manda el preset
+        self.size_mode.setCurrentIndex(max(0, self.size_mode.findData(str(d["size_mode"]))))
+        self.size_mode.blockSignals(False)
+        self.size_value.setValue(int(float(d["size_value"])))
+        self.dpi.setValue(int(d["dpi"]))
+        self.keep_metadata.setChecked(bool(d["keep_metadata"]))
+        self.near_bright.setChecked(bool(d["near_bright"]))
+        self.depth_color.setCurrentIndex(max(0, self.depth_color.findData(str(d["depth_color"] or ""))))
+        self.depth_source.set_current_index(DEPTH_SOURCE_KEYS.index(d["depth_source"])
+                                            if d["depth_source"] in DEPTH_SOURCE_KEYS else 0)
+        self.save_settings.setChecked(bool(d["save_settings"]))
+        self._on_content_changed(0)
+
+    def content_key(self) -> str:
+        """Lo que se va a exportar: «effect», «depth» o «final»."""
+        return CONTENT_KEYS[self.content.current_index()]
+
     # --- Contenido ---------------------------------------------------------------------------------------
     def options(self) -> ex.ExportOptions:
         content = CONTENT_KEYS[self.content.current_index()]
@@ -369,6 +417,7 @@ class ExportPanel(QWidget):
         self._refresh()
 
     def _refresh(self) -> None:
+        self.preset_bar.sync()                       # el nombre del preset se ve mientras los ajustes sean los suyos
         ctx = self._context()
         content = CONTENT_KEYS[self.content.current_index()]
         fmt = FORMAT_KEYS[self.format.current_index()]
@@ -421,6 +470,7 @@ class ExportPanel(QWidget):
     def _on_content_changed(self, _i: int) -> None:
         self._save()
         self._refresh()
+        self.previewChanged.emit()
 
     def _on_format_changed(self, _i: int = 0) -> None:
         self._save()

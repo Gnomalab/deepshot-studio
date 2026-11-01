@@ -126,3 +126,22 @@ def test_roundtrip_keeps_pre_and_post_fx_with_their_map_limits(tmp_path):
     assert [(l.kind, l.limit, l.mask_id, l.mask_invert) for l in back.pre] == [("saturation", "mask", "subject", True)]
     assert [(l.kind, l.limit, l.mask_id, l.mask_invert) for l in back.look] == [("levels", "mask", "subject", False)]
     assert back.pre[0].params["amount"] == -1.0 and back.look[0].params["black"] == 0.2
+
+
+def test_project_can_carry_its_photos_and_open_without_the_originals(tmp_path, monkeypatch):
+    monkeypatch.setenv("DEEPSHOT_DATA_DIR", str(tmp_path / "datos"))
+    a = make_photo(tmp_path / "a.png", color=(5, 6, 7))
+    target = tmp_path / "con fotos.deepshot"
+    pf.save_project(target, [entry(a)], embed_photos=False)
+    assert pf.load_project(target).photos[0].embedded == ""                  # por defecto no se copian
+    pf.save_project(target, [entry(a)], embed_photos=True)
+    e = pf.load_project(target).photos[0]
+    assert e.embedded.startswith("photo/0_")
+    original = a.read_bytes()
+    a.unlink()                                                              # el proyecto se abre en un equipo sin la foto
+    assert pf.locate_photo(e, target) == (None, False)
+    copy = pf.extract_embedded(target, e)
+    assert copy is not None and copy.read_bytes() == original and copy.name == "a.png"
+    assert pf.extract_embedded(target, e) == copy                           # una segunda vez se reutiliza
+    e.sha256 = "0" * 64                                                     # huella que no coincide: no se da por buena
+    assert pf.extract_embedded(target, e) is None

@@ -1,6 +1,7 @@
 """Presets de rampa y de estilo: los de fábrica y los que guarda el usuario.
 
-Cuatro tipos (`kind`):
+Cinco tipos (`kind`):
+  - "export": los ajustes del paso Exportar (qué, formato, tamaño, calidad…); no tocan el proyecto de la foto.
   - "look":  la pila de efectos del paso Look (niveles, contraste, grano, resplandor…). Los de fábrica usan solo los
              efectos de serie (numpy), nunca módulos descargables: así valen en cualquier instalación.
   - "lens":  solo el carácter del bokeh del desenfoque de lente (apertura, palas, ojo de gato…). No toca el foco ni
@@ -31,7 +32,7 @@ from deepshot.tonemap import BLACK, WHITE, ColorRamp, RampStop, ramp_preset
 
 log = logging.getLogger(__name__)
 
-KINDS = ("ramp", "style", "lens", "look")
+KINDS = ("ramp", "style", "lens", "look", "export")
 PRESET_VERSION = 1
 
 
@@ -211,13 +212,47 @@ _LOOKS: list[tuple[str, str, list[dict]]] = [
         {"kind": "levels", "params": {"black": 0.08, "gamma": 1.1}}]),
 ]
 
+# Exportación: lo que guarda y aplica un preset del paso Exportar (no la carpeta ni el nombre, que son de cada foto).
+EXPORT_DEFAULTS = {"content": "effect", "format": "png16", "final_format": "jpg", "quality": 92, "size_mode": "original",
+                   "size_value": 100, "dpi": 300, "keep_metadata": True, "near_bright": True, "depth_color": "",
+                   "depth_source": "original", "save_settings": True}
+_EXPORTS: list[tuple[str, str, dict]] = [
+    ("effect_png8", QT_TRANSLATE_NOOP("Presets", "Efecto · PNG 8 bits (publicar)"),
+     {"content": "effect", "format": "png8"}),
+    ("effect_png16", QT_TRANSLATE_NOOP("Presets", "Efecto · PNG 16 bits (para retocar)"),
+     {"content": "effect", "format": "png16"}),
+    ("effect_exr", QT_TRANSLATE_NOOP("Presets", "Efecto · EXR 32 bits (flujo profesional)"),
+     {"content": "effect", "format": "exr32"}),
+    ("depth_png16", QT_TRANSLATE_NOOP("Presets", "Mapa de profundidad · PNG 16 bits, cerca = claro (otras apps)"),
+     {"content": "depth", "format": "png16", "near_bright": True}),
+    ("depth_png8", QT_TRANSLATE_NOOP("Presets", "Mapa de profundidad · PNG 8 bits (ligero)"),
+     {"content": "depth", "format": "png8", "near_bright": True}),
+    ("depth_exr", QT_TRANSLATE_NOOP("Presets", "Mapa de profundidad · EXR 32 bits (3D y composición)"),
+     {"content": "depth", "format": "exr32", "near_bright": True}),
+    ("depth_color", QT_TRANSLATE_NOOP("Presets", "Mapa de profundidad · en color (térmico), PNG 8 bits"),
+     {"content": "depth", "format": "png8", "depth_color": "thermal"}),
+    ("final_web", QT_TRANSLATE_NOOP("Presets", "Imagen final · Web (JPG, lado largo 2048 px)"),
+     {"content": "final", "final_format": "jpg", "quality": 85, "size_mode": "long_side", "size_value": 2048,
+      "dpi": 72, "keep_metadata": False}),
+    ("final_social", QT_TRANSLATE_NOOP("Presets", "Imagen final · Redes sociales (JPG, lado largo 1350 px)"),
+     {"content": "final", "final_format": "jpg", "quality": 90, "size_mode": "long_side", "size_value": 1350,
+      "dpi": 72, "keep_metadata": False}),
+    ("final_print", QT_TRANSLATE_NOOP("Presets", "Imagen final · Impresión (TIFF 8 bits, 300 ppp)"),
+     {"content": "final", "final_format": "tiff8", "dpi": 300}),
+    ("final_master", QT_TRANSLATE_NOOP("Presets", "Imagen final · Máster (PNG 16 bits, tamaño original)"),
+     {"content": "final", "final_format": "png16"}),
+    ("final_webp", QT_TRANSLATE_NOOP("Presets", "Imagen final · WebP ligero (lado largo 2048 px)"),
+     {"content": "final", "final_format": "webp", "quality": 85, "size_mode": "long_side", "size_value": 2048,
+      "keep_metadata": False}),
+]
+
 LENS_PRESET_FIELDS = ("aperture", "sharp_range", "near", "far", "blades", "rotation", "highlights", "softness",
                       "cat_eye")        # lo que guarda y aplica un preset de bokeh
 
 
 def builtin_names(kind: str) -> list[tuple[str, str]]:
     """[(clave, nombre visible)] de los presets de fábrica."""
-    table = {"ramp": _RAMPS, "style": _STYLES, "lens": _LENS, "look": _LOOKS}[kind]
+    table = {"ramp": _RAMPS, "style": _STYLES, "lens": _LENS, "look": _LOOKS, "export": _EXPORTS}[kind]
     return [(k, name) for k, name, *_ in table]
 
 
@@ -231,6 +266,10 @@ def builtin(kind: str, key: str) -> dict:
         for k, _name, data in _LENS:
             if k == key:
                 return {"lens": dict(data)}
+    elif kind == "export":
+        for k, _name, data in _EXPORTS:
+            if k == key:
+                return {"export": {**EXPORT_DEFAULTS, **data}}
     elif kind == "look":
         for k, _name, layers in _LOOKS:
             if k == key:
@@ -394,6 +433,8 @@ def from_project(kind: str, project, stack: str = "look") -> dict:
         return {"ramp": ramp}
     if kind == "lens":
         return {"lens": {k: d["lens"][k] for k in LENS_PRESET_FIELDS}}
+    if kind == "export":
+        raise ValueError("Los presets de exportación salen del panel Exportar, no del proyecto")
     if kind == "look":
         return {"look": d["pre" if stack == "pre" else "look"]}
     composite = {k: v for k, v in d["composite"].items() if k != "painted_mask"}
@@ -441,6 +482,8 @@ def apply_to_project_dict(kind: str, project_dict: dict, preset: dict, stack: st
     nuevo, marcadas como suyas. Lo demás de un estilo se restablece. La máscara pintada de la foto nunca se toca.
     """
     out = json.loads(json.dumps(project_dict))   # copia profunda barata (solo tipos JSON)
+    if kind == "export":
+        return out                               # los ajustes de exportación no son del proyecto de la foto
     if kind == "lens":
         # Solo el carácter del bokeh; el foco, la zona nítida del foco y el destino siguen siendo los de la foto.
         known = {k: v for k, v in preset.get("lens", {}).items() if k in LENS_PRESET_FIELDS}

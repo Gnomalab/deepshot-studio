@@ -2081,3 +2081,37 @@ def test_reframing_works_on_a_region_and_leaves_the_file_alone(win, tmp_path):
     win._set_crop(None)                                                     # «Foto entera»
     assert (win.current_photo.width(), win.current_photo.height()) == (W, H) and path not in win.crops
     assert win._depth_settings().key() == plain_key                         # la clave vuelve a ser la de siempre
+
+
+def test_export_step_previews_what_will_be_exported_and_presets_fill_the_panel(win):
+    from deepshot import presets
+    from deepshot.ui.main_window import STEP_EXPORT
+
+    panel = win.export_panel
+    # Preset de fábrica: rellena tipo, formato y tamaño; uno propio guardado vale igual.
+    panel.preset_bar.chosen.emit(presets.builtin("export", "final_web"))
+    assert panel.content_key() == "final" and panel.final_format.currentData() == "jpg"
+    assert panel.size_mode.currentData() == "long_side" and panel.size_value.value() == 2048 and panel.quality.value() == 85
+    assert panel.keep_metadata.isChecked() is False
+    assert panel.current_preset()["export"] == presets.builtin("export", "final_web")["export"]
+    panel.preset_bar.chosen.emit(presets.builtin("export", "depth_color"))
+    assert panel.content_key() == "depth" and panel.depth_color.currentData() == "thermal"
+    # Cada tipo tiene presets de fábrica y todos se aplican sin error.
+    keys = [k for k, _n in presets.builtin_names("export")]
+    assert {k.split("_")[0] for k in keys} == {"effect", "depth", "final"}
+    for key in keys:
+        panel.apply_preset(presets.builtin("export", key))
+    # El aviso del visor sigue lo que se exporta.
+    from deepshot.ui.main_window import VIEW_RESULT
+
+    win.set_step(STEP_EXPORT)
+    win.view_switch.set_current_index(VIEW_RESULT)
+    panel.apply_preset(presets.builtin("export", "effect_png8"))
+    win._update_overlays()
+    assert win.editor.export_content == "effect" and win.canvas._badge.split(":")[0] in ("Se exporta", "Exporting")
+    effect_badge = win.canvas._badge
+    panel.apply_preset(presets.builtin("export", "depth_exr"))
+    win._update_overlays()
+    assert win.editor.export_content == "depth" and win.canvas._badge != effect_badge
+    win.set_step(0)
+    assert win.editor.export_content == ""

@@ -166,6 +166,7 @@ class EditSession(QObject):
             bar.previewed.connect(lambda preset, k=kind, st=stack: self.preview_preset(k, preset, st))
             bar.previewEnded.connect(self.end_preview)
         self._previewing = False
+        self.export_content = ""                        # en el paso Exportar: «effect», «depth» o «final» ("" fuera de él)
         self.look_active = False                         # el paso Look está a la vista (lo fija la ventana principal)
         self.look_stack.pages.currentChanged.connect(lambda _i: self._on_fx_tab())
         self.ramp_editor.presetApplying.connect(self._base_to_ramp)
@@ -320,6 +321,12 @@ class EditSession(QObject):
             self.look_active = active
             self._on_fx_tab()
 
+    def set_export_content(self, content: str) -> None:
+        """Lo que se exportaría ahora (paso Exportar). Con «effect» la vista previa no lleva Post FX, igual que el archivo."""
+        if content != self.export_content:
+            self.export_content = content
+            self._request_render()
+
     def _on_fx_tab(self) -> None:
         """Pre FX | Post FX: la vista previa enseña lo que se está tocando (ver `_preview_project`)."""
         self._request_render()
@@ -333,9 +340,12 @@ class EditSession(QObject):
         solos = {"areas": self.areas_panel.solo, "bands": self.bands_panel.solo, "look": self.look_panel.solo,
                  "pre": self.pre_panel.solo}
         pre_view = self.fx_context() == "pre"
-        if not any(solos.values()) and not pre_view:
+        no_look = self.export_content == "effect" and bool(project.look)        # «Efecto» se exporta sin el paso Look
+        if not any(solos.values()) and not pre_view and not no_look:
             return project
         clone = Project.from_dict(project.to_dict())
+        if no_look:
+            clone.look = []
         if pre_view:                                     # Pre FX: la foto con sus efectos, sin depender de la mezcla ni de Post FX
             clone.composite.opacity = 1.0
             clone.composite.mask = "none"
