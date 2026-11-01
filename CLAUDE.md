@@ -120,7 +120,8 @@ deepshot-studio/
 │   ├── depth_view.py   # el mapa de profundidad en gris, en color o con sus zonas marcadas (sin interfaz)
 │   ├── view3d.py       # vista 3D: cámara orbital y dibujo de la nube de puntos (numpy, sin interfaz)
 │   ├── area3d.py       # áreas en 3D: contornos, tiradores y gestos de ratón a valores (sin interfaz)
-│   ├── project_file.py # archivo de proyecto .deepshot (ZIP: ajustes, mapas, máscaras; fotos por ruta)
+│   ├── project_file.py # archivo de proyecto .deepshot (ZIP: ajustes, mapas, máscaras; fotos por ruta o incluidas)
+│   ├── collect.py      # «Recopilar archivos»: carpeta con proyecto, fotos, mapas, presets propios y exportaciones (sin interfaz)
 │   ├── relight.py      # (fase 6) normales desde profundidad + sombreado
 │   ├── compose.py      # mezcla con la foto original, modos de fusión
 │   ├── project.py      # ajustes en JSON (reproducibilidad y presets)

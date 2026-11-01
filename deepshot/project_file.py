@@ -55,6 +55,7 @@ class PhotoEntry:
     mask: bytes | None = None              # PNG de la máscara pintada
     crop: list | None = None               # reencuadre previo (x0, y0, x1, y1 normalizados) o None = foto entera
     embedded: str = ""                     # nombre del miembro del ZIP con la copia de la foto ("" = no la lleva)
+    exports: list = field(default_factory=list)    # rutas de lo que se exportó de esta foto (para «Recopilar archivos»)
 
 
 @dataclass
@@ -125,7 +126,7 @@ def save_project(path: Path, photos: list[PhotoEntry], current: int = 0, app_ver
             for i, e in enumerate(photos):
                 item = {"path": e.path, "name": e.name or Path(e.path).name, "size": e.size, "sha256": e.sha256,
                         "source": e.source, "project": e.project, "depth": None, "mask": None,
-                        "crop": list(e.crop) if e.crop else None, "photo": None}
+                        "crop": list(e.crop) if e.crop else None, "photo": None, "exports": list(e.exports)}
                 if embed_photos and Path(e.path).is_file():
                     item["photo"] = f"photo/{i}_{Path(e.path).name}"
                     z.write(e.path, item["photo"], compress_type=zipfile.ZIP_STORED)      # un JPG ya va comprimido
@@ -148,7 +149,7 @@ def save_project(path: Path, photos: list[PhotoEntry], current: int = 0, app_ver
 
 
 def entry_for_photo(path: Path, project: dict | None, depth: np.ndarray | None, source: str,
-                    mask_file: Path | None, crop: tuple | None = None) -> PhotoEntry:
+                    mask_file: Path | None, crop: tuple | None = None, exports: list | None = None) -> PhotoEntry:
     """Reúne los datos de una foto de la biblioteca (calcula su huella si el archivo existe)."""
     path = Path(path)
     size, digest = 0, ""
@@ -162,7 +163,8 @@ def entry_for_photo(path: Path, project: dict | None, depth: np.ndarray | None, 
             mask = Path(mask_file).read_bytes() if Path(mask_file).is_file() else None
         except OSError:
             mask = None
-    return PhotoEntry(str(path), path.name, size, digest, source, project, depth, mask, list(crop) if crop else None)
+    return PhotoEntry(str(path), path.name, size, digest, source, project, depth, mask, list(crop) if crop else None,
+                      exports=list(exports or []))
 
 
 # ---------------------------------------------------------------------------
@@ -187,7 +189,8 @@ def load_project(path: Path) -> LoadedProject:
                 entry = PhotoEntry(path=str(item["path"]), name=str(item.get("name", "")),
                                    size=int(item.get("size", 0)), sha256=str(item.get("sha256", "")),
                                    source=str(item.get("source", "")), project=item.get("project"),
-                                   crop=item.get("crop") if isinstance(item.get("crop"), list) else None)
+                                   crop=item.get("crop") if isinstance(item.get("crop"), list) else None,
+                                   exports=[str(p) for p in item.get("exports", []) if isinstance(p, str)])
                 if item.get("photo") in names:
                     entry.embedded = str(item["photo"])
                 if item.get("depth") in names:
@@ -240,6 +243,7 @@ def locate_photo(entry: PhotoEntry, project_file: Path) -> tuple[Path | None, bo
     candidates = [Path(entry.path)]
     if entry.name:
         candidates.append(Path(project_file).parent / entry.name)
+        candidates.append(Path(project_file).parent / "fotos" / entry.name)       # carpeta de «Recopilar archivos»
     for candidate in candidates:
         if candidate.is_file():
             changed = False

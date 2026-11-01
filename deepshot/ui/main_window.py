@@ -41,7 +41,7 @@ from PIL import Image
 
 from deepshot import (APP_NAME, AUTHOR, ORG_NAME, RELEASE_DATE, WEBSITE, __version__, depth_runs, depth_view, memory,
                       presets, project_file, themes)
-from deepshot import area3d, framing, modules
+from deepshot import area3d, collect, framing, modules
 from deepshot.paint import mask_path_for
 from deepshot.project import Project
 from deepshot.dof import focus_map
@@ -263,6 +263,7 @@ class MainWindow(QMainWindow):
         self.canvas.areaWheel.connect(self.editor.adjust_selected)
         self.canvas.hint.connect(self._on_canvas_hint)
         self.export_panel = ExportPanel(self._export_context)
+        self.export_log: dict[str, list[str]] = {}       # lo exportado de cada foto (se guarda en el proyecto)
         self.export_panel.exported.connect(self._on_exported)
         self.export_panel.previewChanged.connect(self._on_export_preview_changed)
         self.export_panel.failed.connect(self._on_export_failed)
@@ -857,6 +858,10 @@ class MainWindow(QMainWindow):
                                                    self.save_project_as)
         for action in (self.action_open_project, self.action_save_project, self.action_save_project_as):
             file_menu.addAction(action)
+        self.action_collect = self._action(self.tr("Recopilar archivos…"), None, self.collect_files)
+        self.action_collect.setToolTip(self.tr("Copia a una carpeta ordenada todo el trabajo: proyecto, fotos originales, "
+                                               "mapas de profundidad, presets propios y lo exportado."))
+        file_menu.addAction(self.action_collect)
         self.action_embed_photos = QAction(self.tr("Incluir las fotos en el proyecto"), self)
         self.action_embed_photos.setCheckable(True)
         self.action_embed_photos.setChecked(self.settings.value("project/embed_photos", False, type=bool))
@@ -1335,6 +1340,8 @@ class MainWindow(QMainWindow):
                 "maps": self.editor.current_maps()}
 
     def _on_exported(self, paths: list) -> None:
+        log_list = self.export_log.setdefault(self.export_panel.last_photo or str(self.current_path), [])
+        log_list.extend(str(p) for p in paths if str(p) not in log_list)          # para «Recopilar archivos»
         names = ", ".join(Path(p).name for p in paths)
         log.info("Exportado: %s", names)
         self.statusBar().showMessage(self.tr("Exportado: {0}").format(names), 8000)
@@ -1842,7 +1849,7 @@ class MainWindow(QMainWindow):
             mask = settings["composite"].get("painted_mask") if settings else ""
             entries.append(project_file.entry_for_photo(
                 Path(path), settings, self.depth_maps.get(path), self.depth_sources.get(path, ""),
-                Path(mask) if mask else None, self.crops.get(path)))
+                Path(mask) if mask else None, self.crops.get(path), self.export_log.get(path)))
         return entries
 
     def save_project(self) -> bool:
@@ -1884,6 +1891,36 @@ class MainWindow(QMainWindow):
         self._mark_saved()
         self.statusBar().showMessage(self.tr("Proyecto guardado: {0}").format(path.name), 4000)
         return True
+
+    def collect_files(self) -> None:
+        """Archivo › Recopilar archivos: todo el trabajo en una carpeta (ver deepshot/collect.py)."""
+        if self.library.count() == 0:
+            self.statusBar().showMessage(self.tr("No hay nada que recopilar: importa alguna fotografía."), 4000)
+            return
+        start = str(self.settings.value("last_collect_dir", str(Path.home())))
+        parent = QFileDialog.getExistingDirectory(self, self.tr("Recopilar archivos en…"), start)
+        if not parent:
+            return
+        self.settings.setValue("last_collect_dir", parent)
+        name = self.project_path.stem if self.project_path is not None else \
+            (self.current_path.stem if self.current_path else "proyecto")
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        try:
+            result = collect.collect_files(Path(parent), name, self._project_entries(),
+                                           max(self.library.currentRow(), 0), __version__)
+        except OSError as exc:
+            QApplication.restoreOverrideCursor()
+            log.warning("No se pudieron recopilar los archivos: %s", exc)
+            self._warn(self.tr("Recopilar archivos"), self.tr("No se pudo copiar: {0}").format(exc.strerror or exc))
+            return
+        QApplication.restoreOverrideCursor()
+        text = self.tr("Recopilado en «{0}»: {1} foto(s), {2} mapa(s), {3} preset(s), {4} exportación(es).").format(
+            result.folder.name, result.photos, result.maps, result.presets, result.exports)
+        if result.missing:
+            self._warn(self.tr("Recopilar archivos"), text + "\n\n" + self.tr("No se encontraron: {0}").format(
+                ", ".join(result.missing)))
+        self.statusBar().showMessage(text, 8000)
+        QDesktopServices.openUrl(QUrl.fromLocalFile(str(result.folder)))
 
     def open_project(self, file: str | None = None) -> bool:
         """Abre un proyecto: sustituye la biblioteca actual por la del archivo."""
@@ -1955,6 +1992,8 @@ class MainWindow(QMainWindow):
         if entry.depth is not None:
             self.depth_maps[key] = entry.depth
             self.depth_sources[key] = entry.source or "external"
+        if entry.exports:
+            self.export_log[key] = list(entry.exports)
         settings = entry.project
         if settings:
             composite = settings.setdefault("composite", {})

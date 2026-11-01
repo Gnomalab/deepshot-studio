@@ -145,3 +145,34 @@ def test_project_can_carry_its_photos_and_open_without_the_originals(tmp_path, m
     assert pf.extract_embedded(target, e) == copy                           # una segunda vez se reutiliza
     e.sha256 = "0" * 64                                                     # huella que no coincide: no se da por buena
     assert pf.extract_embedded(target, e) is None
+
+
+def test_collect_files_copies_photos_maps_presets_and_exports_and_the_project_reopens_from_there(tmp_path, monkeypatch):
+    from deepshot import collect, presets
+
+    monkeypatch.setenv("DEEPSHOT_DATA_DIR", str(tmp_path / "datos"))
+    presets.save_user("ramp", "Mi rampa", presets.builtin("ramp", "sunset"))
+    a = make_photo(tmp_path / "x" / "a.png") if (tmp_path / "x").mkdir() is None else None
+    b = make_photo(tmp_path / "y" / "a.png", color=(1, 2, 3)) if (tmp_path / "y").mkdir() is None else None   # mismo nombre
+    out = tmp_path / "salida.png"
+    out.write_bytes(b"png")
+    depth = np.linspace(0, 1, 40 * 30, dtype=np.float32).reshape(30, 40)
+    layer = {"kind": "module.relight_x", "params": {}}
+    e1 = pf.entry_for_photo(a, {"look": [layer]}, depth, "external", None, exports=[str(out), str(tmp_path / "no existe.png")])
+    e2 = pf.entry_for_photo(b, None, None, "", None)
+    result = collect.collect_files(tmp_path / "destino", "mi trabajo", [e1, e2], app_version="1")
+    folder = result.folder
+    assert sorted(p.name for p in (folder / "fotos").iterdir()) == ["a.png", "a_2.png"]        # sin pisarse
+    assert [p.name for p in (folder / "mapas").iterdir()] == ["a_profundidad.png"]
+    assert (folder / "fx" / "ramp" / "Mi rampa.json").is_file()
+    assert [p.name for p in (folder / "exportaciones" / "a").iterdir()] == ["salida.png"]
+    assert result.photos == 2 and result.maps == 1 and result.presets == 1 and result.exports == 1
+    assert result.missing == ["no existe.png"] and result.modules == ["relight_x"]
+    assert "relight_x" in (folder / "LEEME.txt").read_text(encoding="utf-8")
+    # El proyecto recopilado se abre y encuentra sus fotos aunque se mueva toda la carpeta.
+    moved = tmp_path / "otro equipo"
+    folder.rename(moved)
+    loaded = pf.load_project(moved / result.project.name)
+    photo, changed = pf.locate_photo(loaded.photos[0], moved / result.project.name)
+    assert photo == moved / "fotos" / "a.png" and changed is False
+    assert np.abs(loaded.photos[0].depth - depth).max() < 2e-5 and loaded.photos[0].exports == []

@@ -247,6 +247,7 @@ class ExportPanel(QWidget):
         self.review_button.setToolTip(self.tr("Abre lo último que se exportó en un visor rápido, con zoom y sus datos"))
         self.review_button.clicked.connect(self.review)
         self._last_paths: list[str] = []
+        self.last_photo = ""                      # la foto de la última exportación (para anotar lo exportado)
         self.button = QPushButton(self.tr("Exportar"))
         self.button.setObjectName("Primary")
         set_icon(self.button, "export")
@@ -523,6 +524,7 @@ class ExportPanel(QWidget):
             return
         self._save()
         depth, path = ctx["depth"], Path(ctx["path"])
+        self.last_photo = str(path)
         project = Project.from_dict(ctx["project"].to_dict()) if ctx.get("project") is not None else None
         mask = ctx.get("mask")
         crop = ctx.get("crop")                       # reencuadre previo de la foto (None = entera)
