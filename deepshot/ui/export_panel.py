@@ -45,7 +45,21 @@ CONTENT_KEYS = ["effect", "depth", "final"]
 FINAL_FORMAT_KEYS = ["jpg", "tiff8", "tiff16", "png8", "png16", "webp"]      # formatos de la imagen final
 SIZE_MODE_KEYS = ["original", "percent", "width", "height", "long_side"]
 DEPTH_SOURCE_KEYS = ["original", "zones"]       # mapa original o con las zonas movidas del control de profundidad
-SUFFIX = {"effect": "_deepshot", "depth": "_profundidad", "final": "_final"}
+
+
+def name_suffix(options: ex.ExportOptions) -> str:
+    """Sufijo en inglés que describe cómo está hecho el archivo, para reconocerlo sin abrirlo: «_effect», «_final»,
+    «_depth_gray», «_depth_gray_inverted», «_depth_thermal», «_depth_rainbow_zones»…"""
+    if options.content == "effect":
+        return "_effect"
+    if options.content == "final":
+        return "_final"
+    parts = ["_depth", options.depth_palette or "gray"]
+    if not options.depth_palette and not options.near_bright:
+        parts.append("inverted")                  # en gris, lo lejano claro
+    if options.depth_zones:
+        parts.append("zones")                     # con las zonas del control de profundidad movidas
+    return "_".join(parts)
 
 
 class _Worker(QObject):
@@ -453,7 +467,7 @@ class ExportPanel(QWidget):
                                         if out_w > w or out_h > h else ""))
         self.button.setEnabled(not self._worker.is_busy())
         if not self._name_dirty:
-            self.name.setText(Path(ctx["path"]).stem + SUFFIX[content])
+            self.name.setText(Path(ctx["path"]).stem + name_suffix(self.options()))
         folder = self.output_folder()
         self.folder.setText(str(folder))
         self.folder.setToolTip(str(folder))

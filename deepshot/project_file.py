@@ -243,7 +243,7 @@ def locate_photo(entry: PhotoEntry, project_file: Path) -> tuple[Path | None, bo
     candidates = [Path(entry.path)]
     if entry.name:
         candidates.append(Path(project_file).parent / entry.name)
-        candidates.append(Path(project_file).parent / "fotos" / entry.name)       # carpeta de «Recopilar archivos»
+        candidates.append(Path(project_file).parent / "photos" / entry.name)       # carpeta de «Recopilar archivos»
     for candidate in candidates:
         if candidate.is_file():
             changed = False

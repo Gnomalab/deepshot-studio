@@ -695,7 +695,7 @@ def test_export_panel_exports_effect_and_depth_in_background(win, tmp_path):
     panel._last_dir = out
     panel.refresh()
     assert panel.button.isEnabled() and "160" in panel.info.text() and "120" in panel.info.text()
-    assert panel.name.text() == "foto1_deepshot"
+    assert panel.name.text() == "foto1_effect"
 
     done = []
     panel.exported.connect(done.append)
@@ -703,20 +703,20 @@ def test_export_panel_exports_effect_and_depth_in_background(win, tmp_path):
     panel.export()
     assert not panel.button.isEnabled()                                    # mientras trabaja
     assert wait_for(win, lambda: bool(done))
-    assert sorted(p.name for p in out.iterdir()) == ["foto1_deepshot.deepshot.json", "foto1_deepshot.png"]
-    assert panel.button.isEnabled() and "foto1_deepshot.png" in panel.status.text()
+    assert sorted(p.name for p in out.iterdir()) == ["foto1_effect.deepshot.json", "foto1_effect.png"]
+    assert panel.button.isEnabled() and "foto1_effect.png" in panel.status.text()
 
     panel.content.set_current_index(1)                                     # mapa de profundidad
     panel._on_content_changed(1)
-    assert panel.name.text() == "foto1_profundidad"
+    assert panel.name.text() == "foto1_depth_gray"
     panel.format.set_current_index(2)                                      # EXR
     done.clear()
     panel.export()
     assert wait_for(win, lambda: bool(done))
-    assert (out / "foto1_profundidad.exr").is_file()
+    assert (out / "foto1_depth_gray.exr").is_file()
     panel.export()                                                         # otra vez: no pisa el anterior
     assert wait_for(win, lambda: len(done) == 2)
-    assert (out / "foto1_profundidad_2.exr").is_file()
+    assert (out / "foto1_depth_gray_2.exr").is_file()
 
 
 def test_export_final_image_panel_shows_its_own_controls_and_exports_jpg_at_a_chosen_size(win, tmp_path):
@@ -789,14 +789,15 @@ def test_export_depth_source_selector_only_for_depth_warns_and_exports_moved_zon
     assert wait_for(win, lambda: bool(done))
     import OpenEXR
 
-    z = OpenEXR.File(str(out / "foto1_profundidad.exr")).channels()["Z"].pixels
+    assert panel.name.text() == "foto1_depth_gray_zones"                      # el nombre dice que lleva las zonas
+    z = OpenEXR.File(str(out / "foto1_depth_gray_zones.exr")).channels()["Z"].pixels
     expected = 1.0 - control.apply(depth)                                  # cerca = claro, con las zonas movidas
     assert np.abs(z - expected).max() < 1e-5 and not np.allclose(z, 1.0 - depth, atol=1e-3)
     panel.depth_source._group.button(0).click()                            # volver al original: sale el mapa sin tocar
     done.clear()
     panel.export()
     assert wait_for(win, lambda: bool(done))
-    z2 = OpenEXR.File(str(out / "foto1_profundidad_2.exr")).channels()["Z"].pixels
+    z2 = OpenEXR.File(str(out / "foto1_depth_gray.exr")).channels()["Z"].pixels
     assert np.abs(z2 - (1.0 - depth)).max() < 1e-5
 
 

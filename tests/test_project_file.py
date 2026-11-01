@@ -162,17 +162,17 @@ def test_collect_files_copies_photos_maps_presets_and_exports_and_the_project_re
     e2 = pf.entry_for_photo(b, None, None, "", None)
     result = collect.collect_files(tmp_path / "destino", "mi trabajo", [e1, e2], app_version="1")
     folder = result.folder
-    assert sorted(p.name for p in (folder / "fotos").iterdir()) == ["a.png", "a_2.png"]        # sin pisarse
-    assert [p.name for p in (folder / "mapas").iterdir()] == ["a_profundidad.png"]
+    assert sorted(p.name for p in (folder / "photos").iterdir()) == ["a.png", "a_2.png"]        # sin pisarse
+    assert [p.name for p in (folder / "maps").iterdir()] == ["a_depth.png"]
     assert (folder / "fx" / "ramp" / "Mi rampa.json").is_file()
-    assert [p.name for p in (folder / "exportaciones" / "a").iterdir()] == ["salida.png"]
+    assert [p.name for p in (folder / "exports" / "a").iterdir()] == ["salida.png"]
     assert result.photos == 2 and result.maps == 1 and result.presets == 1 and result.exports == 1
     assert result.missing == ["no existe.png"] and result.modules == ["relight_x"]
-    assert "relight_x" in (folder / "LEEME.txt").read_text(encoding="utf-8")
+    assert "relight_x" in (folder / "README.txt").read_text(encoding="utf-8")
     # El proyecto recopilado se abre y encuentra sus fotos aunque se mueva toda la carpeta.
     moved = tmp_path / "otro equipo"
     folder.rename(moved)
     loaded = pf.load_project(moved / result.project.name)
     photo, changed = pf.locate_photo(loaded.photos[0], moved / result.project.name)
-    assert photo == moved / "fotos" / "a.png" and changed is False
+    assert photo == moved / "photos" / "a.png" and changed is False
     assert np.abs(loaded.photos[0].depth - depth).max() < 2e-5 and loaded.photos[0].exports == []

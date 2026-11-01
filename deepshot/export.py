@@ -84,7 +84,7 @@ def _no_progress(_message: str, _fraction: float) -> None:
 # ---------------------------------------------------------------------------
 def free_path(folder: Path, name: str, extension: str) -> Path:
     """Ruta que no pisa un archivo existente: si «nombre.png» existe, usa «nombre_2.png», etc."""
-    safe = "".join("_" if c in '\\/:*?"<>|' else c for c in name).strip(" .") or "imagen"
+    safe = "".join("_" if c in '\\/:*?"<>|' else c for c in name).strip(" .") or "image"
     path = folder / f"{safe}{extension}"
     n = 2
     while path.exists():

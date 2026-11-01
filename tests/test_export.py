@@ -330,3 +330,17 @@ def test_tiff16_keeps_more_than_8_bits(tmp_path):
     ex.write_tiff16(tmp_path / "t.tif", data, 300)
     raw = (tmp_path / "t.tif").read_bytes()
     assert raw[:4] == b"II*\x00" and np.frombuffer(raw[8:8 + 6], dtype="<u2").tolist() == [1000, 40000, 65535]
+
+
+def test_export_file_names_describe_how_the_file_was_made():
+    from deepshot.ui.export_panel import name_suffix
+
+    def options(**kw):
+        return ex.ExportOptions(**{"content": "depth", "format": "png16", "folder": Path("."), "name": "x", **kw})
+
+    assert name_suffix(options(content="effect")) == "_effect"
+    assert name_suffix(options(content="final", format="jpg")) == "_final"
+    assert name_suffix(options()) == "_depth_gray"
+    assert name_suffix(options(near_bright=False)) == "_depth_gray_inverted"
+    assert name_suffix(options(depth_palette="thermal")) == "_depth_thermal"
+    assert name_suffix(options(depth_palette="rainbow", depth_zones=True, near_bright=False)) == "_depth_rainbow_zones"

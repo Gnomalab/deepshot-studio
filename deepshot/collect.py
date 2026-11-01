@@ -3,14 +3,14 @@
 Como «Collect Files» de After Effects o el «Save Project + Media» de MadMapper:
 
     <nombre>/
-      <nombre>.deepshot      el proyecto, que encuentra las fotos en fotos/ aunque se mueva la carpeta
-      fotos/                 las fotos originales
-      mapas/                 el mapa de profundidad de cada foto (PNG de 16 bits, cerca = 0)
+      <nombre>.deepshot      el proyecto, que encuentra las fotos en photos/ aunque se mueva la carpeta
+      photos/                las fotos originales
+      maps/                  el mapa de profundidad de cada foto (PNG de 16 bits, cerca = 0)
       fx/<tipo>/*.json       los presets propios (rampas, estilos, bokeh, looks y exportaciones), si los hay
-      exportaciones/<foto>/  lo que se exportó de cada foto, si se exportó algo
-      LEEME.txt              qué hay en cada sitio y qué módulos de Look usa el trabajo
+      exports/<photo>/  lo que se exportó de cada foto, si se exportó algo
+      README.txt              qué hay en cada sitio y qué módulos de Look usa el trabajo
 
-No cambia nada del proyecto abierto: solo copia. Los módulos descargables no se copian (son código): en LEEME.txt
+No cambia nada del proyecto abierto: solo copia. Los módulos descargables no se copian (son código): en README.txt
 se anota cuáles usa el trabajo, para instalarlos en el otro equipo desde el gestor.
 """
 
@@ -30,7 +30,7 @@ from deepshot.project_file import PhotoEntry
 log = logging.getLogger(__name__)
 
 Progress = Callable[[str, float], None]
-PHOTOS, MAPS, FX, EXPORTS = "fotos", "mapas", "fx", "exportaciones"
+PHOTOS, MAPS, FX, EXPORTS = "photos", "maps", "fx", "exports"
 
 
 @dataclass
@@ -100,7 +100,7 @@ def collect_files(parent: Path, name: str, entries: list[PhotoEntry], current: i
         else:
             result.missing.append(source.name)
         if e.depth is not None:
-            target = _unique(folder / MAPS, f"{source.stem}_profundidad.png", taken_maps)
+            target = _unique(folder / MAPS, f"{source.stem}_depth.png", taken_maps)
             target.write_bytes(project_file._depth_to_png(e.depth))
             result.maps += 1
         exports = [Path(p) for p in e.exports if Path(p).is_file()]
@@ -112,7 +112,7 @@ def collect_files(parent: Path, name: str, entries: list[PhotoEntry], current: i
             for path in exports:
                 shutil.copy2(path, _unique(out, path.name, taken))
                 result.exports += 1
-        new_entries.append(PhotoEntry(**{**copied.__dict__, "exports": []}))      # lo exportado ya va en exportaciones/
+        new_entries.append(PhotoEntry(**{**copied.__dict__, "exports": []}))      # lo exportado ya va en exports/
     progress(QCoreApplication.translate("Collect", "Copiando los presets propios…"), 0.85)
     for kind in presets.KINDS:
         for preset_name in presets.list_user(kind):
@@ -141,4 +141,4 @@ def _write_readme(folder: Path, result: CollectResult) -> None:
                   .format(", ".join(result.modules))]
     if result.missing:
         lines += ["", QCoreApplication.translate("Collect", "No se encontraron (ya no estaban en su sitio): {0}").format(", ".join(result.missing))]
-    (folder / "LEEME.txt").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    (folder / "README.txt").write_text("\n".join(lines) + "\n", encoding="utf-8")
