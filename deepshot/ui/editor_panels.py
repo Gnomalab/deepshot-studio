@@ -153,7 +153,7 @@ class _RowDelegate(QStyledItemDelegate):
     EYE = 16
     MARGIN = 6
     SWATCH = (30, 14)                 # ancho y alto del cuadro de color
-    MIN_HEIGHT = 26
+    MIN_HEIGHT = 28
 
     def _eye_rect(self, rect: QRect) -> QRect:
         return QRect(rect.left() + self.MARGIN, rect.center().y() - self.EYE // 2, self.EYE, self.EYE)
@@ -232,9 +232,13 @@ class _RowDelegate(QStyledItemDelegate):
         painter.restore()
 
     def _hit(self, rect: QRect, index, pos) -> str:
-        if self._eye_rect(rect).adjusted(-3, -3, 2, 3).contains(pos):
+        """Qué hay bajo el ratón. Las zonas del ojo y la «S» ocupan toda la altura de la fila y llegan hasta la mitad del
+        hueco que las separa: así es fácil acertar sin apuntar al dibujo."""
+        eye, solo = self._eye_rect(rect), self._solo_rect(rect)
+        middle = (eye.right() + solo.left()) // 2
+        if QRect(rect.left(), rect.top(), middle - rect.left(), rect.height()).contains(pos):
             return "eye"
-        if self._solo_rect(rect).adjusted(-2, -3, 3, 3).contains(pos):
+        if QRect(middle, rect.top(), solo.right() + 4 - middle, rect.height()).contains(pos):
             return "solo"
         swatch = self._swatch_rect(rect, index)
         if swatch is not None and swatch.adjusted(-2, -2, 2, 2).contains(pos):
@@ -242,10 +246,13 @@ class _RowDelegate(QStyledItemDelegate):
         return ""
 
     def editorEvent(self, event, model, option, index) -> bool:
-        if event.type() in (QEvent.MouseButtonRelease, QEvent.MouseButtonDblClick) and event.button() == Qt.LeftButton:
+        # Ojo, «S» y color actúan al PULSAR (también en el segundo clic de un doble clic, que llega como otro evento y
+        # cuyo «soltar» Qt no entrega al delegado: con «soltar» había que clicar dos veces para volver a activar).
+        if event.type() in (QEvent.MouseButtonPress, QEvent.MouseButtonDblClick, QEvent.MouseButtonRelease) \
+                and event.button() == Qt.LeftButton:
             hit = self._hit(option.rect, index, event.position().toPoint())
             if hit:
-                if event.type() == QEvent.MouseButtonRelease:       # el doble clic en ojo o color no abre el editor de nombre
+                if event.type() != QEvent.MouseButtonRelease:
                     if hit == "eye":
                         self.parent().toggle_row_enabled(index.row())
                     elif hit == "solo":

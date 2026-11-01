@@ -101,6 +101,7 @@ class CanvasView(QGraphicsView):
         self._mask_item: QGraphicsPixmapItem | None = None  # tinte rojo de la máscara pintada
         self._focus_item: QGraphicsPixmapItem | None = None  # tinte verde de la zona en foco (desenfoque de lente)
         self._labels = ("", "")
+        self._badge = ""                  # aviso fijo en la esquina superior izquierda (p. ej. «Pre FX»)
         self._split = 0.5                                 # posición del divisor, 0..1
         self._orientation = Qt.Horizontal                 # Horizontal: divisor vertical (izq | der)
         self._dragging_split = False
@@ -183,6 +184,12 @@ class CanvasView(QGraphicsView):
         self._item_b.setScale(image_a.width() / max(image_b.width(), 1))
         self._labels = labels
         self._update_clip()
+
+    def set_badge(self, text: str) -> None:
+        """Aviso en la esquina superior izquierda del visor («Pre FX», «Post FX»…); vacío = ninguno."""
+        if text != self._badge:
+            self._badge = text
+            self.viewport().update()
 
     def is_comparing(self) -> bool:
         return self._item_b is not None
@@ -343,6 +350,16 @@ class CanvasView(QGraphicsView):
     def drawForeground(self, painter: QPainter, rect: QRectF) -> None:
         super().drawForeground(painter, rect)
         self._draw_overlays(painter)
+        if self._badge:
+            painter.save()
+            painter.resetTransform()
+            font = QFont(painter.font())
+            font.setPointSizeF(9.5)
+            font.setBold(True)
+            painter.setFont(font)
+            self._draw_label(painter, self._badge, QPointF(self.viewport().rect().left() + 12, 12), Qt.AlignLeft,
+                             theme.color("accent"))
+            painter.restore()
         if not self.is_comparing():
             return
         a, b = self._divider_viewport()

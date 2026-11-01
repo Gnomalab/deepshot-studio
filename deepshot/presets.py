@@ -134,6 +134,12 @@ _STYLES: list[tuple[str, str, dict]] = [
                       "mask_feather": 0.3, "mask_snap": 0.6},
         "lens": {"enabled": True, "target": "photo", "focus": 0.2, "sharp_range": 0.06, "aperture": 1.8,
                  "near": 0.8, "far": 1.2, "blades": 0, "highlights": 0.45, "softness": 0.4}}),
+    # Para entender el desenfoque de lente: la foto sola (sin mezcla con el efecto) con un foco claro y mucho desenfoque.
+    ("lens_demo", QT_TRANSLATE_NOOP("Presets", "Desenfoque de lente: foto con foco y fondo borroso"), {
+        "ramp": "linear", "base": "ramp",
+        "composite": {"mode": "normal", "opacity": 1.0, "photo_grayscale": False},
+        "lens": {"enabled": True, "target": "photo", "focus": 0.25, "sharp_range": 0.05, "aperture": 1.4,
+                 "near": 1.2, "far": 1.5, "blades": 6, "highlights": 0.6, "softness": 0.25}}),
 ]
 
 

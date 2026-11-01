@@ -297,3 +297,57 @@ def test_without_the_model_the_map_button_reports_it_and_nothing_breaks(tmp_path
         time.sleep(0.01)
     assert panel.map_state["subject"] == "nomodel" and "SAM" in panel.map_text
     assert session.current_maps() == {}
+
+
+def test_pre_fx_preview_shows_the_photo_with_its_effects_and_the_eye_toggles_on_press(tmp_path):
+    from PySide6.QtCore import QEvent, QPointF, Qt
+    from PySide6.QtGui import QMouseEvent
+    from PySide6.QtTest import QTest
+    from PySide6.QtWidgets import QStyleOptionViewItem
+
+    from deepshot.look import LookLayer
+
+    app, session, stack, *_ = _setup(tmp_path)
+    p = session.project
+    assert p.composite.opacity == 0.0 and session.fx_context() == ""
+    session.pre_panel.add_item(LookLayer.new("saturation"))
+    session.look_panel.add_item(LookLayer.new("levels"))
+    assert session._preview_project() is p                          # fuera del paso Look no cambia nada
+    session.set_look_active(True)
+    assert session.fx_context() == "post" and session._preview_project() is p
+    session.look_stack.show_stack("pre")
+    assert session.fx_context() == "pre"
+    view = session._preview_project()                               # Pre FX: foto con sus efectos, sin Post FX
+    assert view.composite.opacity == 1.0 and view.composite.mask == "none" and view.look == [] and len(view.pre) == 1
+    assert p.composite.opacity == 0.0 and len(p.look) == 1          # el proyecto real no se toca
+    # El ojo actúa al pulsar y su zona es toda la fila: un doble clic seguido no se pierde.
+    panel = session.pre_panel
+    panel.resize(400, 500)
+    panel.show()
+    app.processEvents()
+    delegate = panel.list.itemDelegate()
+    rect = panel.list.visualItemRect(panel.list.item(0))
+    eye = delegate._eye_rect(rect).center()
+    assert delegate._hit(rect, panel.list.model().index(0, 0), rect.topLeft() + type(eye)(3, 2)) == "eye"
+    QTest.mouseClick(panel.list.viewport(), Qt.LeftButton, Qt.NoModifier, eye)
+    assert p.pre[0].enabled is False
+    # El segundo clic de un doble clic llega como otro evento (y Qt no entrega su «soltar» al delegado): también cuenta.
+    index = panel.list.model().index(0, 0)
+    option = QStyleOptionViewItem()
+    option.rect = rect
+    dbl = QMouseEvent(QEvent.MouseButtonDblClick, QPointF(eye), QPointF(eye), Qt.LeftButton, Qt.LeftButton, Qt.NoModifier)
+    assert delegate.editorEvent(dbl, panel.list.model(), option, index) is True
+    assert p.pre[0].enabled is True
+    session.look_stack.show_stack("look")
+    assert session.fx_context() == "post"
+
+
+def test_focus_picker_announces_press_and_release_so_the_zone_shows_while_pressed(tmp_path):
+    app, session, *_ = _setup(tmp_path)
+    events = []
+    session.focusPicking.connect(events.append)
+    session.pick_focus_gesture({"phase": "press", "kind": "pick_focus", "x": 100.0, "y": 40.0})
+    session.pick_focus_gesture({"phase": "move", "kind": "pick_focus", "x": 20.0, "y": 40.0})
+    assert events == [True] and session.project.lens.enabled
+    session.pick_focus_gesture({"phase": "release", "kind": "pick_focus", "x": 20.0, "y": 40.0})
+    assert events == [True, False]

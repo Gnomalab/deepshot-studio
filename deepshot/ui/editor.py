@@ -97,6 +97,8 @@ class EditSession(QObject):
     userEdited = Signal()                       # el usuario cambió algún ajuste del efecto
     gestureFinished = Signal(str)               # terminó un gesto de edición de áreas (tipo)
     maskChanged = Signal()                      # cambió la máscara pintada (para repintar su vista)
+    focusPicking = Signal(bool)                 # el cuentagotas del foco está pulsado (True) o se soltó (False)
+    fxTabChanged = Signal()                     # se cambió entre Pre FX y Post FX (o se entró / salió del paso Look)
     mapsChanged = Signal()                      # cambió el estado de los mapas auxiliares (calculado, en curso, fallo)
 
     def __init__(self, undo_stack: QUndoStack, parent: QObject | None = None) -> None:
@@ -164,6 +166,8 @@ class EditSession(QObject):
             bar.previewed.connect(lambda preset, k=kind, st=stack: self.preview_preset(k, preset, st))
             bar.previewEnded.connect(self.end_preview)
         self._previewing = False
+        self.look_active = False                         # el paso Look está a la vista (lo fija la ventana principal)
+        self.look_stack.pages.currentChanged.connect(lambda _i: self._on_fx_tab())
         self.ramp_editor.presetApplying.connect(self._base_to_ramp)
         self.ramp_editor.fitRequested.connect(self.fit_ramp)
         self.depth_panel.centersRequested.connect(self.centers_from_map)
@@ -305,6 +309,22 @@ class EditSession(QObject):
         if self.project is not None:
             self.render.request(self._preview_project(), self._mask_array())
 
+    def fx_context(self) -> str:
+        """«pre» o «post» con el paso Look a la vista y la pestaña elegida; vacío fuera de él."""
+        if not self.look_active:
+            return ""
+        return "pre" if self.look_stack.current_panel() is self.pre_panel else "post"
+
+    def set_look_active(self, active: bool) -> None:
+        if active != self.look_active:
+            self.look_active = active
+            self._on_fx_tab()
+
+    def _on_fx_tab(self) -> None:
+        """Pre FX | Post FX: la vista previa enseña lo que se está tocando (ver `_preview_project`)."""
+        self._request_render()
+        self.fxTabChanged.emit()
+
     def _preview_project(self) -> Project:
         """El proyecto tal cual, o —con algo en «solo»— una copia donde lo que no está en solo queda desactivado y lo que
         sí lo está se aplica aunque su ojo esté apagado. Solo vale para la vista previa: lo que se guarda y se exporta es
@@ -312,9 +332,14 @@ class EditSession(QObject):
         project = self.project
         solos = {"areas": self.areas_panel.solo, "bands": self.bands_panel.solo, "look": self.look_panel.solo,
                  "pre": self.pre_panel.solo}
-        if not any(solos.values()):
+        pre_view = self.fx_context() == "pre"
+        if not any(solos.values()) and not pre_view:
             return project
         clone = Project.from_dict(project.to_dict())
+        if pre_view:                                     # Pre FX: la foto con sus efectos, sin depender de la mezcla ni de Post FX
+            clone.composite.opacity = 1.0
+            clone.composite.mask = "none"
+            clone.look = []
         for group, items in (("areas", clone.areas), ("bands", clone.bands), ("look", clone.look), ("pre", clone.pre)):
             solo = solos[group]
             for i, item in enumerate(items):
@@ -797,13 +822,17 @@ class EditSession(QObject):
                 lens.focus, lens.enabled = round(value, 4), True
                 self.lens_panel.refresh()
                 self._on_changed()
+        if phase == "press":
+            self.focusPicking.emit(True)             # mientras se pulsa se ve la zona en foco (focus peaking)
         if phase == "release":
             self._on_committed()
+            self.focusPicking.emit(False)
             self.gestureFinished.emit("pick_focus")
         elif phase == "cancel" and getattr(self, "_focus_before", None) is not None:
             lens.focus, lens.enabled = self._focus_before
             self.lens_panel.refresh()
             self._on_changed()
+            self.focusPicking.emit(False)
             self.gestureFinished.emit("pick_focus")
 
     def gesture3d(self, g: dict) -> None:

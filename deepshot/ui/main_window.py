@@ -245,6 +245,9 @@ class MainWindow(QMainWindow):
         self.editor.crops = self.crops                  # el editor lee el reencuadre de aquí (set_photo)
         self.editor.resultReady.connect(self._on_result)
         self.editor.overlaysChanged.connect(self._update_overlays)
+        self.editor.fxTabChanged.connect(self._update_overlays)
+        self._focus_peak = False                        # cuentagotas del foco pulsado: se enseña la zona en foco
+        self.editor.focusPicking.connect(self._on_focus_picking)
         self.editor.editableChanged.connect(self._on_editable)
         self.editor.userEdited.connect(self._on_user_edit)
         for signal in (self.editor.userEdited, self.editor.maskChanged, self.undo_stack.indexChanged):
@@ -1013,6 +1016,7 @@ class MainWindow(QMainWindow):
                 s.setVisible(step == index)
         if not hasattr(self, "editor"):
             return
+        self.editor.set_look_active(index == STEP_LOOK)
         if index != STEP_EDIT:
             # Dibujar, colocar y pincel solo tienen sentido sobre el efecto del paso 3: se sueltan al salir.
             self.editor.areas_panel.set_tool("")
@@ -1354,7 +1358,10 @@ class MainWindow(QMainWindow):
         self.edit_hint.setVisible(not editable)
 
     def _update_overlays(self) -> None:
-        """Contornos de las áreas: solo en el paso de edición y sobre el efecto (o al comparar)."""
+        """Contornos de las áreas: solo en el paso de edición y sobre el efecto (o al comparar). También el aviso Pre / Post FX."""
+        fx = self.editor.fx_context() if self.step_group.checkedId() == STEP_LOOK else ""
+        badge = {"pre": self.tr("Pre FX · la foto con sus efectos"), "post": self.tr("Post FX · el resultado")}.get(fx, "")
+        self.canvas.set_badge(badge if self.view_switch.current_index() == VIEW_RESULT else "")
         context = self.editor.visible_context()          # áreas o bandas: solo se ven los tiradores de lo que se toca
         show = (self.step_group.checkedId() == STEP_EDIT and self.areas_button.isChecked() and context == "areas"
                 and self.view_switch.current_index() in (VIEW_RESULT, VIEW_COMPARE) and not self._in_3d())
@@ -1480,7 +1487,8 @@ class MainWindow(QMainWindow):
     def _refresh_focus_overlay(self) -> None:
         """Tinte verde de la zona en foco: con «Ver zona en foco» marcado, en el paso del efecto y sobre el efecto."""
         project, depth = self.editor.project, self.editor.depth
-        show = (project is not None and depth is not None and self.editor.lens_panel.show_focus.isChecked()
+        show = (project is not None and depth is not None
+                and (self.editor.lens_panel.show_focus.isChecked() or self._focus_peak)
                 and self.step_group.checkedId() == STEP_EDIT
                 and self.view_switch.current_index() in (VIEW_RESULT, VIEW_COMPARE))
         if show and self.editor.photo_size is not None:
@@ -1490,6 +1498,12 @@ class MainWindow(QMainWindow):
         else:
             self.canvas.set_focus_overlay(None)
             self.view3d.set_focus_overlay(None)
+
+    def _on_focus_picking(self, on: bool) -> None:
+        """Con el cuentagotas pulsado la zona en foco se ve en tiempo real aunque «Ver zona en foco» esté apagado; al soltar
+        el ratón vuelve a como estaba."""
+        self._focus_peak = on
+        self._refresh_focus_overlay()
 
     def _on_gesture_finished(self, kind: str) -> None:
         if kind == "pick_focus":

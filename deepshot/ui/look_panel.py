@@ -20,6 +20,7 @@ from PySide6.QtWidgets import (
     QLabel,
     QMenu,
     QPushButton,
+    QSizePolicy,
     QStackedWidget,
     QVBoxLayout,
     QWidget,
@@ -61,11 +62,11 @@ class LookPanel(_ListPanel):
         self.stack = "pre" if stack == "pre" else "look"
         self.map_state: dict[str, str] = {}      # estado de cada mapa de la foto: "ready" | "busy" | "missing" | "nomodel"
         self.map_text = ""                       # mensaje del cálculo en curso (progreso) o del último fallo
-        self.list.setMaximumHeight(150)
+        self.list.setFixedHeight(156)                # altura fija: añadir o quitar efectos no mueve lo que hay debajo
         self.list.setToolTip(self.tr("Efectos de arriba abajo; se aplican de abajo arriba, como en Photoshop. Arrastra "
                                      "para reordenar, doble clic o F2 para renombrar. El ojo aplica o salta el efecto."))
         if self.stack == "pre":
-            hint = self.tr("Retocan la foto antes de mezclarla con el efecto.")
+            hint = self.tr("Retocan la foto antes de mezclarla («Foto» en Mezcla).")
         else:
             hint = self.tr("Se aplican de abajo arriba, como en Photoshop.")
         self.layout_.insertWidget(0, _one_line(hint))
@@ -145,6 +146,7 @@ class LookPanel(_ListPanel):
         for w in (self.opacity, self.blend, self.limit, self.range_box, self.map_box):
             common.addWidget(w)
         self.props_layout.addWidget(self.common)
+        self.layout_.addStretch(1)                   # si el panel queda más alto que su contenido, el hueco va abajo
 
     # --- Lista -------------------------------------------------------------
     def items(self) -> list[LookLayer]:
@@ -390,8 +392,9 @@ class LookStack(QWidget):
         self.pre, self.post = pre, post
         self.switch = SegmentedControl([self.tr("Pre FX"), self.tr("Post FX")], current=1)
         self.switch.set_tooltips([
-            self.tr("Pre FX: efectos sobre la foto ANTES de mezclarla con el efecto de profundidad (solo se ven si la "
-                    "mezcla con la foto está activa)."),
+            self.tr("Pre FX: efectos sobre la foto ANTES de mezclarla con el efecto de profundidad. La vista previa "
+                    "enseña la foto con ellos; en el resultado final solo se notan si «Foto» (en Mezcla y máscaras) "
+                    "es mayor que 0."),
             self.tr("Post FX: efectos sobre el resultado final, después de la mezcla."),
         ])
         self.pages = QStackedWidget()
@@ -399,11 +402,20 @@ class LookStack(QWidget):
         self.pages.addWidget(post)
         self.pages.setCurrentIndex(1)
         self.switch.changed.connect(self.pages.setCurrentIndex)
+        self.switch.changed.connect(self._fit_pages)
+        self._fit_pages()
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(6)
         layout.addWidget(self.switch)
         layout.addWidget(self.pages)
+
+    def _fit_pages(self, _index: int = 0) -> None:
+        """El conjunto mide como la pila a la vista y no como la más alta de las dos (sin hueco bajo los botones)."""
+        current = self.pages.currentWidget()
+        for page in (self.pre, self.post):
+            page.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred if page is current else QSizePolicy.Ignored)
+        self.pages.updateGeometry()
 
     def current_panel(self) -> LookPanel:
         return self.pages.currentWidget()
@@ -413,3 +425,4 @@ class LookStack(QWidget):
         index = 0 if stack == "pre" else 1
         self.switch.set_current_index(index)
         self.pages.setCurrentIndex(index)
+        self._fit_pages()
