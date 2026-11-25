@@ -89,7 +89,7 @@ Pedidas en dos tandas (con capturas) y resueltas el mismo día. 152 tests en ver
 ## Decisiones de Juanjo del 2026-10-19 (tras `NOTAS_CREDITOS_Y_3D.md`)
 - **Créditos: hecho.** Pestaña Créditos en «Acerca de» (`ui/about.py`).
 - **Vista 3D: sí, con QPainter + numpy primero** (OpenGL solo si va lenta). Orden: relieve con órbita; después áreas con tiradores.
-- **Funciones Pro del add-on: se incluirán** (inclinación de rampa, modos Add/Merge/Mask, profundidad lejos/medio/cerca, alcance por lado), reimplementadas por nosotros, sin copiar código. Pendiente: valorar escribir al autor antes de distribuir.
+- **Funciones Pro del add-on: se incluirán** (inclinación de rampa, modos Add/Merge/Mask, profundidad lejos/medio/cerca, alcance por lado), reimplementadas por nosotros, sin copiar código. Contacto con el autor: ya hecho el 2026-11-25 (ver «Legal review and names»).
   - **Hecho (2026-10-19): control de profundidad lejos / medio / cerca** (ver «Control de profundidad» más abajo). Faltan: inclinación de rampa, modos Add/Merge/Mask de las áreas y alcance por lado.
 - Pendiente de verificar: licencia de Stable Diffusion 2, base de Marigold V1.0 (la ficha declara Apache 2.0; el recuerdo de Claude es OpenRAIL++). Regla del proyecto: OpenRAIL solo con aviso.
 - Revisar que la interfaz no copie nombres propios del add-on («Focus & Shape», «Fit ramp to relief»).
@@ -325,7 +325,8 @@ Nombres tal como aparecen en el panel de Blender. Nuestra app puede usar otros n
 - **Presets:** ours (ramps, styles, bokeh and looks) are original and use generic names; none matches the palette names published by the author or by third parties. The add-on's own presets are not public and were not seen, so they cannot be compared value by value.
 - **Interface texts:** three that were identical to the add-on's were changed ("Artistic ramp" to "Colour ramp", "Fit ramp to relief" to "Match ramp to depth range", "Left = near · right = far" to "From near (left) to far (right)"), and "Bands and areas apply on:" became "…are painted on:". Generic terms are kept: Ramp / Black / White, Ellipsoid / Box, Strength, Edge softness, Falloff and Relief.
 - **Repository (2026-11-25):** public, all rights reserved (`LICENSE`). Any variation that is permitted must credit the author of Deepshot Studio and the Vathography practice (`README.md`, `CITATION.cff`). Whether to open the code further (for example under Apache-2.0 with a `NOTICE`, or a non-commercial licence) is still to be decided.
-- **Still open before commercial distribution:** the formal patent and trademark search above, and contact with the author of the reference practice (public contact on vathography.com).
+- **Contact with the author (2026-11-25):** an invitation to try Deepshot Studio was sent to the public address on vathography.com (public alpha, credits and licence as above; no mention of commercial plans, no promises). It says the application is independent, that some features are inspired by his add-on (tilted bands, depth zones) and that the rest are our own additions. Awaiting a reply; any answer, request or objection should be recorded here.
+- **Still open before commercial distribution:** the formal patent and trademark search above, and a conversation with the author about commercial use (not mentioned in the invitation on purpose).
 
 ## Ideas para más adelante (no prioritarias)
 - Upscaling de la foto con IA (tipo Real-ESRGAN, BSD-3) antes de calcular la profundidad. Comprobar licencia de los pesos.
