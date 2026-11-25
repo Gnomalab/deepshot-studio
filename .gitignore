@@ -29,3 +29,7 @@ desktop.ini
 # Salidas de pruebas y editores
 .vscode/
 .idea/
+
+# Local references and working notes (not published)
+Link References/
+NOTAS_CREDITOS_Y_3D.md

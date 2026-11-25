@@ -45,6 +45,7 @@ class AboutDialog(QDialog):
             "<p>Imágenes creadas a partir del mapa de profundidad de una fotografía. "
             "Todo se procesa en tu equipo.</p>"
             "<p>By <a href='{url}'>{org}</a> · {author}<br>Versión del {date}</p>"
+            "<p>© 2026 {author} ({org}). Todos los derechos reservados.</p>"
             # Mención de la técnica de referencia: aquí y en Créditos, nunca en otra parte de la interfaz.
             "<p>Inspirado en la técnica Vathography de Karim Joseph Nassar "
             "(<a href='https://vathography.com'>vathography.com</a>). "

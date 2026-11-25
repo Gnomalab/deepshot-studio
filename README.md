@@ -9,7 +9,8 @@ stack of effects and exports it at full resolution.
 Everything runs **locally**: no telemetry, no external APIs at run time. The only download is the model weights from
 Hugging Face the first time you use a model, and they stay in a local folder next to the program.
 
-> Status: 0.1.0, alpha. Personal use for now; the code is organised so it can be packaged later.
+> Status: 0.1.0, alpha. The source is public so it can be read and evaluated, and feedback is welcome (open an issue).
+> It is not open source: see [Licence](#licence).
 
 ![Deepshot Studio shaping a depth effect](docs/images/03-shape-ramp.png)
 
@@ -84,18 +85,32 @@ Marigold V1.0 and Depth Anything V2 Small.
 - [`ROADMAP.md`](ROADMAP.md): phases, decisions and what is left to do (in Spanish).
 - [`CLAUDE.md`](CLAUDE.md): working notes for the AI assistant used on this project (in Spanish).
 
-## Licences
+## Licence
+
+Copyright (c) 2026 Juanjo Fernández ([Gnomalab Estudio](https://www.gnomalab.es)). **All rights reserved.** The source is
+published so it can be read and evaluated; apart from what GitHub allows (viewing and forking the repository), no licence to
+copy, modify, redistribute or sell it is granted without written permission. See [`LICENSE`](LICENSE).
+
+If you want to build a variation of Deepshot Studio, please get in touch first. Any variation that is permitted must credit
+**Juanjo Fernández (Gnomalab Estudio)** as the author of Deepshot Studio and **Karim Joseph Nassar** as the creator of the
+**Vathography** practice that inspired it. The *Cite this repository* button on GitHub (from [`CITATION.cff`](CITATION.cff))
+gives both references.
+
+### Third-party licences
 
 Only dependencies and models with licences compatible with commercial use are accepted (MIT, BSD, Apache-2.0 and similar;
 LGPL only dynamically linked). Test-only models with non-commercial licences are clearly marked in the app and are not
 part of the final offer. Every dependency and model is listed in [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md).
-
 PySide6 (LGPL-3.0) is used for the interface. No PyQt, no GPL components at run time.
 
 ## Credits
 
-Inspired by a depth-based imaging technique by Karim Joseph Nassar. Deepshot Studio is an independent project with no
-affiliation with the author; the full citation and the credits for Marigold and the other libraries are in the **About**
-dialog of the application.
+Deepshot Studio is inspired by the **Vathography** practice, created by **Karim Joseph Nassar**
+([vathography.com](https://vathography.com); the practice statement is on
+[Zenodo](https://doi.org/10.5281/zenodo.23103263) under CC BY 4.0): treating the depth map of a photograph as the artwork
+and focus as something you author with tone and colour. Deepshot Studio is an independent project with no affiliation with
+the author, and it contains no code or assets from his Blender add-on or his ComfyUI nodes. Depth is estimated with
+[Marigold](https://github.com/prs-eth/Marigold) (Apache-2.0). The full citations are in the **About** dialog of the
+application.
 
 By Juanjo Fernández, [Gnomalab Estudio](https://www.gnomalab.es).

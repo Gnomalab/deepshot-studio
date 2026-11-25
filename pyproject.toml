@@ -1,7 +1,7 @@
 [project]
 name = "deepshot"
 version = "0.1.0"
-description = "Deepshot Studio: aplicación de escritorio local para crear imágenes a partir del mapa de profundidad de una foto."
+description = "Deepshot Studio: a local desktop application that creates images from the depth map of a photograph."
 authors = [{ name = "Juanjo Fernández (Gnomalab Estudio)" }]
 requires-python = ">=3.11,<3.14"
 readme = "README.md"

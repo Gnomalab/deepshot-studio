@@ -20,11 +20,11 @@
     </message>
     <message>
         <location filename="../../deepshot/ui/about.py" line="43"/>
-        <source>&lt;h3&gt;{app} {ver}&lt;/h3&gt;&lt;p&gt;&lt;i&gt;{app} — {tagline}&lt;/i&gt;&lt;/p&gt;&lt;p&gt;Imágenes creadas a partir del mapa de profundidad de una fotografía. Todo se procesa en tu equipo.&lt;/p&gt;&lt;p&gt;By &lt;a href=&apos;{url}&apos;&gt;{org}&lt;/a&gt; · {author}&lt;br&gt;Versión del {date}&lt;/p&gt;&lt;p&gt;Inspirado en la técnica Vathography de Karim Joseph Nassar (&lt;a href=&apos;https://vathography.com&apos;&gt;vathography.com&lt;/a&gt;). Proyecto independiente, sin afiliación con el autor.&lt;/p&gt;</source>
-        <translation>&lt;h3&gt;{app} {ver}&lt;/h3&gt;&lt;p&gt;&lt;i&gt;{app} · {tagline}&lt;/i&gt;&lt;/p&gt;&lt;p&gt;Images created from the depth map of a photograph. Everything is processed on your computer.&lt;/p&gt;&lt;p&gt;By &lt;a href=&apos;{url}&apos;&gt;{org}&lt;/a&gt; · {author}&lt;br&gt;Version of {date}&lt;/p&gt;&lt;p&gt;Inspired by the Vathography technique by Karim Joseph Nassar (&lt;a href=&apos;https://vathography.com&apos;&gt;vathography.com&lt;/a&gt;). Independent project, not affiliated with the author.&lt;/p&gt;</translation>
+        <source>&lt;h3&gt;{app} {ver}&lt;/h3&gt;&lt;p&gt;&lt;i&gt;{app} — {tagline}&lt;/i&gt;&lt;/p&gt;&lt;p&gt;Imágenes creadas a partir del mapa de profundidad de una fotografía. Todo se procesa en tu equipo.&lt;/p&gt;&lt;p&gt;By &lt;a href=&apos;{url}&apos;&gt;{org}&lt;/a&gt; · {author}&lt;br&gt;Versión del {date}&lt;/p&gt;&lt;p&gt;© 2026 {author} ({org}). Todos los derechos reservados.&lt;/p&gt;&lt;p&gt;Inspirado en la técnica Vathography de Karim Joseph Nassar (&lt;a href=&apos;https://vathography.com&apos;&gt;vathography.com&lt;/a&gt;). Proyecto independiente, sin afiliación con el autor.&lt;/p&gt;</source>
+        <translation>&lt;h3&gt;{app} {ver}&lt;/h3&gt;&lt;p&gt;&lt;i&gt;{app} · {tagline}&lt;/i&gt;&lt;/p&gt;&lt;p&gt;Images created from the depth map of a photograph. Everything is processed on your computer.&lt;/p&gt;&lt;p&gt;By &lt;a href='{url}'&gt;{org}&lt;/a&gt; · {author}&lt;br&gt;Version of {date}&lt;/p&gt;&lt;p&gt;© 2026 {author} ({org}). All rights reserved.&lt;/p&gt;&lt;p&gt;Inspired by the Vathography technique by Karim Joseph Nassar (&lt;a href='https://vathography.com'&gt;vathography.com&lt;/a&gt;). Independent project, not affiliated with the author.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/about.py" line="56"/>
+        <location filename="../../deepshot/ui/about.py" line="57"/>
         <source>&lt;h3&gt;Técnica&lt;/h3&gt;&lt;p&gt;Inspirada en la práctica &lt;b&gt;Vathography&lt;/b&gt;, creada por &lt;b&gt;Karim Joseph Nassar&lt;/b&gt; (licencia CC BY 4.0). Cita:&lt;br&gt;&lt;i&gt;Nassar, K. J. (2026). Vathography: The Art of a Photograph&apos;s Hidden Volume (Version 1.2). Zenodo.&lt;/i&gt; &lt;a href=&apos;{doi}&apos;&gt;{doi}&lt;/a&gt;&lt;/p&gt;&lt;p&gt;{app} es un proyecto independiente: no usa código ni recursos de su add-on de Blender y no tiene afiliación con el autor.&lt;/p&gt;&lt;h3&gt;Modelo de profundidad&lt;/h3&gt;&lt;p&gt;&lt;b&gt;Marigold&lt;/b&gt; (licencia Apache 2.0): Bingxin Ke, Anton Obukhov, Shengyu Huang, Nando Metzger, Rodrigo Caye Daudt y Konrad Schindler, ETH Zürich (Photogrammetry and Remote Sensing). Se ejecuta con la biblioteca &lt;i&gt;diffusers&lt;/i&gt; de Hugging Face.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;«Repurposing Diffusion-Based Image Generators for Monocular Depth Estimation», CVPR 2024 (&lt;a href=&apos;https://arxiv.org/abs/2312.02145&apos;&gt;arXiv 2312.02145&lt;/a&gt;).&lt;/li&gt;&lt;li&gt;«Marigold: Affordable Adaptation of Diffusion-Based Image Generators for Image Analysis» (&lt;a href=&apos;https://arxiv.org/abs/2505.09358&apos;&gt;arXiv 2505.09358&lt;/a&gt;).&lt;/li&gt;&lt;/ul&gt;&lt;h3&gt;Bibliotecas&lt;/h3&gt;&lt;p&gt;Interfaz: Qt for Python / PySide6 (LGPL 3.0, enlazada dinámicamente). Cálculo: PyTorch, NumPy, SciPy, Pillow y OpenEXR. Cada una conserva su propia licencia: la lista completa está en el archivo &lt;code&gt;THIRD_PARTY_LICENSES.md&lt;/code&gt; que acompaña a la aplicación.&lt;/p&gt;</source>
         <translation>&lt;h3&gt;Technique&lt;/h3&gt;&lt;p&gt;Inspired by the &lt;b&gt;Vathography&lt;/b&gt; practice, created by &lt;b&gt;Karim Joseph Nassar&lt;/b&gt; (CC BY 4.0 license). Citation:&lt;br&gt;&lt;i&gt;Nassar, K. J. (2026). Vathography: The Art of a Photograph&apos;s Hidden Volume (Version 1.2). Zenodo.&lt;/i&gt; &lt;a href=&apos;{doi}&apos;&gt;{doi}&lt;/a&gt;&lt;/p&gt;&lt;p&gt;{app} is an independent project: it uses no code or resources from his Blender add-on and is not affiliated with the author.&lt;/p&gt;&lt;h3&gt;Depth model&lt;/h3&gt;&lt;p&gt;&lt;b&gt;Marigold&lt;/b&gt; (Apache 2.0 license): Bingxin Ke, Anton Obukhov, Shengyu Huang, Nando Metzger, Rodrigo Caye Daudt and Konrad Schindler, ETH Zürich (Photogrammetry and Remote Sensing). It runs with the Hugging Face &lt;i&gt;diffusers&lt;/i&gt; library.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;“Repurposing Diffusion-Based Image Generators for Monocular Depth Estimation”, CVPR 2024 (&lt;a href=&apos;https://arxiv.org/abs/2312.02145&apos;&gt;arXiv 2312.02145&lt;/a&gt;).&lt;/li&gt;&lt;li&gt;“Marigold: Affordable Adaptation of Diffusion-Based Image Generators for Image Analysis” (&lt;a href=&apos;https://arxiv.org/abs/2505.09358&apos;&gt;arXiv 2505.09358&lt;/a&gt;).&lt;/li&gt;&lt;/ul&gt;&lt;h3&gt;Libraries&lt;/h3&gt;&lt;p&gt;Interface: Qt for Python / PySide6 (LGPL 3.0, dynamically linked). Computation: PyTorch, NumPy, SciPy, Pillow and OpenEXR. Each keeps its own license: the full list is in the &lt;code&gt;THIRD_PARTY_LICENSES.md&lt;/code&gt; file that comes with the application.&lt;/p&gt;</translation>
     </message>
@@ -860,446 +860,446 @@
 <context>
     <name>ExportPanel</name>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="92"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="106"/>
         <source>No hay memoria suficiente para procesar la imagen a resolución completa.</source>
         <translation>Not enough memory to process the image at full resolution.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="94"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="108"/>
         <source>No se puede escribir en esa carpeta. Elige otra.</source>
         <translation>Cannot write to that folder. Choose another.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="96"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="110"/>
         <source>No se pudo guardar el archivo: {0}</source>
         <translation>The file could not be saved: {0}</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="98"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="112"/>
         <source>Falta un componente para este formato (OpenEXR). Reinstala las dependencias.</source>
         <translation>A component for this format is missing (OpenEXR). Reinstall the dependencies.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="99"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="113"/>
         <source>No se pudo exportar. Consulta el panel Registro para ver el detalle.</source>
         <translation>The export failed. See the Log panel for details.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="131"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="145"/>
         <source>Cargar preset de exportación…</source>
         <translation>Load export preset…</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="132"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="146"/>
         <source>Ajustes de exportación listos: elige uno y se rellenan el tipo, el formato, el tamaño y la calidad (no cambian el nombre ni la carpeta).</source>
         <translation>Ready-made export settings: pick one and the type, format, size and quality are filled in (the name and folder do not change).</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="135"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="149"/>
         <source>Efecto</source>
         <translation>Effect</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="135"/>
-        <location filename="../../deepshot/ui/export_panel.py" line="282"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="149"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="296"/>
         <source>Mapa de profundidad</source>
         <translation>Depth map</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="135"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="149"/>
         <source>Imagen final</source>
         <translation>Final image</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="137"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="151"/>
         <source>La imagen con la rampa, las bandas, las áreas y la mezcla aplicadas (sin el paso Look)</source>
         <translation>The image with the ramp, bands, areas and mix applied (without the Look step)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="138"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="152"/>
         <source>Solo el mapa de profundidad en gris (cerca = claro), sin ningún efecto</source>
         <translation>Only the depth map in gray (near = bright), without any effect</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="139"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="153"/>
         <source>El efecto con las capas del paso Look aplicadas, en un formato de fotografía (JPG, TIFF…) y al tamaño que elijas</source>
         <translation>The effect with the Look step layers applied, in a photo format (JPG, TIFF…) and at the size you choose</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="142"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="156"/>
         <source>Original</source>
         <translation>Original</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="142"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="156"/>
         <source>Con zonas movidas</source>
         <translation>With moved zones</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="144"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="158"/>
         <source>El mapa tal como lo calculó el modelo (o como lo cargaste)</source>
         <translation>The map as the model computed it (or as you loaded it)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="145"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="159"/>
         <source>El mapa con las zonas cerca / medio / lejos movidas, como lo leen la rampa, las bandas, el desenfoque y las áreas (Control de profundidad)</source>
         <translation>The map with the near / middle / far zones moved, as the ramp, bands, blur and areas read it (Depth control)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="151"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="165"/>
         <source>Gris</source>
         <translation>Gray</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="152"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="166"/>
         <source>Color rojo / azul</source>
         <translation>Color red / blue</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="152"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="166"/>
         <source>Color arcoíris</source>
         <translation>Color rainbow</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="153"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="167"/>
         <source>Color térmico</source>
         <translation>Color thermal</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="153"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="167"/>
         <source>Color océano</source>
         <translation>Color ocean</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="155"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="169"/>
         <source>El mapa en gris o coloreado con una paleta (cerca → lejos). Solo cambia la imagen guardada, no el mapa.</source>
         <translation>The map in gray or colored with a palette (near → far). It only changes the saved image, not the map.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="157"/>
         <location filename="../../deepshot/ui/export_panel.py" line="171"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="185"/>
         <source>PNG 8 bits</source>
         <translation>PNG 8-bit</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="157"/>
-        <location filename="../../deepshot/ui/export_panel.py" line="172"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="171"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="186"/>
         <source>PNG 16 bits</source>
         <translation>PNG 16-bit</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="157"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="171"/>
         <source>EXR 32 bits</source>
         <translation>EXR 32-bit</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="159"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="173"/>
         <source>PNG de 8 bits: ligero, para publicar o ver en cualquier programa</source>
         <translation>8-bit PNG: lightweight, for publishing or viewing in any program</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="160"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="174"/>
         <source>PNG de 16 bits: mucha más precisión de tonos; ideal para retocar después</source>
         <translation>16-bit PNG: much more tonal precision; ideal for retouching afterwards</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="161"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="175"/>
         <source>EXR de 32 bits en coma flotante: sin pérdida, para flujos profesionales</source>
         <translation>32-bit floating-point EXR: lossless, for professional workflows</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="167"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="181"/>
         <source>JPG</source>
         <translation>JPG</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="167"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="181"/>
         <source>JPG: ligero, el más compatible; pierde algo de calidad según el ajuste</source>
         <translation>JPG: light and the most compatible; loses some quality depending on the setting</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="168"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="182"/>
         <source>TIFF 8 bits</source>
         <translation>TIFF 8-bit</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="168"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="182"/>
         <source>TIFF de 8 bits comprimido sin pérdida: para imprimir o retocar</source>
         <translation>8-bit TIFF with lossless compression: for printing or retouching</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="169"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="183"/>
         <source>TIFF 16 bits</source>
         <translation>TIFF 16-bit</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="169"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="183"/>
         <source>TIFF de 16 bits sin comprimir: máxima precisión de tonos para seguir retocando (pesa mucho)</source>
         <translation>Uncompressed 16-bit TIFF: maximum tonal precision for further retouching (large file)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="171"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="185"/>
         <source>PNG de 8 bits sin pérdida, para web y publicar</source>
         <translation>Lossless 8-bit PNG, for the web and publishing</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="172"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="186"/>
         <source>PNG de 16 bits sin pérdida, mucha precisión de tonos</source>
         <translation>Lossless 16-bit PNG, with a lot of tonal precision</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="173"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="187"/>
         <source>WebP</source>
         <translation>WebP</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="173"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="187"/>
         <source>WebP: muy ligero para la web, con la calidad que elijas</source>
         <translation>WebP: very light for the web, at the quality you choose</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="176"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="190"/>
         <source>Formato del archivo de la imagen final</source>
         <translation>File format of the final image</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="177"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="191"/>
         <source>Calidad</source>
         <translation>Quality</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="178"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="192"/>
         <source>Calidad de la compresión de JPG y WebP: más alto = mejor imagen y archivo más grande (92 es un buen punto de partida)</source>
         <translation>JPG and WebP compression quality: higher = better image and larger file (92 is a good starting point)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="181"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="195"/>
         <source>Tamaño original</source>
         <translation>Original size</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="181"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="195"/>
         <source>Porcentaje</source>
         <translation>Percentage</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="182"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="196"/>
         <source>Ancho</source>
         <translation>Width</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="182"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="196"/>
         <source>Alto</source>
         <translation>Height</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="182"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="196"/>
         <source>Lado largo</source>
         <translation>Long side</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="184"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="198"/>
         <source>Tamaño de la imagen exportada: el original o uno que elijas, siempre conservando la proporción</source>
         <translation>Size of the exported image: the original or one you choose, always keeping the proportions</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="189"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="203"/>
         <source>Porcentaje o píxeles, según el modo elegido</source>
         <translation>Percentage or pixels, depending on the chosen mode</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="194"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="208"/>
         <source> ppp</source>
         <translation> ppi</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="195"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="209"/>
         <source>Resolución que se anota en el archivo (para imprimir). No cambia los píxeles.</source>
         <translation>Resolution written in the file (for printing). It does not change the pixels.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="196"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="210"/>
         <source>Conservar metadatos de la foto</source>
         <translation>Keep the photo&apos;s metadata</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="197"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="211"/>
         <source>Copia a la imagen exportada los datos EXIF de la foto original (cámara, fecha…). Desmarca para quitarlos.</source>
         <translation>Copies the EXIF data of the original photo (camera, date…) to the exported image. Uncheck to remove it.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="209"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="223"/>
         <source>Resolución</source>
         <translation>Resolution</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="211"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="225"/>
         <source>Formato de la imagen</source>
         <translation>Image format</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="213"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="227"/>
         <source>Tamaño</source>
         <translation>Size</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="218"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="232"/>
         <source>Cerca = claro</source>
         <translation>Near = bright</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="219"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="233"/>
         <source>Marcado: lo cercano sale claro y lo lejano oscuro (como se ve en la app). Desmarcado: al revés.</source>
         <translation>Checked: near things come out bright and far things dark (as seen in the app). Unchecked: the opposite.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="221"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="235"/>
         <source>Guardar también los ajustes (.json)</source>
         <translation>Also save the settings (.json)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="222"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="236"/>
         <source>Guarda junto a la imagen un archivo con todos los ajustes, para repetir el resultado o aplicarlo a otra foto (Archivo › Cargar estilo, Ctrl+L)</source>
         <translation>Saves next to the image a file with all the settings, to repeat the result or apply it to another photo (File › Load style, Ctrl+L)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="226"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="240"/>
         <source>Nombre del archivo, sin la extensión. Si ya existe, se añade un número: nunca se sobrescribe.</source>
         <translation>File name, without the extension. If it already exists, a number is added: it never overwrites.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="231"/>
-        <location filename="../../deepshot/ui/export_panel.py" line="496"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="245"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="510"/>
         <source>Carpeta de salida</source>
         <translation>Output folder</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="232"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="246"/>
         <source>Carpeta donde se guarda el archivo</source>
         <translation>Folder where the file is saved</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="238"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="252"/>
         <source>Elegir la carpeta de salida…</source>
         <translation>Choose the output folder…</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="240"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="254"/>
         <source>Abrir carpeta</source>
         <translation>Open folder</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="241"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="255"/>
         <source>Abre la carpeta de salida en el explorador de archivos</source>
         <translation>Opens the output folder in the file explorer</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="244"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="258"/>
         <source>Revisar</source>
         <translation>Review</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="247"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="261"/>
         <source>Abre lo último que se exportó en un visor rápido, con zoom y sus datos</source>
         <translation>Opens what was exported last in a quick viewer, with zoom and its data</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="251"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="265"/>
         <source>Exportar</source>
         <translation>Export</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="255"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="269"/>
         <source>Procesa la imagen a resolución completa y la guarda (Ctrl+E abre este paso)</source>
         <translation>Processes the image at full resolution and saves it (Ctrl+E opens this step)</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="268"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="282"/>
         <source>Nombre</source>
         <translation>Name</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="280"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="294"/>
         <source>Qué exportar</source>
         <translation>What to export</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="287"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="301"/>
         <source>Formato</source>
         <translation>Format</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="439"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="453"/>
         <source>PNG 8 bits: ligero, para publicar.</source>
         <translation>PNG 8-bit: lightweight, for publishing.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="440"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="454"/>
         <source>PNG 16 bits: mucha precisión de tonos, ideal para retocar después.</source>
         <translation>PNG 16-bit: lots of tonal precision, ideal for retouching afterwards.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="441"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="455"/>
         <source>EXR 32 bits: coma flotante sin pérdida, para flujos profesionales.</source>
         <translation>EXR 32-bit: lossless floating point, for professional workflows.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="444"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="458"/>
         <source>Para exportar, selecciona una foto y calcula (o carga) su mapa de profundidad.</source>
         <translation>To export, select a photo and compute (or load) its depth map.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="448"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="462"/>
         <source>Se exporta a resolución completa: {0} × {1} px.</source>
         <translation>Exports at full resolution: {0} × {1} px.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="451"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="465"/>
         <source>Saldrá a {0} × {1} px.</source>
         <translation>It will come out at {0} × {1} px.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="452"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="466"/>
         <source>Al ampliar no se recalcula el efecto: se estira la imagen.</source>
         <translation>When enlarging, the effect is not recalculated: the image is stretched.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="464"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="478"/>
         <source>Se guarda el mapa original, sin cambios.</source>
         <translation>The original map is saved, unchanged.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="467"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="481"/>
         <source>El control de profundidad está apagado o sin cambios: el mapa saldrá igual que el original. Actívalo en el paso 3 (Control de profundidad).</source>
         <translation>Depth control is off or unchanged: the map will come out the same as the original. Turn it on in step 3 (Depth control).</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="469"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="483"/>
         <source>Se guarda el mapa con las zonas cerca / medio / lejos movidas.</source>
         <translation>The map is saved with the near / middle / far zones moved.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="512"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="526"/>
         <source>La carpeta todavía no existe: se creará al exportar.</source>
         <translation>The folder does not exist yet: it will be created when exporting.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="543"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="557"/>
         <source>Ya hay una exportación en marcha.</source>
         <translation>An export is already in progress.</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="548"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="562"/>
         <source>Preparando…</source>
         <translation>Preparing…</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="569"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="583"/>
         <source>Guardado: {0}</source>
         <translation>Saved: {0}</translation>
     </message>
     <message>
-        <location filename="../../deepshot/ui/export_panel.py" line="569"/>
+        <location filename="../../deepshot/ui/export_panel.py" line="583"/>
         <source>Listo</source>
         <translation>Done</translation>
     </message>

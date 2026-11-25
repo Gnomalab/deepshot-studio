@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use or build on Deepshot Studio, please credit its author and the Vathography practice that inspired it."
+title: "Deepshot Studio"
+abstract: "A local desktop application that creates images from the depth of a photograph: depth estimation with Marigold, a colour ramp, depth bands, 3D areas, lens blur and a stack of effects."
+type: software
+version: "0.1.0"
+date-released: "2026-11-25"
+url: "https://github.com/Gnomalab/deepshot-studio"
+repository-code: "https://github.com/Gnomalab/deepshot-studio"
+authors:
+  - family-names: "Fernández"
+    given-names: "Juanjo"
+    affiliation: "Gnomalab Estudio"
+    website: "https://www.gnomalab.es"
+references:
+  - type: report
+    title: "Vathography: The Art of a Photograph's Hidden Volume"
+    authors:
+      - family-names: "Nassar"
+        given-names: "Karim Joseph"
+    year: 2026
+    doi: "10.5281/zenodo.23103263"
+    url: "https://vathography.com"
+    notes: "The practice that inspired Deepshot Studio (CC BY 4.0). Deepshot Studio is an independent project with no affiliation with its author."

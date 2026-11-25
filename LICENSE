@@ -1,0 +1,22 @@
+Deepshot Studio
+Copyright (c) 2026 Juanjo Fernández (Gnomalab Estudio). All rights reserved.
+
+The source code in this repository is published so that it can be read and evaluated. Apart from what the GitHub Terms
+of Service allow (viewing the repository and forking it on GitHub), NO LICENSE is granted: you may not copy, modify,
+redistribute, sublicense, sell or otherwise use this software or its source code, in whole or in part, without the
+written permission of the copyright holder.
+
+Attribution. Any variation or derivative work of Deepshot Studio that the copyright holder permits is permitted on the
+condition that it clearly credits:
+
+  1. Juanjo Fernández (Gnomalab Estudio, https://www.gnomalab.es) as the author of Deepshot Studio; and
+  2. the Vathography practice, created by Karim Joseph Nassar (https://vathography.com), which inspired it:
+     Nassar, K. J. (2026). Vathography: The Art of a Photograph's Hidden Volume. Zenodo.
+     https://doi.org/10.5281/zenodo.23103263
+
+Deepshot Studio is an independent project and has no affiliation with the author of Vathography.
+
+Third-party components. This software depends on libraries and models that keep their own licences, listed in
+THIRD_PARTY_LICENSES.md. Nothing in this file changes those licences.
+
+To ask for permission, get in touch through https://www.gnomalab.es.
